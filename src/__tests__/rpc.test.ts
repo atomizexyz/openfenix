@@ -31,7 +31,15 @@ const MEV_CHAIN_IDS = [1, 56, 8453];
 /** Reads a fallback transport's child transports without making a request. */
 function childConfigs(transport: ReturnType<typeof createChainTransport>) {
   const { value } = transport({}) as {
-    value?: { transports?: { config: { methods?: { include?: string[]; exclude?: string[] } } }[] };
+    value?: {
+      transports?: {
+        config: {
+          methods?: { include?: string[]; exclude?: string[] };
+          retryCount: number;
+          timeout?: number;
+        };
+      }[];
+    };
   };
   return (value?.transports ?? []).map((t) => t.config);
 }
@@ -84,6 +92,47 @@ describe("createChainTransport", () => {
     // back to viem's defaults rather than yielding an empty fallback list.
     for (const id of EXPECTED_CHAIN_IDS) {
       expect(childConfigs(createChainTransport(id)).length).toBeGreaterThan(0);
+    }
+  });
+});
+
+describe("per-endpoint retry and timeout budget", () => {
+  // These lock the notes on createChainTransport. Both settings look like tail
+  // control and are the opposite: `fallback` already hands every child
+  // `retryCount: 0`, and `http` lets a config value override it, so a
+  // retryCount here doubles the attempts per endpoint instead of capping them
+  // -- including re-sending a signed transaction on the chains where the read
+  // transports carry every method.
+  it("gives every endpoint exactly one attempt per fallback pass", () => {
+    for (const id of EXPECTED_CHAIN_IDS) {
+      for (const config of childConfigs(createChainTransport(id))) {
+        expect(config.retryCount).toBe(0);
+      }
+    }
+  });
+
+  it("never tightens viem's per-endpoint budget", () => {
+    // viem's own default is 10s. Cutting below it turns a slow-but-healthy
+    // endpoint into a hard failure, and Ethereum PoW (1 endpoint) and OKC (2)
+    // have no fast sibling to fall through to.
+    for (const id of EXPECTED_CHAIN_IDS) {
+      for (const config of childConfigs(createChainTransport(id))) {
+        expect(config.timeout).toBeGreaterThanOrEqual(10_000);
+      }
+    }
+  });
+
+  it("keeps the write path on the same budget as everything else", async () => {
+    vi.stubEnv("NEXT_PUBLIC_BLINK_API_KEY", "test-key");
+    vi.resetModules();
+    const rpc = await import("@/config/rpc");
+
+    // Polygon has no Blink endpoint, so its read transports are also its write
+    // transports; nothing may abort or re-send a broadcast on them.
+    for (const config of childConfigs(rpc.createChainTransport(137))) {
+      expect(config.methods).toBeUndefined();
+      expect(config.retryCount).toBe(0);
+      expect(config.timeout).toBeGreaterThanOrEqual(10_000);
     }
   });
 });
