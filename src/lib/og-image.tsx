@@ -50,12 +50,16 @@ export function ogImageElement() {
           }}
         />
 
+        {/* eslint-disable-next-line @next/next/no-img-element -- rendered by
+            satori into a PNG, never into a DOM, so next/image does not apply. */}
         <img
           alt=""
           src={`data:image/svg+xml;utf8,${encodeURIComponent(LOGO_SVG)}`}
           width={170}
           height={170}
         />
+        {/* eslint-disable-next-line @next/next/no-img-element -- same: satori
+            output, not DOM. */}
         <img
           alt="Fenix Protocol"
           src={`data:image/svg+xml;utf8,${encodeURIComponent(WORDMARK_SVG)}`}
