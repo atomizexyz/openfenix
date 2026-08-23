@@ -9,6 +9,8 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Label } from "@/components/ui/label";
 
 import {
   useBurnXen,
@@ -127,9 +129,9 @@ export function BurnForm() {
         {/* XEN Input */}
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <label className="text-sm font-medium text-ash-700 dark:text-ash-300">
+            <Label className="text-sm font-medium text-ash-700 dark:text-ash-300">
               {t("amount_label")}
-            </label>
+            </Label>
             <div className="flex items-center gap-1.5 text-xs text-ash-500 dark:text-ash-400">
               <span>{t("balance")}:</span>
               {isBalanceLoading ? (
@@ -182,9 +184,9 @@ export function BurnForm() {
 
         {/* FENIX Output */}
         <div className="space-y-2">
-          <label className="text-sm font-medium text-ash-700 dark:text-ash-300">
+          <Label className="text-sm font-medium text-ash-700 dark:text-ash-300">
             {t("receive_label")}
-          </label>
+          </Label>
           <div className="flex h-12 items-center rounded-lg border border-ash-200 bg-ash-50 px-4 dark:border-ash-700 dark:bg-ash-800/50">
             <span className="font-mono text-lg font-semibold text-ash-900 dark:text-ash-100">
               <NumberFlow
@@ -235,40 +237,40 @@ export function BurnForm() {
 
         {/* Status messages */}
         {isBurnSuccess && (
-          <div className="flex items-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-700 dark:border-emerald-800 dark:bg-emerald-950/30 dark:text-emerald-400">
-            <CheckCircle className="h-4 w-4 shrink-0" />
-            <span>
+          <Alert variant="success">
+            <CheckCircle />
+            <AlertDescription>
               {t("success", {
                 xen: parseFloat(amount).toLocaleString(),
                 fenix: fenixReceived.toLocaleString(undefined, {
                   maximumFractionDigits: 4,
                 }),
               })}
-            </span>
-          </div>
+            </AlertDescription>
+          </Alert>
         )}
 
         {isApproveSuccess && needsApproval && (
-          <div className="flex items-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-700 dark:border-emerald-800 dark:bg-emerald-950/30 dark:text-emerald-400">
-            <CheckCircle className="h-4 w-4 shrink-0" />
-            <span>{t("approval_confirmed")}</span>
-          </div>
+          <Alert variant="success">
+            <CheckCircle />
+            <AlertDescription>{t("approval_confirmed")}</AlertDescription>
+          </Alert>
         )}
 
         {isConnected && !chainSupported && (
-          <div className="flex items-center gap-2 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-700 dark:border-amber-800 dark:bg-amber-950/30 dark:text-amber-400">
-            <AlertCircle className="h-4 w-4 shrink-0" />
-            <span>{t("unsupported_network")}</span>
-          </div>
+          <Alert variant="warning">
+            <AlertCircle />
+            <AlertDescription>{t("unsupported_network")}</AlertDescription>
+          </Alert>
         )}
 
         {(burnError || approveError) && (
-          <div className="flex items-start gap-2 rounded-lg border border-ember-200 bg-ember-50 p-3 text-sm text-ember-700 dark:border-ember-800 dark:bg-ember-950/30 dark:text-ember-400">
-            <AlertCircle className="h-4 w-4 mt-0.5 shrink-0" />
-            <span className="break-all">
+          <Alert variant="destructive">
+            <AlertCircle />
+            <AlertDescription className="break-all">
               {(approveError as unknown as { shortMessage?: string })?.shortMessage ?? (burnError as unknown as { shortMessage?: string })?.shortMessage ?? (approveError?.message || burnError?.message || t("error"))}
-            </span>
-          </div>
+            </AlertDescription>
+          </Alert>
         )}
       </CardContent>
     </Card>

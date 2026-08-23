@@ -1,45 +1,63 @@
-"use client";
+"use client"
 
-import * as React from "react";
+import * as React from "react"
+import { Slider as SliderPrimitive } from "radix-ui"
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils"
 
-export interface SliderProps
-  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "type"> {
-  /** Custom track class overrides */
-  trackClassName?: string;
+function Slider({
+  className,
+  defaultValue,
+  value,
+  min = 0,
+  max = 100,
+  ...props
+}: React.ComponentProps<typeof SliderPrimitive.Root>) {
+  const _values = React.useMemo(
+    () =>
+      Array.isArray(value)
+        ? value
+        : Array.isArray(defaultValue)
+          ? defaultValue
+          : [min, max],
+    [value, defaultValue, min, max]
+  )
+
+  return (
+    <SliderPrimitive.Root
+      data-slot="slider"
+      defaultValue={defaultValue}
+      value={value}
+      min={min}
+      max={max}
+      className={cn(
+        "relative flex w-full touch-none items-center select-none data-[disabled]:opacity-50 data-[orientation=vertical]:h-full data-[orientation=vertical]:min-h-44 data-[orientation=vertical]:w-auto data-[orientation=vertical]:flex-col",
+        className
+      )}
+      {...props}
+    >
+      <SliderPrimitive.Track
+        data-slot="slider-track"
+        className={cn(
+          "relative grow overflow-hidden rounded-full bg-muted data-[orientation=horizontal]:h-1.5 data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-1.5"
+        )}
+      >
+        <SliderPrimitive.Range
+          data-slot="slider-range"
+          className={cn(
+            "absolute bg-primary data-[orientation=horizontal]:h-full data-[orientation=vertical]:w-full"
+          )}
+        />
+      </SliderPrimitive.Track>
+      {Array.from({ length: _values.length }, (_, index) => (
+        <SliderPrimitive.Thumb
+          data-slot="slider-thumb"
+          key={index}
+          className="block size-4 shrink-0 rounded-full border border-primary bg-white shadow-sm ring-ring/50 transition-[color,box-shadow] hover:ring-4 focus-visible:ring-4 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50"
+        />
+      ))}
+    </SliderPrimitive.Root>
+  )
 }
 
-const Slider = React.forwardRef<HTMLInputElement, SliderProps>(
-  ({ className, trackClassName, ...props }, ref) => {
-    return (
-      <input
-        type="range"
-        className={cn(
-          "slider w-full cursor-pointer appearance-none bg-transparent focus-visible:outline-none",
-          /* Track styles */
-          "[&::-webkit-slider-runnable-track]:h-2 [&::-webkit-slider-runnable-track]:rounded-full [&::-webkit-slider-runnable-track]:bg-gradient-to-r [&::-webkit-slider-runnable-track]:from-fenix-500 [&::-webkit-slider-runnable-track]:to-ember-500",
-          "[&::-moz-range-track]:h-2 [&::-moz-range-track]:rounded-full [&::-moz-range-track]:bg-gradient-to-r [&::-moz-range-track]:from-fenix-500 [&::-moz-range-track]:to-ember-500",
-          /* Thumb styles */
-          "[&::-webkit-slider-thumb]:mt-[-4px] [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:shadow-md [&::-webkit-slider-thumb]:ring-2 [&::-webkit-slider-thumb]:ring-fenix-500 [&::-webkit-slider-thumb]:transition-transform [&::-webkit-slider-thumb]:hover:scale-110",
-          "[&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:bg-white [&::-moz-range-thumb]:shadow-md [&::-moz-range-thumb]:ring-2 [&::-moz-range-thumb]:ring-fenix-500 [&::-moz-range-thumb]:transition-transform [&::-moz-range-thumb]:hover:scale-110",
-          /* Dark mode thumb */
-          "dark:[&::-webkit-slider-thumb]:bg-ash-100 dark:[&::-webkit-slider-thumb]:ring-fenix-400",
-          "dark:[&::-moz-range-thumb]:bg-ash-100 dark:[&::-moz-range-thumb]:ring-fenix-400",
-          /* Focus ring */
-          "focus-visible:[&::-webkit-slider-thumb]:ring-4 focus-visible:[&::-webkit-slider-thumb]:ring-fenix-500/50",
-          "focus-visible:[&::-moz-range-thumb]:ring-4 focus-visible:[&::-moz-range-thumb]:ring-fenix-500/50",
-          /* Disabled */
-          "disabled:cursor-not-allowed disabled:opacity-50",
-          trackClassName,
-          className
-        )}
-        ref={ref}
-        {...props}
-      />
-    );
-  }
-);
-Slider.displayName = "Slider";
-
-export { Slider };
+export { Slider }

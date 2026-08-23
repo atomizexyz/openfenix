@@ -17,6 +17,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { FlushCountdown } from "@/components/ui/flush-countdown";
 import {
   useFlushRewards,
@@ -256,17 +257,17 @@ export function RewardsPanel() {
 
         {/* Status Messages */}
         {isSuccess && (
-          <div className="flex items-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-700 dark:border-emerald-800 dark:bg-emerald-950/30 dark:text-emerald-400">
-            <CheckCircle className="h-4 w-4 shrink-0" />
-            <span>{t("flush_success")}</span>
-          </div>
+          <Alert variant="success">
+            <CheckCircle />
+            <AlertDescription>{t("flush_success")}</AlertDescription>
+          </Alert>
         )}
 
         {error && (
-          <div className="flex items-center gap-2 rounded-lg border border-ember-200 bg-ember-50 p-3 text-sm text-ember-700 dark:border-ember-800 dark:bg-ember-950/30 dark:text-ember-400">
-            <AlertCircle className="h-4 w-4 shrink-0" />
-            <span>{t("flush_error")}</span>
-          </div>
+          <Alert variant="destructive">
+            <AlertCircle />
+            <AlertDescription>{t("flush_error")}</AlertDescription>
+          </Alert>
         )}
       </CardContent>
     </Card>

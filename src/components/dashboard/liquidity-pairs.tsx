@@ -12,6 +12,14 @@ import { mainnet } from "wagmi/chains";
 import { useMemo } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { useDexScreenerPrices } from "@/hooks/use-dexscreener-prices";
 import { DEXSCREENER_CHAIN_ID_MAP } from "@/config/dexscreener";
 import { getChainConfig } from "@/config/chains";
@@ -198,10 +206,18 @@ const WAGMI_TO_DEXSCREENER = Object.fromEntries(
   Object.entries(DEXSCREENER_CHAIN_ID_MAP).map(([dex, wagmi]) => [wagmi, dex])
 );
 
-export function LiquidityPairsSection({ filterByChain = false }: { filterByChain?: boolean }) {
+interface LiquidityPairsSectionProps {
+  filterByChain?: boolean;
+  chainId?: number;
+}
+
+export function LiquidityPairsSection({
+  filterByChain = false,
+  chainId: selectedChainId,
+}: LiquidityPairsSectionProps) {
   const t = useTranslations("dex");
   const { chain } = useAccount();
-  const chainId = chain?.id ?? mainnet.id;
+  const chainId = selectedChainId ?? chain?.id ?? mainnet.id;
   const { allPairs, isLoading } = useDexScreenerPrices();
   const chainConfig = getChainConfig(chainId);
   const chainName = chainConfig?.chain.name ?? "Ethereum";
@@ -230,54 +246,54 @@ export function LiquidityPairsSection({ filterByChain = false }: { filterByChain
       <Card variant="glow" className="hidden overflow-hidden lg:block">
         <CardContent className="p-0">
           <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b border-ash-200 bg-ash-50/80 dark:border-ash-800 dark:bg-ash-900/50">
-                  <th className="px-3 py-3 text-left text-xs font-semibold uppercase tracking-wider text-ash-500 dark:text-ash-400 sm:px-4">
+            <Table className="w-full">
+              <TableHeader>
+                <TableRow className="border-b border-ash-200 bg-ash-50/80 dark:border-ash-800 dark:bg-ash-900/50">
+                  <TableHead className="px-3 py-3 text-left text-xs font-semibold uppercase tracking-wider text-ash-500 dark:text-ash-400 sm:px-4">
                     {t("chain")}
-                  </th>
-                  <th className="px-3 py-3 text-left text-xs font-semibold uppercase tracking-wider text-ash-500 dark:text-ash-400 sm:px-4">
+                  </TableHead>
+                  <TableHead className="px-3 py-3 text-left text-xs font-semibold uppercase tracking-wider text-ash-500 dark:text-ash-400 sm:px-4">
                     {t("pair")}
-                  </th>
-                  <th className="px-3 py-3 text-left text-xs font-semibold uppercase tracking-wider text-ash-500 dark:text-ash-400 sm:px-4">
+                  </TableHead>
+                  <TableHead className="px-3 py-3 text-left text-xs font-semibold uppercase tracking-wider text-ash-500 dark:text-ash-400 sm:px-4">
                     {t("exchange")}
-                  </th>
-                  <th className="px-3 py-3 text-right text-xs font-semibold uppercase tracking-wider text-ash-500 dark:text-ash-400 sm:px-4">
+                  </TableHead>
+                  <TableHead className="px-3 py-3 text-right text-xs font-semibold uppercase tracking-wider text-ash-500 dark:text-ash-400 sm:px-4">
                     {t("price")}
-                  </th>
-                  <th className="px-3 py-3 text-right text-xs font-semibold uppercase tracking-wider text-ash-500 dark:text-ash-400 sm:px-4">
+                  </TableHead>
+                  <TableHead className="px-3 py-3 text-right text-xs font-semibold uppercase tracking-wider text-ash-500 dark:text-ash-400 sm:px-4">
                     {t("change_24h")}
-                  </th>
-                  <th className="px-3 py-3 text-right text-xs font-semibold uppercase tracking-wider text-ash-500 dark:text-ash-400 sm:px-4">
+                  </TableHead>
+                  <TableHead className="px-3 py-3 text-right text-xs font-semibold uppercase tracking-wider text-ash-500 dark:text-ash-400 sm:px-4">
                     {t("volume_24h")}
-                  </th>
-                  <th className="px-3 py-3 text-right text-xs font-semibold uppercase tracking-wider text-ash-500 dark:text-ash-400 sm:px-4">
+                  </TableHead>
+                  <TableHead className="px-3 py-3 text-right text-xs font-semibold uppercase tracking-wider text-ash-500 dark:text-ash-400 sm:px-4">
                     {t("liquidity")}
-                  </th>
-                  <th className="px-3 py-3 text-left text-xs font-semibold uppercase tracking-wider text-ash-500 dark:text-ash-400 sm:px-4" />
-                </tr>
-              </thead>
-              <tbody>
+                  </TableHead>
+                  <TableHead className="px-3 py-3 text-left text-xs font-semibold uppercase tracking-wider text-ash-500 dark:text-ash-400 sm:px-4" />
+                </TableRow>
+              </TableHeader>
+              <TableBody>
                 {isLoading ? (
                   Array.from({ length: 5 }).map((_, i) => (
                     <PairSkeletonRow key={i} />
                   ))
                 ) : filteredPairs.length === 0 ? (
-                  <tr>
-                    <td
+                  <TableRow>
+                    <TableCell
                       colSpan={8}
                       className="px-4 py-8 text-center text-sm text-ash-500 dark:text-ash-400"
                     >
                       {t("no_pairs")}
-                    </td>
-                  </tr>
+                    </TableCell>
+                  </TableRow>
                 ) : (
                   filteredPairs.map((pair) => (
                     <PairRow key={pair.pairAddress} pair={pair} />
                   ))
                 )}
-              </tbody>
-            </table>
+              </TableBody>
+            </Table>
           </div>
         </CardContent>
       </Card>

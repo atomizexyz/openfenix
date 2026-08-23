@@ -10,6 +10,13 @@ import {
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
+  Table,
+  TableBody,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
   useAllChainsStats,
   type ChainStats,
 } from "@/hooks/use-all-chains-stats";
@@ -354,38 +361,38 @@ export function ChainTable() {
       <Card variant="glow" className="hidden overflow-hidden lg:block">
         <CardContent className="p-0">
           <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b border-ash-200 bg-ash-50/80 dark:border-ash-800 dark:bg-ash-900/50">
-                  <th className="px-3 py-3 text-left text-xs font-semibold uppercase tracking-wider text-ash-500 dark:text-ash-400 sm:px-4">
+            <Table className="w-full">
+              <TableHeader>
+                <TableRow className="border-b border-ash-200 bg-ash-50/80 dark:border-ash-800 dark:bg-ash-900/50">
+                  <TableHead className="px-3 py-3 text-left text-xs font-semibold uppercase tracking-wider text-ash-500 dark:text-ash-400 sm:px-4">
                     {t("chain")}
-                  </th>
-                  <th className="px-3 py-3 text-left text-xs font-semibold uppercase tracking-wider text-ash-500 dark:text-ash-400 sm:px-4">
+                  </TableHead>
+                  <TableHead className="px-3 py-3 text-left text-xs font-semibold uppercase tracking-wider text-ash-500 dark:text-ash-400 sm:px-4">
                     {t("status")}
-                  </th>
-                  <th className="px-3 py-3 text-right text-xs font-semibold uppercase tracking-wider text-ash-500 dark:text-ash-400 sm:px-4">
+                  </TableHead>
+                  <TableHead className="px-3 py-3 text-right text-xs font-semibold uppercase tracking-wider text-ash-500 dark:text-ash-400 sm:px-4">
                     {t("equity_supply")}
-                  </th>
-                  <th className="px-3 py-3 text-right text-xs font-semibold uppercase tracking-wider text-ash-500 dark:text-ash-400 sm:px-4">
+                  </TableHead>
+                  <TableHead className="px-3 py-3 text-right text-xs font-semibold uppercase tracking-wider text-ash-500 dark:text-ash-400 sm:px-4">
                     {t("reward_supply")}
-                  </th>
-                  <th className="px-3 py-3 text-right text-xs font-semibold uppercase tracking-wider text-ash-500 dark:text-ash-400 sm:px-4">
+                  </TableHead>
+                  <TableHead className="px-3 py-3 text-right text-xs font-semibold uppercase tracking-wider text-ash-500 dark:text-ash-400 sm:px-4">
                     {t("circulating_supply")}
-                  </th>
-                  <th className="px-3 py-3 text-right text-xs font-semibold uppercase tracking-wider text-ash-500 dark:text-ash-400 sm:px-4">
+                  </TableHead>
+                  <TableHead className="px-3 py-3 text-right text-xs font-semibold uppercase tracking-wider text-ash-500 dark:text-ash-400 sm:px-4">
                     {t("share_rate")}
-                  </th>
-                  <th className="px-3 py-3 text-left text-xs font-semibold uppercase tracking-wider text-ash-500 dark:text-ash-400 sm:px-4">
+                  </TableHead>
+                  <TableHead className="px-3 py-3 text-left text-xs font-semibold uppercase tracking-wider text-ash-500 dark:text-ash-400 sm:px-4">
                     {t("address")}
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
+                  </TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
                 {chainsStats.map((stats) => (
                   <ChainRow key={stats.chainConfig.chain.id} stats={stats} />
                 ))}
-              </tbody>
-            </table>
+              </TableBody>
+            </Table>
           </div>
         </CardContent>
       </Card>

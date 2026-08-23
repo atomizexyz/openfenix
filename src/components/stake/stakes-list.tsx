@@ -21,6 +21,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Progress } from "@/components/ui/progress";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
   useUserStakes,
   useEndStake,
@@ -253,26 +255,24 @@ function StakeCard({
               </span>
             </div>
 
-            <div className="h-2 w-full overflow-hidden rounded-full bg-ash-200 dark:bg-ash-800">
-              <div
-                className={cn(
-                  "h-full rounded-full transition-all duration-500",
-                  progress >= 100
-                    ? "bg-gradient-to-r from-emerald-500 to-emerald-400"
-                    : "bg-gradient-to-r from-fenix-500 to-ember-500"
-                )}
-                style={{ width: `${Math.min(progress, 100)}%` }}
-              />
-            </div>
+            <Progress
+              value={Math.min(progress, 100)}
+              className={cn(
+                "bg-ash-200 dark:bg-ash-800 [&>[data-slot=progress-indicator]]:rounded-full [&>[data-slot=progress-indicator]]:bg-gradient-to-r [&>[data-slot=progress-indicator]]:duration-500",
+                progress >= 100
+                  ? "[&>[data-slot=progress-indicator]]:from-emerald-500 [&>[data-slot=progress-indicator]]:to-emerald-400"
+                  : "[&>[data-slot=progress-indicator]]:from-fenix-500 [&>[data-slot=progress-indicator]]:to-ember-500"
+              )}
+            />
           </div>
         )}
 
         {/* Penalty Preview */}
         {!isEnded && penaltyInfo && penaltyInfo.penalty > 0 && (
-          <div className="mt-3 flex items-center gap-2 rounded-lg border border-amber-200 bg-amber-50/50 p-2.5 text-xs dark:border-amber-800/50 dark:bg-amber-950/20">
-            <AlertTriangle className="h-3.5 w-3.5 shrink-0 text-amber-500" />
-            <div className="space-y-0.5">
-              <p className="font-medium text-amber-700 dark:text-amber-400">
+          <Alert variant="warning" className="mt-3">
+            <AlertTriangle />
+            <AlertDescription>
+              <p className="font-medium">
                 {t("penalty")}:{" "}
                 <NumberFlow
                   value={penaltyInfo.penalty * 100}
@@ -281,7 +281,7 @@ function StakeCard({
                 />
                 %
               </p>
-              <p className="text-amber-600 dark:text-amber-500">
+              <p>
                 {t("payout")}:{" "}
                 <NumberFlow
                   value={penaltyInfo.payout}
@@ -290,8 +290,8 @@ function StakeCard({
                 />{" "}
                 FENIX
               </p>
-            </div>
-          </div>
+            </AlertDescription>
+          </Alert>
         )}
 
         {/* Actions */}
@@ -481,12 +481,12 @@ export function StakesList() {
 
       {/* Error messages */}
       {(endError || deferError) && (
-        <div className="flex items-center gap-2 rounded-lg border border-ember-200 bg-ember-50 p-3 text-sm text-ember-700 dark:border-ember-800 dark:bg-ember-950/30 dark:text-ember-400">
-          <AlertCircle className="h-4 w-4 shrink-0" />
-          <span>
+        <Alert variant="destructive">
+          <AlertCircle />
+          <AlertDescription>
             {endError ? t("error_ending") : t("error_deferring")}
-          </span>
-        </div>
+          </AlertDescription>
+        </Alert>
       )}
     </div>
   );

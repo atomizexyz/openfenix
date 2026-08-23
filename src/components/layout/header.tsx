@@ -7,10 +7,17 @@ import { useDisconnect } from "wagmi";
 import { useTheme } from "next-themes";
 import { Sun, Moon, Menu, X, LogOut, Copy, Check, ExternalLink } from "lucide-react";
 import { FenixLogo, FenixWordmark } from "@/components/icons";
-import { useState, useRef, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { cn } from "@/lib/utils";
-import { useClickOutside } from "@/hooks/use-click-outside";
 import { useCopyToClipboard } from "@/hooks/use-copy-to-clipboard";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
+import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
 import { ChainSelector } from "@/components/wallet/chain-selector";
 import { WalletQR } from "@/components/wallet/wallet-qr";
 import { LocaleSelector } from "@/components/layout/locale-selector";
@@ -18,14 +25,9 @@ import { LocaleSelector } from "@/components/layout/locale-selector";
 function WalletButton() {
   const t = useTranslations("nav");
   const { disconnect } = useDisconnect();
-  const [menuOpen, setMenuOpen] = useState(false);
-  const menuRef = useRef<HTMLDivElement>(null);
   const { copied, copy } = useCopyToClipboard();
 
-  useClickOutside(menuRef, useCallback(() => setMenuOpen(false), []));
-
   const handleDisconnect = useCallback(() => {
-    setMenuOpen(false);
     disconnect();
   }, [disconnect]);
 
@@ -44,53 +46,41 @@ function WalletButton() {
         }
 
         return (
-          <div ref={menuRef} className="relative">
-            <button
-              onClick={() => setMenuOpen(!menuOpen)}
-              className="rounded-xl border border-ash-200 bg-white px-4 py-2 text-sm font-medium text-ash-900 transition-all hover:bg-ash-50 dark:border-ash-700 dark:bg-ash-800 dark:text-ash-100 dark:hover:bg-ash-700"
-            >
-              {ensName || truncatedAddress}
-            </button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button className="rounded-xl border border-ash-200 bg-white px-4 py-2 text-sm font-medium text-ash-900 transition-all hover:bg-ash-50 dark:border-ash-700 dark:bg-ash-800 dark:text-ash-100 dark:hover:bg-ash-700">
+                {ensName || truncatedAddress}
+              </button>
+            </DropdownMenuTrigger>
 
-            {menuOpen && (
-              <div className="absolute end-0 top-full z-50 mt-2 w-52 rounded-xl border border-ash-200 bg-white p-1 shadow-lg dark:border-ash-700 dark:bg-ash-900">
-                {address && (
-                  <button
-                    onClick={() => copy(address)}
-                    className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-ash-700 transition-colors hover:bg-ash-100 dark:text-ash-300 dark:hover:bg-ash-800"
-                  >
-                    {copied ? (
-                      <Check className="h-4 w-4 text-emerald-500" />
-                    ) : (
-                      <Copy className="h-4 w-4" />
-                    )}
-                    {copied ? t("copied") : t("copy_address")}
-                  </button>
-                )}
+            <DropdownMenuContent align="end" className="w-52">
+              {address && (
+                <DropdownMenuItem onClick={() => copy(address)}>
+                  {copied ? (
+                    <Check className="h-4 w-4 text-emerald-500" />
+                  ) : (
+                    <Copy className="h-4 w-4" />
+                  )}
+                  {copied ? t("copied") : t("copy_address")}
+                </DropdownMenuItem>
+              )}
 
-                <button
-                  onClick={() => {
-                    setMenuOpen(false);
-                    show?.();
-                  }}
-                  className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-ash-700 transition-colors hover:bg-ash-100 dark:text-ash-300 dark:hover:bg-ash-800"
-                >
-                  <ExternalLink className="h-4 w-4" />
-                  {t("wallet_details")}
-                </button>
+              <DropdownMenuItem onClick={() => show?.()}>
+                <ExternalLink className="h-4 w-4" />
+                {t("wallet_details")}
+              </DropdownMenuItem>
 
-                <div className="my-1 border-t border-ash-200 dark:border-ash-700" />
+              <DropdownMenuSeparator />
 
-                <button
-                  onClick={handleDisconnect}
-                  className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-red-600 transition-colors hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950/30"
-                >
-                  <LogOut className="h-4 w-4" />
-                  {t("disconnect")}
-                </button>
-              </div>
-            )}
-          </div>
+              <DropdownMenuItem
+                onClick={handleDisconnect}
+                className="text-red-600 focus:bg-red-50 focus:text-red-600 dark:text-red-400 dark:focus:bg-red-950/30 dark:focus:text-red-400"
+              >
+                <LogOut className="h-4 w-4 text-red-600 dark:text-red-400" />
+                {t("disconnect")}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         );
       }}
     </ConnectKitButton.Custom>
@@ -154,41 +144,44 @@ export function Header() {
           <WalletButton />
 
           {/* Mobile menu button */}
-          <button
-            onClick={() => setMobileOpen(!mobileOpen)}
-            className="rounded-lg p-2 text-ash-600 md:hidden dark:text-ash-400"
-          >
-            {mobileOpen ? (
-              <X className="h-5 w-5" />
-            ) : (
-              <Menu className="h-5 w-5" />
-            )}
-          </button>
+          <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
+            <SheetTrigger asChild>
+              <button className="rounded-lg p-2 text-ash-600 md:hidden dark:text-ash-400">
+                {mobileOpen ? (
+                  <X className="h-5 w-5" />
+                ) : (
+                  <Menu className="h-5 w-5" />
+                )}
+              </button>
+            </SheetTrigger>
+
+            {/* Mobile Nav */}
+            <SheetContent
+              side="top"
+              aria-label="Menu"
+              className="border-ash-200 bg-white px-4 py-3 dark:border-ash-800 dark:bg-ash-950 md:hidden"
+            >
+              <nav className="flex flex-col gap-1">
+                {navItems.map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setMobileOpen(false)}
+                    className={cn(
+                      "rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+                      pathname === item.href
+                        ? "bg-fenix-500/10 text-fenix-600 dark:text-fenix-400"
+                        : "text-ash-600 hover:bg-ash-100 dark:text-ash-400 dark:hover:bg-ash-800"
+                    )}
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+              </nav>
+            </SheetContent>
+          </Sheet>
         </div>
       </div>
-
-      {/* Mobile Nav */}
-      {mobileOpen && (
-        <div className="border-t border-ash-200 bg-white px-4 py-3 dark:border-ash-800 dark:bg-ash-950 md:hidden">
-          <nav className="flex flex-col gap-1">
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => setMobileOpen(false)}
-                className={cn(
-                  "rounded-lg px-3 py-2 text-sm font-medium transition-colors",
-                  pathname === item.href
-                    ? "bg-fenix-500/10 text-fenix-600 dark:text-fenix-400"
-                    : "text-ash-600 hover:bg-ash-100 dark:text-ash-400 dark:hover:bg-ash-800"
-                )}
-              >
-                {item.label}
-              </Link>
-            ))}
-          </nav>
-        </div>
-      )}
     </header>
   );
 }

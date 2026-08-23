@@ -15,8 +15,11 @@ import {
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Separator } from "@/components/ui/separator";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useStartStake, useFenixBalance } from "@/hooks/use-fenix-contract";
 import {
   formatEther,
@@ -154,9 +157,9 @@ export function StakeForm() {
         {/* FENIX Amount Input */}
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <label className="text-sm font-medium text-ash-700 dark:text-ash-300">
+            <Label className="text-sm font-medium text-ash-700 dark:text-ash-300">
               {t("amount_label")}
-            </label>
+            </Label>
             <div className="flex items-center gap-1.5 text-xs text-ash-500 dark:text-ash-400">
               <span>{t("balance")}:</span>
               {isBalanceLoading ? (
@@ -203,9 +206,9 @@ export function StakeForm() {
         {/* Term Slider */}
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <label className="text-sm font-medium text-ash-700 dark:text-ash-300">
+            <Label className="text-sm font-medium text-ash-700 dark:text-ash-300">
               {t("term_label")}
-            </label>
+            </Label>
             <span className="rounded-md bg-fenix-500/10 px-2 py-0.5 font-mono text-sm font-semibold text-fenix-600 dark:text-fenix-400">
               {t("term_days", { days: term.toLocaleString() })}
             </span>
@@ -215,8 +218,8 @@ export function StakeForm() {
             min={MIN_STAKE_DAYS}
             max={MAX_STAKE_DAYS}
             step={1}
-            value={term}
-            onChange={(e) => setTerm(parseInt(e.target.value, 10))}
+            value={[term]}
+            onValueChange={([v]) => setTerm(v)}
             disabled={isProcessing}
           />
 
@@ -261,7 +264,7 @@ export function StakeForm() {
               value={sizeBonus}
             />
 
-            <div className="my-1 border-t border-ash-200 dark:border-ash-700" />
+            <Separator className="my-1" />
 
             <BonusRow
               icon={<Sparkles className="h-3.5 w-3.5 text-fenix-500" />}
@@ -318,22 +321,22 @@ export function StakeForm() {
 
         {/* Status Messages */}
         {isSuccess && (
-          <div className="flex items-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-700 dark:border-emerald-800 dark:bg-emerald-950/30 dark:text-emerald-400">
-            <CheckCircle className="h-4 w-4 shrink-0" />
-            <span>
+          <Alert variant="success">
+            <CheckCircle />
+            <AlertDescription>
               {t("success", {
                 amount: parseFloat(amount).toLocaleString(),
                 term: term.toLocaleString(),
               })}
-            </span>
-          </div>
+            </AlertDescription>
+          </Alert>
         )}
 
         {error && (
-          <div className="flex items-center gap-2 rounded-lg border border-ember-200 bg-ember-50 p-3 text-sm text-ember-700 dark:border-ember-800 dark:bg-ember-950/30 dark:text-ember-400">
-            <AlertCircle className="h-4 w-4 shrink-0" />
-            <span>{t("error")}</span>
-          </div>
+          <Alert variant="destructive">
+            <AlertCircle />
+            <AlertDescription>{t("error")}</AlertDescription>
+          </Alert>
         )}
       </CardContent>
     </Card>
