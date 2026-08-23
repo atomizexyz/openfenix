@@ -20,7 +20,6 @@ import {
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
 import { ChainSelector } from "@/components/wallet/chain-selector";
 import { WalletQR } from "@/components/wallet/wallet-qr";
-import { LocaleSelector } from "@/components/layout/locale-selector";
 
 function WalletButton() {
   const t = useTranslations("nav");
@@ -129,7 +128,6 @@ export function Header() {
 
         {/* Right side controls */}
         <div className="flex items-center gap-2">
-          <LocaleSelector />
           <ChainSelector />
           <WalletQR />
           <button

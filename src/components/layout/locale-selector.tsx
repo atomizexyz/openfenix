@@ -12,7 +12,17 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-export function LocaleSelector() {
+interface LocaleSelectorProps {
+  /** Which edge the menu lines up with. Use "start" on the left of a layout. */
+  align?: "start" | "end";
+  /** Show the locale code beside the globe. Hidden on small screens by default. */
+  label?: "responsive" | "always";
+}
+
+export function LocaleSelector({
+  align = "end",
+  label = "responsive",
+}: LocaleSelectorProps = {}) {
   const locale = useLocale();
   const router = useRouter();
   const pathname = usePathname();
@@ -29,12 +39,14 @@ export function LocaleSelector() {
           aria-label="Change language"
         >
           <Globe className="h-4 w-4" />
-          <span className="hidden sm:inline">{locale.toUpperCase()}</span>
+          <span className={cn(label === "responsive" && "hidden sm:inline")}>
+            {locale.toUpperCase()}
+          </span>
         </button>
       </DropdownMenuTrigger>
 
       <DropdownMenuContent
-        align="end"
+        align={align}
         className="max-h-80 w-48 overflow-y-auto rounded-xl border-ash-200 bg-white shadow-lg dark:border-ash-700 dark:bg-ash-900"
       >
         {LOCALES.map((l) => (

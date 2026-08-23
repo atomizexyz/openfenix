@@ -5,6 +5,7 @@ import { ExternalLink } from "lucide-react";
 import { FenixLogo, FenixWordmark, GithubIcon } from "@/components/icons";
 import { SOCIAL_LINKS } from "@/config/constants";
 import { Link } from "@/i18n/routing";
+import { LocaleSelector } from "@/components/layout/locale-selector";
 
 export function Footer() {
   const t = useTranslations("footer");
@@ -22,6 +23,9 @@ export function Footer() {
             <p className="text-sm text-ash-500 dark:text-ash-400">
               {t("copyright")}
             </p>
+            <div className="-ms-2">
+              <LocaleSelector align="start" label="always" />
+            </div>
           </div>
 
           {/* Protocol */}
