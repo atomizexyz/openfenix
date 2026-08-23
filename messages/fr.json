@@ -9,7 +9,10 @@
     "stake": "Staker",
     "rewards": "Récompenses",
     "connect": "Connecter le Portefeuille",
-    "disconnect": "Déconnecter"
+    "disconnect": "Déconnecter",
+    "copied": "Copié !",
+    "copy_address": "Copier l'Adresse",
+    "wallet_details": "Détails du Portefeuille"
   },
   "hero": {
     "title": "Renaître de ses Cendres",
@@ -29,7 +32,10 @@
     "circulating": "En circulation",
     "supply_distribution": "Distribution de l'offre",
     "inflation_rate": "Taux d'Inflation",
-    "active_stakes": "Stakes Actifs"
+    "active_stakes": "Stakes Actifs",
+    "projected_yield": "Rendement Prévu",
+    "yield_empty": "Saisissez un montant et une durée pour voir le rendement prévu",
+    "no_pool_data": "Aucune donnée de pool disponible"
   },
   "dashboard": {
     "title": "Tableau de bord",
@@ -47,7 +53,12 @@
     "max": "Max",
     "balance": "Solde",
     "success": "Brûlé avec succès {xen} XEN pour {fenix} FENIX",
-    "error": "Erreur lors de la combustion de XEN"
+    "error": "Erreur lors de la combustion de XEN",
+    "confirming": "Confirmation...",
+    "approving": "Approbation...",
+    "burning": "Combustion...",
+    "approval_confirmed": "Approbation confirmée. Vous pouvez maintenant brûler.",
+    "unsupported_network": "Veuillez basculer vers un réseau pris en charge"
   },
   "stake": {
     "title": "Staker FENIX",
@@ -68,7 +79,9 @@
     "balance": "Solde",
     "max": "Max",
     "success": "Staké avec succès {amount} FENIX pour {term} jours",
-    "error": "Erreur lors du démarrage du stake"
+    "error": "Erreur lors du démarrage du stake",
+    "confirming": "Confirmation...",
+    "staking": "Démarrage du stake..."
   },
   "stakes": {
     "title": "Vos Stakes",
@@ -95,7 +108,9 @@
     "matured": "Échu",
     "previous": "Précédent",
     "next": "Suivant",
-    "page_of": "Page {page} sur {total}"
+    "page_of": "Page {page} sur {total}",
+    "error_ending": "Erreur lors de la fin du stake",
+    "error_deferring": "Erreur lors du report du stake"
   },
   "rewards": {
     "title": "Récompenses",
@@ -109,7 +124,11 @@
     "estimated_reward": "Récompense Estimée",
     "weeks": "{weeks} semaines",
     "days": "{days} jours",
-    "ready": "Pret"
+    "ready": "Pret",
+    "confirming": "Confirmation...",
+    "flushing": "Distribution...",
+    "flush_success": "Récompenses distribuées avec succès",
+    "flush_error": "Erreur lors de la distribution des récompenses"
   },
   "chain_table": {
     "title": "Vue Multi-Chaines",
@@ -154,6 +173,8 @@
     "retry": "Réessayer",
     "copy": "Copier",
     "copied": "Copié !",
+    "wallet_address": "Adresse du Portefeuille",
+    "scan_to_send": "Scannez pour envoyer des tokens à cette adresse",
     "share": "Partager",
     "close": "Fermer",
     "confirm": "Confirmer",

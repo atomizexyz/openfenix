@@ -9,7 +9,10 @@
     "stake": "Staking",
     "rewards": "Recompensas",
     "connect": "Conectar Billetera",
-    "disconnect": "Desconectar"
+    "disconnect": "Desconectar",
+    "copied": "¡Copiado!",
+    "copy_address": "Copiar Dirección",
+    "wallet_details": "Detalles de la Billetera"
   },
   "hero": {
     "title": "Renace de las Cenizas",
@@ -29,7 +32,10 @@
     "circulating": "Circulante",
     "supply_distribution": "Distribución de Suministro",
     "inflation_rate": "Tasa de Inflación",
-    "active_stakes": "Stakes Activos"
+    "active_stakes": "Stakes Activos",
+    "projected_yield": "Rendimiento Proyectado",
+    "yield_empty": "Introduce un monto y un plazo para ver el rendimiento proyectado",
+    "no_pool_data": "No hay datos del pool disponibles"
   },
   "dashboard": {
     "title": "Panel",
@@ -47,7 +53,12 @@
     "max": "Máx",
     "balance": "Saldo",
     "success": "Se quemaron exitosamente {xen} XEN por {fenix} FENIX",
-    "error": "Error al quemar XEN"
+    "error": "Error al quemar XEN",
+    "confirming": "Confirmando...",
+    "approving": "Aprobando...",
+    "burning": "Quemando...",
+    "approval_confirmed": "Aprobación confirmada. Ya puedes quemar.",
+    "unsupported_network": "Por favor, cambia a una red compatible"
   },
   "stake": {
     "title": "Staking de FENIX",
@@ -68,7 +79,9 @@
     "balance": "Saldo",
     "max": "Máx",
     "success": "Se hizo staking exitosamente de {amount} FENIX por {term} días",
-    "error": "Error al iniciar el stake"
+    "error": "Error al iniciar el stake",
+    "confirming": "Confirmando...",
+    "staking": "Iniciando stake..."
   },
   "stakes": {
     "title": "Tus Stakes",
@@ -95,7 +108,9 @@
     "matured": "Vencido",
     "previous": "Anterior",
     "next": "Siguiente",
-    "page_of": "Página {page} de {total}"
+    "page_of": "Página {page} de {total}",
+    "error_ending": "Error al finalizar el stake",
+    "error_deferring": "Error al diferir el stake"
   },
   "rewards": {
     "title": "Recompensas",
@@ -109,7 +124,11 @@
     "estimated_reward": "Recompensa Estimada",
     "weeks": "{weeks} semanas",
     "days": "{days} días",
-    "ready": "Listo"
+    "ready": "Listo",
+    "confirming": "Confirmando...",
+    "flushing": "Distribuyendo...",
+    "flush_success": "Recompensas distribuidas con éxito",
+    "flush_error": "Error al distribuir las recompensas"
   },
   "chain_table": {
     "title": "Vista Multi-Cadena",
@@ -154,6 +173,8 @@
     "retry": "Intentar de nuevo",
     "copy": "Copiar",
     "copied": "¡Copiado!",
+    "wallet_address": "Dirección de la Billetera",
+    "scan_to_send": "Escanea para enviar tokens a esta dirección",
     "share": "Compartir",
     "close": "Cerrar",
     "confirm": "Confirmar",

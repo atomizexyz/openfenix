@@ -9,11 +9,14 @@
     "stake": "Staken",
     "rewards": "Beloningen",
     "connect": "Portemonnee Verbinden",
-    "disconnect": "Loskoppelen"
+    "disconnect": "Loskoppelen",
+    "copied": "Gekopieerd!",
+    "copy_address": "Adres Kopiëren",
+    "wallet_details": "Wallet-details"
   },
   "hero": {
     "title": "Herrijs Uit De As",
-    "subtitle": "Verbrand XEN om FENIX te creeren. Stake FENIX om vertrouwensloos rendement te verdienen tegen een vast jaarlijks inflatiepercentage van 1,618%.",
+    "subtitle": "Verbrand XEN om FENIX te creëren. Stake FENIX om vertrouwensloos rendement te verdienen tegen een vast jaarlijks inflatiepercentage van 1,618%.",
     "cta_burn": "Begin Met Verbranden",
     "cta_learn": "Meer Informatie",
     "next_flush": "Volgende beloning over",
@@ -29,7 +32,10 @@
     "circulating": "In omloop",
     "supply_distribution": "Aanbodverdeling",
     "inflation_rate": "Inflatiepercentage",
-    "active_stakes": "Actieve Stakes"
+    "active_stakes": "Actieve Stakes",
+    "projected_yield": "Verwacht Rendement",
+    "yield_empty": "Voer een bedrag en looptijd in om het verwachte rendement te zien",
+    "no_pool_data": "Geen poolgegevens beschikbaar"
   },
   "dashboard": {
     "title": "Dashboard",
@@ -47,7 +53,12 @@
     "max": "Max",
     "balance": "Saldo",
     "success": "Succesvol {xen} XEN verbrand voor {fenix} FENIX",
-    "error": "Fout bij het verbranden van XEN"
+    "error": "Fout bij het verbranden van XEN",
+    "confirming": "Bevestigen...",
+    "approving": "Goedkeuren...",
+    "burning": "Verbranden...",
+    "approval_confirmed": "Goedkeuring bevestigd. Je kunt nu verbranden.",
+    "unsupported_network": "Schakel over naar een ondersteund netwerk"
   },
   "stake": {
     "title": "FENIX Staken",
@@ -68,7 +79,9 @@
     "balance": "Saldo",
     "max": "Max",
     "success": "Succesvol {amount} FENIX gestaked voor {term} dagen",
-    "error": "Fout bij het starten van de stake"
+    "error": "Fout bij het starten van de stake",
+    "confirming": "Bevestigen...",
+    "staking": "Stake starten..."
   },
   "stakes": {
     "title": "Uw Stakes",
@@ -82,11 +95,11 @@
     "payout": "Uitbetaling",
     "penalty": "Boete",
     "progress": "Voortgang",
-    "end_stake": "Stake Beeindigen",
+    "end_stake": "Stake Beëindigen",
     "defer_stake": "Stake Uitstellen",
     "active": "Actief",
     "deferred": "Uitgesteld",
-    "ended": "Beeindigd",
+    "ended": "Beëindigd",
     "early": "Vroeg",
     "late": "Laat",
     "on_time": "Op Tijd",
@@ -95,7 +108,9 @@
     "matured": "Vervallen",
     "previous": "Vorige",
     "next": "Volgende",
-    "page_of": "Pagina {page} van {total}"
+    "page_of": "Pagina {page} van {total}",
+    "error_ending": "Fout bij het beëindigen van de stake",
+    "error_deferring": "Fout bij het uitstellen van de stake"
   },
   "rewards": {
     "title": "Beloningen",
@@ -109,7 +124,11 @@
     "estimated_reward": "Geschatte Beloning",
     "weeks": "{weeks} weken",
     "days": "{days} dagen",
-    "ready": "Gereed"
+    "ready": "Gereed",
+    "confirming": "Bevestigen...",
+    "flushing": "Distribueren...",
+    "flush_success": "Beloningen succesvol gedistribueerd",
+    "flush_error": "Fout bij het distribueren van beloningen"
   },
   "chain_table": {
     "title": "Cross-Chain Overzicht",
@@ -127,7 +146,7 @@
   },
   "features": {
     "burn_title": "Bewijs van Verbranding (Proof of Burn)",
-    "burn_desc": "FENIX wordt uitsluitend gecreeerd uit verbrande XEN-tokens. Geen pre-mine, geen investeerdersallocatie.",
+    "burn_desc": "FENIX wordt uitsluitend gecreëerd uit verbrande XEN-tokens. Geen pre-mine, geen investeerdersallocatie.",
     "stake_title": "Vermogensstaking (Equity Staking)",
     "stake_desc": "Dynamische vermogenspool waar stakers FENIX storten en proportionele aandelen ontvangen.",
     "yield_title": "Vertrouwensloos Rendement (Trustless Yield)",
@@ -152,8 +171,10 @@
     "loading": "Laden...",
     "error": "Er is iets misgegaan",
     "retry": "Opnieuw proberen",
-    "copy": "Kopieren",
+    "copy": "Kopiëren",
     "copied": "Gekopieerd!",
+    "wallet_address": "Wallet-adres",
+    "scan_to_send": "Scan om tokens naar dit adres te sturen",
     "share": "Delen",
     "close": "Sluiten",
     "confirm": "Bevestigen",

@@ -9,7 +9,10 @@
     "stake": "Staken",
     "rewards": "Belohnungen",
     "connect": "Wallet Verbinden",
-    "disconnect": "Trennen"
+    "disconnect": "Trennen",
+    "copied": "Kopiert!",
+    "copy_address": "Adresse Kopieren",
+    "wallet_details": "Wallet-Details"
   },
   "hero": {
     "title": "Aus der Asche Auferstehen",
@@ -29,7 +32,10 @@
     "circulating": "Umlaufend",
     "supply_distribution": "Angebotsverteilung",
     "inflation_rate": "Inflationsrate",
-    "active_stakes": "Aktive Stakes"
+    "active_stakes": "Aktive Stakes",
+    "projected_yield": "Voraussichtlicher Ertrag",
+    "yield_empty": "Betrag und Laufzeit eingeben, um den voraussichtlichen Ertrag zu sehen",
+    "no_pool_data": "Keine Pool-Daten verfügbar"
   },
   "dashboard": {
     "title": "Dashboard",
@@ -47,7 +53,12 @@
     "max": "Max",
     "balance": "Guthaben",
     "success": "Erfolgreich {xen} XEN für {fenix} FENIX verbrannt",
-    "error": "Fehler beim Verbrennen von XEN"
+    "error": "Fehler beim Verbrennen von XEN",
+    "confirming": "Wird bestätigt...",
+    "approving": "Wird genehmigt...",
+    "burning": "Wird verbrannt...",
+    "approval_confirmed": "Genehmigung bestätigt. Sie können jetzt verbrennen.",
+    "unsupported_network": "Bitte zu einem unterstützten Netzwerk wechseln"
   },
   "stake": {
     "title": "FENIX Staken",
@@ -68,7 +79,9 @@
     "balance": "Guthaben",
     "max": "Max",
     "success": "Erfolgreich {amount} FENIX für {term} Tage gestaket",
-    "error": "Fehler beim Starten des Stakes"
+    "error": "Fehler beim Starten des Stakes",
+    "confirming": "Wird bestätigt...",
+    "staking": "Stake wird gestartet..."
   },
   "stakes": {
     "title": "Deine Stakes",
@@ -95,7 +108,9 @@
     "matured": "Fällig",
     "previous": "Zurück",
     "next": "Weiter",
-    "page_of": "Seite {page} von {total}"
+    "page_of": "Seite {page} von {total}",
+    "error_ending": "Fehler beim Beenden des Stakes",
+    "error_deferring": "Fehler beim Aufschieben des Stakes"
   },
   "rewards": {
     "title": "Belohnungen",
@@ -109,7 +124,11 @@
     "estimated_reward": "Geschätzte Belohnung",
     "weeks": "{weeks} Wochen",
     "days": "{days} Tage",
-    "ready": "Bereit"
+    "ready": "Bereit",
+    "confirming": "Wird bestätigt...",
+    "flushing": "Wird ausgeschüttet...",
+    "flush_success": "Belohnungen erfolgreich ausgeschüttet",
+    "flush_error": "Fehler beim Ausschütten der Belohnungen"
   },
   "chain_table": {
     "title": "Ketten-Ubersicht",
@@ -154,6 +173,8 @@
     "retry": "Erneut versuchen",
     "copy": "Kopieren",
     "copied": "Kopiert!",
+    "wallet_address": "Wallet-Adresse",
+    "scan_to_send": "Scannen, um Token an diese Adresse zu senden",
     "share": "Teilen",
     "close": "Schließen",
     "confirm": "Bestätigen",

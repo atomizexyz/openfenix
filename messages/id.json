@@ -9,7 +9,10 @@
     "stake": "Stake",
     "rewards": "Hadiah",
     "connect": "Hubungkan Dompet",
-    "disconnect": "Putuskan"
+    "disconnect": "Putuskan",
+    "copied": "Disalin!",
+    "copy_address": "Salin Alamat",
+    "wallet_details": "Detail Dompet"
   },
   "hero": {
     "title": "Bangkit Dari Abu",
@@ -29,7 +32,10 @@
     "circulating": "Beredar",
     "supply_distribution": "Distribusi Pasokan",
     "inflation_rate": "Tingkat Inflasi",
-    "active_stakes": "Stake Aktif"
+    "active_stakes": "Stake Aktif",
+    "projected_yield": "Perkiraan Imbal Hasil",
+    "yield_empty": "Masukkan jumlah dan jangka waktu untuk melihat perkiraan imbal hasil",
+    "no_pool_data": "Tidak ada data pool tersedia"
   },
   "dashboard": {
     "title": "Dasbor",
@@ -47,7 +53,12 @@
     "max": "Maks",
     "balance": "Saldo",
     "success": "Berhasil membakar {xen} XEN untuk {fenix} FENIX",
-    "error": "Kesalahan saat membakar XEN"
+    "error": "Kesalahan saat membakar XEN",
+    "confirming": "Mengonfirmasi...",
+    "approving": "Menyetujui...",
+    "burning": "Membakar...",
+    "approval_confirmed": "Persetujuan dikonfirmasi. Anda sekarang dapat membakar.",
+    "unsupported_network": "Silakan beralih ke jaringan yang didukung"
   },
   "stake": {
     "title": "Stake FENIX",
@@ -68,7 +79,9 @@
     "balance": "Saldo",
     "max": "Maks",
     "success": "Berhasil men-stake {amount} FENIX selama {term} hari",
-    "error": "Kesalahan saat memulai stake"
+    "error": "Kesalahan saat memulai stake",
+    "confirming": "Mengonfirmasi...",
+    "staking": "Memulai stake..."
   },
   "stakes": {
     "title": "Stake Anda",
@@ -95,7 +108,9 @@
     "matured": "Jatuh Tempo",
     "previous": "Sebelumnya",
     "next": "Berikutnya",
-    "page_of": "Halaman {page} dari {total}"
+    "page_of": "Halaman {page} dari {total}",
+    "error_ending": "Gagal mengakhiri stake",
+    "error_deferring": "Gagal menunda stake"
   },
   "rewards": {
     "title": "Hadiah",
@@ -109,7 +124,11 @@
     "estimated_reward": "Estimasi Hadiah",
     "weeks": "{weeks} minggu",
     "days": "{days} hari",
-    "ready": "Siap"
+    "ready": "Siap",
+    "confirming": "Mengonfirmasi...",
+    "flushing": "Mendistribusikan...",
+    "flush_success": "Hadiah berhasil didistribusikan",
+    "flush_error": "Gagal mendistribusikan hadiah"
   },
   "chain_table": {
     "title": "Ikhtisar Lintas Rantai",
@@ -154,6 +173,8 @@
     "retry": "Coba lagi",
     "copy": "Salin",
     "copied": "Disalin!",
+    "wallet_address": "Alamat Dompet",
+    "scan_to_send": "Pindai untuk mengirim token ke alamat ini",
     "share": "Bagikan",
     "close": "Tutup",
     "confirm": "Konfirmasi",
