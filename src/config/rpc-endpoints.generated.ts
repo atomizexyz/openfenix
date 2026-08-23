@@ -17,16 +17,16 @@ export const GENERATED_RPC_ENDPOINTS: Record<number, GeneratedRpcConfig> = {
   // Ethereum
   1: {
     http: [
-      //   35ms
+      //   36ms
       "https://eth.drpc.org",
-      //   52ms, no multicall3, no batch
-      "https://ethereum-mainnet.gateway.tatum.io",
-      //   56ms
+      //   52ms
       "https://mainnet.rpc.sentio.xyz",
-      //   72ms
-      "https://eth1.lava.build",
-      //   78ms
+      //   57ms, no multicall3, no batch
+      "https://ethereum-mainnet.gateway.tatum.io",
+      //   74ms
       "https://uk.rpc.blxrbdn.com",
+      //   76ms
+      "https://eth1.lava.build",
     ],
     multicall: false,
     batch: false,
@@ -34,33 +34,33 @@ export const GENERATED_RPC_ENDPOINTS: Record<number, GeneratedRpcConfig> = {
   // Polygon
   137: {
     http: [
-      //   42ms, no batch
-      "https://polygon-mainnet.g.alchemy.com/v2/demo",
-      //   43ms
+      //   36ms
       "https://polygon.drpc.org",
-      //   56ms
+      //   49ms
       "https://matic.rpc.sentio.xyz",
-      //  117ms
+      //   98ms
       "https://gateway.tenderly.co/public/polygon",
-      //  120ms
-      "https://public.1rpc.io/matic",
+      //  114ms, no multicall3, no batch
+      "https://polygon-mainnet.gateway.tatum.io",
+      //  127ms
+      "https://polygon-bor-rpc.publicnode.com",
     ],
-    multicall: true,
+    multicall: false,
     batch: false,
   },
   // BNB Smart Chain
   56: {
     http: [
-      //   99ms
+      //   78ms
+      "https://binance.nodereal.io",
+      //   83ms
+      "https://bsc-dataseed.bnbchain.org",
+      //   92ms
       "https://bsc.rpc.sentio.xyz",
-      //  132ms
-      "https://rpc-bsc.48.club",
-      //  139ms
-      "https://56.rpc.thirdweb.com",
-      //  148ms
-      "https://0.48.club",
-      //  149ms
+      //  106ms
       "https://bsc-rpc.publicnode.com",
+      //  108ms
+      "https://bsc-mainnet.public.blastapi.io",
     ],
     multicall: true,
     batch: true,
@@ -68,16 +68,16 @@ export const GENERATED_RPC_ENDPOINTS: Record<number, GeneratedRpcConfig> = {
   // Avalanche
   43114: {
     http: [
-      //   38ms
+      //   35ms
       "https://avalanche.drpc.org",
-      //   52ms
+      //   47ms
       "https://api.avax.network/ext/bc/C/rpc",
-      //   86ms
+      //   52ms
       "https://avalanche.rpc.sentio.xyz",
-      //  136ms
+      //  115ms
+      "https://public.1rpc.io/avax/c",
+      //  139ms
       "https://avalanche-c-chain-rpc.publicnode.com",
-      //  251ms
-      "https://avalanche-mainnet.gateway.tenderly.co",
     ],
     multicall: true,
     batch: true,
@@ -85,18 +85,18 @@ export const GENERATED_RPC_ENDPOINTS: Record<number, GeneratedRpcConfig> = {
   // Moonbeam
   1284: {
     http: [
-      //   80ms
+      //  110ms
       "https://moonbeam.drpc.org",
-      //  199ms
+      //  145ms
       "https://public.1rpc.io/glmr",
-      //  260ms
+      //  175ms
+      "https://moonbeam.unitedbloc.com",
+      //  266ms
       "https://moonbeam.api.onfinality.io/public",
-      //  575ms
+      //  583ms, no multicall3
       "https://moonbeam.api.pocket.network",
-      //  641ms
-      "https://rpc.swiftnodes.io/rpc/moonbeam",
     ],
-    multicall: true,
+    multicall: false,
     batch: true,
   },
   // Evmos
@@ -110,19 +110,19 @@ export const GENERATED_RPC_ENDPOINTS: Record<number, GeneratedRpcConfig> = {
   // Fantom
   250: {
     http: [
-      //   77ms
+      //   84ms
       "https://fantom.drpc.org",
-      //  178ms
+      //  156ms, no batch
       "https://public.1rpc.io/ftm",
-      //  214ms
+      //  219ms
       "https://250.rpc.thirdweb.com",
-      //  568ms
+      //  562ms
+      "https://rpc.fantom.network",
+      //  577ms
       "https://fantom.api.pocket.network",
-      //  569ms
-      "https://rpc2.fantom.network",
     ],
     multicall: true,
-    batch: true,
+    batch: false,
   },
   // Dogechain
   2000: {
@@ -135,11 +135,9 @@ export const GENERATED_RPC_ENDPOINTS: Record<number, GeneratedRpcConfig> = {
   // OKC
   66: {
     http: [
-      //  114ms
+      //   77ms
       "https://oktc.drpc.org",
-      //  203ms
-      "https://public.1rpc.io/oktc",
-      //  524ms
+      //  537ms
       "https://exchainrpc.okex.org",
     ],
     multicall: true,
@@ -157,16 +155,16 @@ export const GENERATED_RPC_ENDPOINTS: Record<number, GeneratedRpcConfig> = {
   // Base
   8453: {
     http: [
-      //   42ms
+      //   73ms
       "https://base.drpc.org",
-      //   97ms
+      //   89ms
       "https://base.rpc.sentio.xyz",
-      //  122ms
+      //  136ms
       "https://developer-access-mainnet.base.org",
-      //  139ms
-      "https://base-rpc.publicnode.com",
-      //  141ms
+      //  136ms
       "https://mainnet.base.org",
+      //  152ms
+      "https://base-rpc.publicnode.com",
     ],
     multicall: true,
     batch: true,
@@ -174,15 +172,15 @@ export const GENERATED_RPC_ENDPOINTS: Record<number, GeneratedRpcConfig> = {
   // PulseChain
   369: {
     http: [
-      //   64ms
+      //   63ms
       "https://rpc.pulsechainstats.com",
-      //  100ms
+      //   99ms
       "https://pulsechain-rpc.publicnode.com",
-      //  196ms
+      //  198ms
       "https://one.valve.city/rpc/vk_demo/evm/369",
-      //  220ms
+      //  215ms
       "https://rpc-pulsechain.g4mm4.io",
-      //  228ms
+      //  242ms
       "https://rpc.pulsechainrpc.com",
     ],
     multicall: true,
