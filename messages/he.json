@@ -58,7 +58,9 @@
     "approving": "מאשר הרשאה...",
     "burning": "שורף...",
     "approval_confirmed": "ההרשאה אושרה. כעת ניתן לשרוף.",
-    "unsupported_network": "אנא עבור לרשת נתמכת"
+    "unsupported_network": "אנא עבור לרשת נתמכת",
+    "error_invalid_amount": "הזן סכום גדול מ-0",
+    "error_exceeds_balance": "הסכום חורג מיתרת ה-XEN שלך"
   },
   "stake": {
     "title": "הפקדת FENIX",
@@ -81,11 +83,14 @@
     "success": "הופקדו בהצלחה {amount} FENIX למשך {term} ימים",
     "error": "שגיאה בהתחלת הפקדה",
     "confirming": "מאשר...",
-    "staking": "מתחיל הפקדה..."
+    "staking": "מתחיל הפקדה...",
+    "error_invalid_amount": "הזן סכום גדול מ-0",
+    "error_exceeds_balance": "הסכום חורג מיתרת ה-FENIX שלך"
   },
   "stakes": {
     "title": "ההפקדות שלך",
     "no_stakes": "אין הפקדות פעילות",
+    "start_staking": "הפקידו FENIX",
     "stake_id": "הפקדה #{id}",
     "amount": "כמות",
     "shares": "מניות",
@@ -142,7 +147,9 @@
     "circulating_supply": "במחזור",
     "active": "פעיל",
     "error": "שגיאה",
-    "loading": "טוען"
+    "loading": "טוען",
+    "unavailable": "RPC לא זמין",
+    "unavailable_hint": "אף נקודת קצה ציבורית אינה מגיבה עבור רשת זו."
   },
   "features": {
     "burn_title": "הוכחת שריפה (Proof of Burn)",

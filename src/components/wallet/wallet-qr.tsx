@@ -31,7 +31,7 @@ export function WalletQR() {
         variant="ghost"
         size="icon"
         onClick={() => setOpen(true)}
-        className="text-ash-600 dark:text-ash-400"
+        className="text-foreground-secondary"
         aria-label="Show QR code"
       >
         <QrCode className="h-4 w-4" />
@@ -39,13 +39,13 @@ export function WalletQR() {
 
       {/* max-h + overflow keeps the code fully on screen (and so centered) on
           short viewports, where the taller stacked layout used to clip. */}
-      <DialogContent className="max-h-[calc(100dvh-2rem)] max-w-sm overflow-y-auto rounded-2xl border-ash-200 bg-white shadow-2xl dark:border-ash-700 dark:bg-ash-900">
+      <DialogContent className="max-h-[calc(100dvh-2rem)] max-w-sm overflow-y-auto rounded-2xl border-ash-200 bg-card shadow-2xl dark:border-ash-700">
         <div className="flex flex-col items-center gap-5">
           <DialogHeader className="gap-1">
-            <DialogTitle className="text-center text-ash-900 dark:text-ash-100">
+            <DialogTitle className="text-center text-foreground">
               {t("wallet_address")}
             </DialogTitle>
-            <DialogDescription className="text-center text-ash-500 dark:text-ash-400">
+            <DialogDescription className="text-center text-muted-foreground">
               {t("scan_to_send")}
             </DialogDescription>
           </DialogHeader>
@@ -117,7 +117,7 @@ export function WalletAddressLockup({
           "flex items-center gap-1.5 text-xs font-medium transition-colors",
           copied
             ? "text-emerald-600 dark:text-emerald-400"
-            : "text-ash-500 dark:text-ash-400"
+            : "text-muted-foreground"
         )}
       >
         {copied ? (
@@ -172,8 +172,8 @@ function AddressColumn({ address }: { address: string }) {
                 key={i}
                 className={
                   highlighted
-                    ? "font-semibold text-ash-900 dark:text-ash-100"
-                    : "font-medium text-ash-900/25 dark:text-ash-100/25"
+                    ? "font-semibold text-foreground"
+                    : "font-medium text-foreground/25"
                 }
               >
                 {ch}

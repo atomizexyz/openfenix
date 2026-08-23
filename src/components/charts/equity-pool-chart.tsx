@@ -44,11 +44,11 @@ function CustomTooltip({
   const data = payload[0].payload;
 
   return (
-    <div className="rounded-lg border border-ash-200 bg-white/95 px-3 py-2 shadow-lg backdrop-blur-sm dark:border-ash-700 dark:bg-ash-900/95">
-      <p className="text-xs font-medium text-ash-500 dark:text-ash-400">
+    <div className="rounded-lg border border-ash-200 bg-card/95 px-3 py-2 shadow-lg backdrop-blur-sm dark:border-ash-700">
+      <p className="text-xs font-medium text-muted-foreground">
         {data.name}
       </p>
-      <p className="text-sm font-semibold text-ash-900 dark:text-ash-100">
+      <p className="text-sm font-semibold text-foreground">
         {formatCompact(data.value)} FENIX
       </p>
     </div>
@@ -224,7 +224,7 @@ export function SupplyChart({ chainId, className }: SupplyChartProps) {
                     className="h-3 w-3 rounded-full"
                     style={{ backgroundColor: entry.fill }}
                   />
-                  <span className="text-xs text-ash-600 dark:text-ash-400">
+                  <span className="text-xs text-foreground-secondary">
                     <span className="font-medium">{entry.name}</span>
                     {" "}
                     <span className="font-mono">{formatCompact(entry.value)}</span>
@@ -255,7 +255,7 @@ function MiniSupplyChart({ stats }: { stats: ChainStats }) {
   return (
     <Card variant="glow" className="group">
       <CardContent className="p-4">
-        <h3 className="mb-3 flex items-center justify-center gap-2 text-sm font-semibold text-ash-900 dark:text-ash-100">
+        <h3 className="mb-3 flex items-center justify-center gap-2 text-sm font-semibold text-foreground">
           <ChainIcon
             slug={chainConfig.iconSlug}
             name={chainConfig.chain.name}
@@ -315,7 +315,7 @@ function MiniSupplyChart({ stats }: { stats: ChainStats }) {
                     className="h-2 w-2 rounded-full"
                     style={{ backgroundColor: entry.fill }}
                   />
-                  <span className="text-[10px] text-ash-500 dark:text-ash-400">
+                  <span className="text-[10px] text-muted-foreground">
                     {formatCompact(entry.value)}
                   </span>
                 </div>
@@ -337,7 +337,7 @@ export function ChainSupplyGrid() {
   return (
     <section className="space-y-6">
       <div className="text-center">
-        <h2 className="text-2xl font-bold tracking-tight text-ash-900 dark:text-ash-100 sm:text-3xl">
+        <h2 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
           {t("supply_distribution")}
         </h2>
       </div>

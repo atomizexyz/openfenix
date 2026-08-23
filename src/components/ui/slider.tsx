@@ -4,6 +4,7 @@ import * as React from "react"
 import { Slider as SliderPrimitive } from "radix-ui"
 
 import { cn } from "@/lib/utils"
+import { useField } from "./field"
 
 function Slider({
   className,
@@ -11,8 +12,12 @@ function Slider({
   value,
   min = 0,
   max = 100,
+  "aria-label": ariaLabel,
+  "aria-labelledby": ariaLabelledBy,
   ...props
 }: React.ComponentProps<typeof SliderPrimitive.Root>) {
+  const field = useField()
+
   const _values = React.useMemo(
     () =>
       Array.isArray(value)
@@ -22,6 +27,14 @@ function Slider({
           : [min, max],
     [value, defaultValue, min, max]
   )
+
+  // Radix spreads Root's props onto the wrapper span, not onto the thumb that
+  // carries `role="slider"` -- so the accessible name has to be attached to the
+  // thumb itself. An explicit prop wins; otherwise an enclosing
+  // `<Field labelable={false}>` supplies the id of its `Label`, which is how a
+  // Slider gets a name without a labelable element for `htmlFor` to target.
+  // Only fall back to the Field when no explicit `aria-label` was given.
+  const labelledBy = ariaLabelledBy ?? (ariaLabel ? undefined : field?.labelId)
 
   return (
     <SliderPrimitive.Root
@@ -53,6 +66,8 @@ function Slider({
         <SliderPrimitive.Thumb
           data-slot="slider-thumb"
           key={index}
+          aria-label={ariaLabel}
+          aria-labelledby={labelledBy}
           className="block size-4 shrink-0 rounded-full border border-primary bg-white shadow-sm ring-ring/50 transition-[color,box-shadow] hover:ring-4 focus-visible:ring-4 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50"
         />
       ))}

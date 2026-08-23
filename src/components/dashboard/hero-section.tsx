@@ -137,17 +137,17 @@ function FlushCountdownDisplay() {
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.5 }}
-      className="mt-8 inline-flex items-center gap-3 rounded-2xl border border-ash-200/60 bg-white/60 px-5 py-3 backdrop-blur-md dark:border-ash-800/60 dark:bg-ash-900/60"
+      className="mt-8 inline-flex items-center gap-3 rounded-2xl border border-border/60 bg-card/60 px-5 py-3 backdrop-blur-md"
     >
-      <span className="text-sm font-medium text-ash-500 dark:text-ash-400">
+      <span className="text-sm font-medium text-muted-foreground">
         {t("next_flush")}
       </span>
       {ready ? (
-        <span className="text-sm font-bold text-emerald-600 dark:text-emerald-400">
+        <span className="text-sm font-bold text-success-foreground">
           {t("flush_ready")}
         </span>
       ) : (
-        <span className="flex items-center gap-1 font-mono text-sm font-bold text-ash-900 dark:text-ash-100">
+        <span className="flex items-center gap-1 font-mono text-sm font-bold text-foreground">
           {days > 0 && (
             <>
               <NumberFlow

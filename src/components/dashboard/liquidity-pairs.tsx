@@ -34,22 +34,22 @@ function PairRow({ pair }: { pair: DexScreenerPair }) {
   return (
     <tr className="border-b border-ash-100 transition-colors hover:bg-ash-50/50 dark:border-ash-800 dark:hover:bg-ash-800/30">
       <td className="whitespace-nowrap px-3 py-3 sm:px-4">
-        <span className="text-sm font-semibold capitalize text-ash-900 dark:text-ash-100">
+        <span className="text-sm font-semibold capitalize text-foreground">
           {pair.chainId}
         </span>
       </td>
       <td className="whitespace-nowrap px-3 py-3 sm:px-4">
-        <span className="text-sm font-medium text-ash-900 dark:text-ash-100">
+        <span className="text-sm font-medium text-foreground">
           {pair.baseToken.symbol}/{pair.quoteToken.symbol}
         </span>
       </td>
       <td className="whitespace-nowrap px-3 py-3 sm:px-4">
-        <span className="text-sm capitalize text-ash-600 dark:text-ash-400">
+        <span className="text-sm capitalize text-foreground-secondary">
           {pair.dexId}
         </span>
       </td>
       <td className="whitespace-nowrap px-3 py-3 text-right font-mono text-sm sm:px-4">
-        <span className="text-ash-900 dark:text-ash-100">
+        <span className="text-foreground">
           {formatUsd(priceUsd)}
         </span>
       </td>
@@ -57,7 +57,7 @@ function PairRow({ pair }: { pair: DexScreenerPair }) {
         <span
           className={`inline-flex items-center gap-1 font-medium ${
             isPositive
-              ? "text-emerald-600 dark:text-emerald-400"
+              ? "text-success-foreground"
               : "text-red-600 dark:text-red-400"
           }`}
         >
@@ -70,7 +70,7 @@ function PairRow({ pair }: { pair: DexScreenerPair }) {
         </span>
       </td>
       <td className="whitespace-nowrap px-3 py-3 text-right font-mono text-sm sm:px-4">
-        <span className="text-ash-900 dark:text-ash-100">
+        <span className="text-foreground">
           <NumberFlow
             value={pair.volume?.h24 ?? 0}
             format={{
@@ -84,7 +84,7 @@ function PairRow({ pair }: { pair: DexScreenerPair }) {
         </span>
       </td>
       <td className="whitespace-nowrap px-3 py-3 text-right font-mono text-sm sm:px-4">
-        <span className="text-ash-900 dark:text-ash-100">
+        <span className="text-foreground">
           <NumberFlow
             value={pair.liquidity?.usd ?? 0}
             format={{
@@ -122,10 +122,10 @@ function PairCard({ pair }: { pair: DexScreenerPair }) {
       <CardContent className="p-4">
         <div className="flex items-center justify-between">
           <div>
-            <span className="font-semibold text-ash-900 dark:text-ash-100">
+            <span className="font-semibold text-foreground">
               {pair.baseToken.symbol}/{pair.quoteToken.symbol}
             </span>
-            <span className="ml-2 text-xs capitalize text-ash-500 dark:text-ash-400">
+            <span className="ml-2 text-xs capitalize text-muted-foreground">
               {pair.chainId} &middot; {pair.dexId}
             </span>
           </div>
@@ -141,21 +141,21 @@ function PairCard({ pair }: { pair: DexScreenerPair }) {
 
         <div className="mt-3 grid grid-cols-2 gap-2">
           <div>
-            <p className="text-xs text-ash-500 dark:text-ash-400">
+            <p className="text-xs text-muted-foreground">
               {t("price")}
             </p>
-            <p className="font-mono text-sm font-semibold text-ash-900 dark:text-ash-100">
+            <p className="font-mono text-sm font-semibold text-foreground">
               {formatUsd(priceUsd)}
             </p>
           </div>
           <div>
-            <p className="text-xs text-ash-500 dark:text-ash-400">
+            <p className="text-xs text-muted-foreground">
               {t("change_24h")}
             </p>
             <p
               className={`inline-flex items-center gap-1 text-sm font-semibold ${
                 isPositive
-                  ? "text-emerald-600 dark:text-emerald-400"
+                  ? "text-success-foreground"
                   : "text-red-600 dark:text-red-400"
               }`}
             >
@@ -168,18 +168,18 @@ function PairCard({ pair }: { pair: DexScreenerPair }) {
             </p>
           </div>
           <div>
-            <p className="text-xs text-ash-500 dark:text-ash-400">
+            <p className="text-xs text-muted-foreground">
               {t("volume_24h")}
             </p>
-            <p className="font-mono text-sm font-semibold text-ash-900 dark:text-ash-100">
+            <p className="font-mono text-sm font-semibold text-foreground">
               {formatUsd(pair.volume?.h24 ?? 0)}
             </p>
           </div>
           <div>
-            <p className="text-xs text-ash-500 dark:text-ash-400">
+            <p className="text-xs text-muted-foreground">
               {t("liquidity")}
             </p>
-            <p className="font-mono text-sm font-semibold text-ash-900 dark:text-ash-100">
+            <p className="font-mono text-sm font-semibold text-foreground">
               {formatUsd(pair.liquidity?.usd ?? 0)}
             </p>
           </div>
@@ -232,10 +232,10 @@ export function LiquidityPairsSection({
   return (
     <section className="space-y-6">
       <div className="text-center">
-        <h2 className="text-2xl font-bold tracking-tight text-ash-900 dark:text-ash-100 sm:text-3xl">
+        <h2 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
           {t("title")}
         </h2>
-        <p className="mt-2 text-ash-500 dark:text-ash-400">
+        <p className="mt-2 text-muted-foreground">
           {filterByChain
             ? `${chainName} — ${t("subtitle")}`
             : t("subtitle")}
@@ -248,29 +248,29 @@ export function LiquidityPairsSection({
           <div className="overflow-x-auto">
             <Table className="w-full">
               <TableHeader>
-                <TableRow className="border-b border-ash-200 bg-ash-50/80 dark:border-ash-800 dark:bg-ash-900/50">
-                  <TableHead className="px-3 py-3 text-left text-xs font-semibold uppercase tracking-wider text-ash-500 dark:text-ash-400 sm:px-4">
+                <TableRow className="border-b border-border bg-ash-50/80 dark:bg-ash-900/50">
+                  <TableHead className="px-3 py-3 text-left text-xs font-semibold text-muted-foreground sm:px-4">
                     {t("chain")}
                   </TableHead>
-                  <TableHead className="px-3 py-3 text-left text-xs font-semibold uppercase tracking-wider text-ash-500 dark:text-ash-400 sm:px-4">
+                  <TableHead className="px-3 py-3 text-left text-xs font-semibold text-muted-foreground sm:px-4">
                     {t("pair")}
                   </TableHead>
-                  <TableHead className="px-3 py-3 text-left text-xs font-semibold uppercase tracking-wider text-ash-500 dark:text-ash-400 sm:px-4">
+                  <TableHead className="px-3 py-3 text-left text-xs font-semibold text-muted-foreground sm:px-4">
                     {t("exchange")}
                   </TableHead>
-                  <TableHead className="px-3 py-3 text-right text-xs font-semibold uppercase tracking-wider text-ash-500 dark:text-ash-400 sm:px-4">
+                  <TableHead className="px-3 py-3 text-right text-xs font-semibold text-muted-foreground sm:px-4">
                     {t("price")}
                   </TableHead>
-                  <TableHead className="px-3 py-3 text-right text-xs font-semibold uppercase tracking-wider text-ash-500 dark:text-ash-400 sm:px-4">
+                  <TableHead className="px-3 py-3 text-right text-xs font-semibold text-muted-foreground sm:px-4">
                     {t("change_24h")}
                   </TableHead>
-                  <TableHead className="px-3 py-3 text-right text-xs font-semibold uppercase tracking-wider text-ash-500 dark:text-ash-400 sm:px-4">
+                  <TableHead className="px-3 py-3 text-right text-xs font-semibold text-muted-foreground sm:px-4">
                     {t("volume_24h")}
                   </TableHead>
-                  <TableHead className="px-3 py-3 text-right text-xs font-semibold uppercase tracking-wider text-ash-500 dark:text-ash-400 sm:px-4">
+                  <TableHead className="px-3 py-3 text-right text-xs font-semibold text-muted-foreground sm:px-4">
                     {t("liquidity")}
                   </TableHead>
-                  <TableHead className="px-3 py-3 text-left text-xs font-semibold uppercase tracking-wider text-ash-500 dark:text-ash-400 sm:px-4" />
+                  <TableHead className="px-3 py-3 text-left text-xs font-semibold text-muted-foreground sm:px-4" />
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -282,7 +282,7 @@ export function LiquidityPairsSection({
                   <TableRow>
                     <TableCell
                       colSpan={8}
-                      className="px-4 py-8 text-center text-sm text-ash-500 dark:text-ash-400"
+                      className="px-4 py-8 text-center text-sm text-muted-foreground"
                     >
                       {t("no_pairs")}
                     </TableCell>
@@ -314,7 +314,7 @@ export function LiquidityPairsSection({
             </Card>
           ))
         ) : filteredPairs.length === 0 ? (
-          <p className="col-span-full text-center text-sm text-ash-500 dark:text-ash-400">
+          <p className="col-span-full text-center text-sm text-muted-foreground">
             {t("no_pairs")}
           </p>
         ) : (

@@ -6,6 +6,7 @@ import {
   ExternalLink,
   Copy,
   Check,
+  Unplug,
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -43,9 +44,23 @@ function CopyButton({ text }: { text: string }) {
 }
 
 function StatusDot({ status }: { status: ChainStats["status"] }) {
+  const t = useTranslations("chain_table");
+
+  // Terminal, not pending: a hollow ring reads as "off" in both themes, where a
+  // filled dot that pings would claim the chain is live and still working.
+  if (status === "unavailable") {
+    return (
+      <span
+        role="img"
+        aria-label={t("unavailable")}
+        className="flex h-2.5 w-2.5 rounded-full border-2 border-muted-foreground"
+      />
+    );
+  }
+
   if (status === "loading") {
     return (
-      <span className="relative flex h-2.5 w-2.5">
+      <span role="img" aria-label={t("loading")} className="relative flex h-2.5 w-2.5">
         <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-ash-400 opacity-75" />
         <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-ash-400" />
       </span>
@@ -54,7 +69,7 @@ function StatusDot({ status }: { status: ChainStats["status"] }) {
 
   if (status === "error") {
     return (
-      <span className="relative flex h-2.5 w-2.5">
+      <span role="img" aria-label={t("error")} className="relative flex h-2.5 w-2.5">
         <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-500 opacity-75" />
         <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-red-500" />
       </span>
@@ -62,10 +77,46 @@ function StatusDot({ status }: { status: ChainStats["status"] }) {
   }
 
   return (
-    <span className="relative flex h-2.5 w-2.5">
+    <span role="img" aria-label={t("active")} className="relative flex h-2.5 w-2.5">
       <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-75" />
       <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500" />
     </span>
+  );
+}
+
+/**
+ * Contract address plus copy/explorer affordances. Shared by the desktop row and
+ * the mobile card, including their unavailable variants -- the deployment is
+ * real and worth copying even when no RPC answers for it.
+ *
+ * `textClassName` is a parameter rather than a constant because the two call
+ * sites ship different muted greys today (ash-500 vs ash-600 in light mode);
+ * hard-coding either would silently restyle the other.
+ */
+function AddressCell({
+  address,
+  addressUrl,
+  textClassName,
+}: {
+  address: `0x${string}`;
+  addressUrl: string | undefined;
+  textClassName: string;
+}) {
+  return (
+    <div className="flex items-center gap-1.5">
+      <span className={textClassName}>{shortenAddress(address, 4)}</span>
+      <CopyButton text={address} />
+      {addressUrl && (
+        <a
+          href={addressUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-ash-400 transition-colors hover:text-fenix-500"
+        >
+          <ExternalLink className="h-3 w-3" />
+        </a>
+      )}
+    </div>
   );
 }
 
@@ -95,9 +146,46 @@ function parseChainStats(stats: ChainStats) {
 }
 
 function ChainRow({ stats }: { stats: ChainStats }) {
+  const t = useTranslations("chain_table");
   const { chainConfig, status } = stats;
   const { chain, equityNum, rewardNum, circulatingNum, shareRateNum, addressUrl } =
     parseChainStats(stats);
+
+  // One explicit statement beats four "--"s: nothing is loading and nothing will
+  // arrive, so the four numeric cells collapse into a single sentence.
+  if (status === "unavailable") {
+    return (
+      <tr className="border-b border-ash-100 dark:border-ash-800">
+        <td className="whitespace-nowrap px-3 py-3 sm:px-4">
+          <span className="text-sm font-semibold text-muted-foreground">
+            {chain.name}
+          </span>
+        </td>
+
+        <td className="px-3 py-3 sm:px-4">
+          <StatusDot status={status} />
+        </td>
+
+        <td
+          colSpan={4}
+          className="px-3 py-3 text-right text-sm text-muted-foreground sm:px-4"
+        >
+          <span className="inline-flex items-center gap-1.5">
+            <Unplug className="h-3.5 w-3.5" aria-hidden="true" />
+            {t("unavailable")}
+          </span>
+        </td>
+
+        <td className="whitespace-nowrap px-3 py-3 sm:px-4">
+          <AddressCell
+            address={chainConfig.fenixContract}
+            addressUrl={addressUrl}
+            textClassName="font-mono text-xs text-muted-foreground"
+          />
+        </td>
+      </tr>
+    );
+  }
 
   return (
     <tr className="border-b border-ash-100 transition-colors hover:bg-ash-50/50 dark:border-ash-800 dark:hover:bg-ash-800/30">
@@ -105,7 +193,7 @@ function ChainRow({ stats }: { stats: ChainStats }) {
       <td className="whitespace-nowrap px-3 py-3 sm:px-4">
         <div className="flex items-center gap-2">
           <ChainIcon slug={chainConfig.iconSlug} name={chain.name} size={20} />
-          <span className="text-sm font-semibold text-ash-900 dark:text-ash-100">
+          <span className="text-sm font-semibold text-foreground">
             {chain.name}
           </span>
         </div>
@@ -121,7 +209,7 @@ function ChainRow({ stats }: { stats: ChainStats }) {
         {status === "loading" ? (
           <Skeleton className="ml-auto h-5 w-20" />
         ) : equityNum !== undefined ? (
-          <span className="text-ash-900 dark:text-ash-100">
+          <span className="text-foreground">
             <NumberFlow
               value={equityNum}
               format={{
@@ -141,7 +229,7 @@ function ChainRow({ stats }: { stats: ChainStats }) {
         {status === "loading" ? (
           <Skeleton className="ml-auto h-5 w-20" />
         ) : rewardNum !== undefined ? (
-          <span className="text-ash-900 dark:text-ash-100">
+          <span className="text-foreground">
             <NumberFlow
               value={rewardNum}
               format={{
@@ -161,7 +249,7 @@ function ChainRow({ stats }: { stats: ChainStats }) {
         {status === "loading" ? (
           <Skeleton className="ml-auto h-5 w-20" />
         ) : circulatingNum !== undefined ? (
-          <span className="text-ash-900 dark:text-ash-100">
+          <span className="text-foreground">
             <NumberFlow
               value={circulatingNum}
               format={{
@@ -181,7 +269,7 @@ function ChainRow({ stats }: { stats: ChainStats }) {
         {status === "loading" ? (
           <Skeleton className="ml-auto h-5 w-16" />
         ) : shareRateNum !== undefined ? (
-          <span className="text-fenix-600 dark:text-fenix-400">
+          <span className="text-brand-foreground">
             <NumberFlow
               value={shareRateNum}
               format={{ maximumFractionDigits: 4 }}
@@ -195,22 +283,11 @@ function ChainRow({ stats }: { stats: ChainStats }) {
 
       {/* Address */}
       <td className="whitespace-nowrap px-3 py-3 sm:px-4">
-        <div className="flex items-center gap-1.5">
-          <span className="font-mono text-xs text-ash-500 dark:text-ash-400">
-            {shortenAddress(chainConfig.fenixContract, 4)}
-          </span>
-          <CopyButton text={chainConfig.fenixContract} />
-          {addressUrl && (
-            <a
-              href={addressUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-ash-400 transition-colors hover:text-fenix-500"
-            >
-              <ExternalLink className="h-3 w-3" />
-            </a>
-          )}
-        </div>
+        <AddressCell
+          address={chainConfig.fenixContract}
+          addressUrl={addressUrl}
+          textClassName="font-mono text-xs text-muted-foreground"
+        />
       </td>
     </tr>
   );
@@ -223,13 +300,53 @@ function ChainCard({ stats }: { stats: ChainStats }) {
   const { chain, equityNum, rewardNum, circulatingNum, shareRateNum, addressUrl } =
     parseChainStats(stats);
 
+  // Same terminal state as the desktop row: say why there are no numbers rather
+  // than showing a grid of dashes.
+  if (status === "unavailable") {
+    return (
+      <Card variant="glow" className="overflow-hidden">
+        <CardContent className="p-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <span className="font-semibold text-muted-foreground">
+                {chain.name}
+              </span>
+            </div>
+            <StatusDot status={status} />
+          </div>
+
+          <div className="mt-3 space-y-1">
+            <p className="flex items-center gap-1.5 text-sm text-muted-foreground">
+              <Unplug className="h-3.5 w-3.5" aria-hidden="true" />
+              {t("unavailable")}
+            </p>
+            <p className="text-xs text-muted-foreground">
+              {t("unavailable_hint")}
+            </p>
+          </div>
+
+          <div className="mt-3">
+            <p className="text-xs text-muted-foreground">
+              {t("address")}
+            </p>
+            <AddressCell
+              address={chainConfig.fenixContract}
+              addressUrl={addressUrl}
+              textClassName="font-mono text-xs text-foreground-secondary"
+            />
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
     <Card variant="glow" className="overflow-hidden">
       <CardContent className="p-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <ChainIcon slug={chainConfig.iconSlug} name={chain.name} size={20} />
-            <span className="font-semibold text-ash-900 dark:text-ash-100">
+            <span className="font-semibold text-foreground">
               {chain.name}
             </span>
           </div>
@@ -238,10 +355,10 @@ function ChainCard({ stats }: { stats: ChainStats }) {
 
         <div className="mt-3 grid grid-cols-2 gap-2">
           <div>
-            <p className="text-xs text-ash-500 dark:text-ash-400">
+            <p className="text-xs text-muted-foreground">
               {t("equity_supply")}
             </p>
-            <p className="font-mono text-sm font-semibold text-ash-900 dark:text-ash-100">
+            <p className="font-mono text-sm font-semibold text-foreground">
               {status === "loading" ? (
                 <Skeleton className="h-4 w-16" />
               ) : equityNum !== undefined ? (
@@ -259,10 +376,10 @@ function ChainCard({ stats }: { stats: ChainStats }) {
             </p>
           </div>
           <div>
-            <p className="text-xs text-ash-500 dark:text-ash-400">
+            <p className="text-xs text-muted-foreground">
               {t("reward_supply")}
             </p>
-            <p className="font-mono text-sm font-semibold text-ash-900 dark:text-ash-100">
+            <p className="font-mono text-sm font-semibold text-foreground">
               {status === "loading" ? (
                 <Skeleton className="h-4 w-16" />
               ) : rewardNum !== undefined ? (
@@ -280,10 +397,10 @@ function ChainCard({ stats }: { stats: ChainStats }) {
             </p>
           </div>
           <div>
-            <p className="text-xs text-ash-500 dark:text-ash-400">
+            <p className="text-xs text-muted-foreground">
               {t("circulating_supply")}
             </p>
-            <p className="font-mono text-sm font-semibold text-ash-900 dark:text-ash-100">
+            <p className="font-mono text-sm font-semibold text-foreground">
               {status === "loading" ? (
                 <Skeleton className="h-4 w-16" />
               ) : circulatingNum !== undefined ? (
@@ -301,10 +418,10 @@ function ChainCard({ stats }: { stats: ChainStats }) {
             </p>
           </div>
           <div>
-            <p className="text-xs text-ash-500 dark:text-ash-400">
+            <p className="text-xs text-muted-foreground">
               {t("share_rate")}
             </p>
-            <p className="font-mono text-sm font-semibold text-fenix-600 dark:text-fenix-400">
+            <p className="font-mono text-sm font-semibold text-brand-foreground">
               {status === "loading" ? (
                 <Skeleton className="h-4 w-12" />
               ) : shareRateNum !== undefined ? (
@@ -319,25 +436,14 @@ function ChainCard({ stats }: { stats: ChainStats }) {
             </p>
           </div>
           <div>
-            <p className="text-xs text-ash-500 dark:text-ash-400">
+            <p className="text-xs text-muted-foreground">
               {t("address")}
             </p>
-            <div className="flex items-center gap-1">
-              <span className="font-mono text-xs text-ash-600 dark:text-ash-400">
-                {shortenAddress(chainConfig.fenixContract, 4)}
-              </span>
-              <CopyButton text={chainConfig.fenixContract} />
-              {addressUrl && (
-                <a
-                  href={addressUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-ash-400 transition-colors hover:text-fenix-500"
-                >
-                  <ExternalLink className="h-3 w-3" />
-                </a>
-              )}
-            </div>
+            <AddressCell
+              address={chainConfig.fenixContract}
+              addressUrl={addressUrl}
+              textClassName="font-mono text-xs text-foreground-secondary"
+            />
           </div>
         </div>
       </CardContent>
@@ -352,10 +458,10 @@ export function ChainTable() {
   return (
     <section className="space-y-6">
       <div className="text-center">
-        <h2 className="text-2xl font-bold tracking-tight text-ash-900 dark:text-ash-100 sm:text-3xl">
+        <h2 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
           {t("title")}
         </h2>
-        <p className="mt-2 text-ash-500 dark:text-ash-400">
+        <p className="mt-2 text-muted-foreground">
           {t("subtitle")}
         </p>
       </div>
@@ -366,26 +472,26 @@ export function ChainTable() {
           <div className="overflow-x-auto">
             <Table className="w-full">
               <TableHeader>
-                <TableRow className="border-b border-ash-200 bg-ash-50/80 dark:border-ash-800 dark:bg-ash-900/50">
-                  <TableHead className="px-3 py-3 text-left text-xs font-semibold uppercase tracking-wider text-ash-500 dark:text-ash-400 sm:px-4">
+                <TableRow className="border-b border-border bg-ash-50/80 dark:bg-ash-900/50">
+                  <TableHead className="px-3 py-3 text-left text-xs font-semibold text-muted-foreground sm:px-4">
                     {t("chain")}
                   </TableHead>
-                  <TableHead className="px-3 py-3 text-left text-xs font-semibold uppercase tracking-wider text-ash-500 dark:text-ash-400 sm:px-4">
+                  <TableHead className="px-3 py-3 text-left text-xs font-semibold text-muted-foreground sm:px-4">
                     {t("status")}
                   </TableHead>
-                  <TableHead className="px-3 py-3 text-right text-xs font-semibold uppercase tracking-wider text-ash-500 dark:text-ash-400 sm:px-4">
+                  <TableHead className="px-3 py-3 text-right text-xs font-semibold text-muted-foreground sm:px-4">
                     {t("equity_supply")}
                   </TableHead>
-                  <TableHead className="px-3 py-3 text-right text-xs font-semibold uppercase tracking-wider text-ash-500 dark:text-ash-400 sm:px-4">
+                  <TableHead className="px-3 py-3 text-right text-xs font-semibold text-muted-foreground sm:px-4">
                     {t("reward_supply")}
                   </TableHead>
-                  <TableHead className="px-3 py-3 text-right text-xs font-semibold uppercase tracking-wider text-ash-500 dark:text-ash-400 sm:px-4">
+                  <TableHead className="px-3 py-3 text-right text-xs font-semibold text-muted-foreground sm:px-4">
                     {t("circulating_supply")}
                   </TableHead>
-                  <TableHead className="px-3 py-3 text-right text-xs font-semibold uppercase tracking-wider text-ash-500 dark:text-ash-400 sm:px-4">
+                  <TableHead className="px-3 py-3 text-right text-xs font-semibold text-muted-foreground sm:px-4">
                     {t("share_rate")}
                   </TableHead>
-                  <TableHead className="px-3 py-3 text-left text-xs font-semibold uppercase tracking-wider text-ash-500 dark:text-ash-400 sm:px-4">
+                  <TableHead className="px-3 py-3 text-left text-xs font-semibold text-muted-foreground sm:px-4">
                     {t("address")}
                   </TableHead>
                 </TableRow>

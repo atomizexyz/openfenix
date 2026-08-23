@@ -31,10 +31,10 @@ export function FeaturesSection() {
             >
               <feature.icon className="h-6 w-6 text-white" />
             </div>
-            <h3 className="mb-2 text-lg font-semibold text-ash-900 dark:text-ash-100">
+            <h3 className="mb-2 text-lg font-semibold text-foreground">
               {t(`${feature.key}_title`)}
             </h3>
-            <p className="text-sm leading-relaxed text-ash-500 dark:text-ash-400">
+            <p className="text-sm leading-relaxed text-muted-foreground">
               {t(`${feature.key}_desc`)}
             </p>
           </motion.div>

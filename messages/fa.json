@@ -58,7 +58,9 @@
     "approving": "در حال تأیید مجوز...",
     "burning": "در حال سوزاندن...",
     "approval_confirmed": "مجوز تأیید شد. اکنون می‌توانید بسوزانید.",
-    "unsupported_network": "لطفاً به یک شبکه پشتیبانی‌شده تغییر دهید"
+    "unsupported_network": "لطفاً به یک شبکه پشتیبانی‌شده تغییر دهید",
+    "error_invalid_amount": "مبلغی بزرگ‌تر از ۰ وارد کنید",
+    "error_exceeds_balance": "مبلغ از موجودی XEN شما بیشتر است"
   },
   "stake": {
     "title": "استیک FENIX",
@@ -81,11 +83,14 @@
     "success": "{amount} FENIX با موفقیت برای {term} روز استیک شد",
     "error": "خطا در شروع استیک",
     "confirming": "در حال تأیید...",
-    "staking": "در حال شروع استیک..."
+    "staking": "در حال شروع استیک...",
+    "error_invalid_amount": "مبلغی بزرگ‌تر از ۰ وارد کنید",
+    "error_exceeds_balance": "مبلغ از موجودی FENIX شما بیشتر است"
   },
   "stakes": {
     "title": "استیک‌های شما",
     "no_stakes": "استیک فعالی وجود ندارد",
+    "start_staking": "استیک FENIX",
     "stake_id": "استیک #{id}",
     "amount": "مقدار",
     "shares": "سهام",
@@ -142,7 +147,9 @@
     "circulating_supply": "در گردش",
     "active": "فعال",
     "error": "خطا",
-    "loading": "در حال بارگذاری"
+    "loading": "در حال بارگذاری",
+    "unavailable": "RPC در دسترس نیست",
+    "unavailable_hint": "هیچ نقطه پایانی عمومی برای این زنجیره پاسخ نمی‌دهد."
   },
   "features": {
     "burn_title": "اثبات سوزاندن (Proof of Burn)",

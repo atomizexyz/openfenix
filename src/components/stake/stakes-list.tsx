@@ -163,7 +163,7 @@ function StakeCard({
       <CardContent className="p-5">
         {/* Header */}
         <div className="flex items-center justify-between">
-          <h4 className="font-semibold text-ash-900 dark:text-ash-100">
+          <h4 className="font-semibold text-foreground">
             {t("stake_id", { id: index + 1 })}
           </h4>
           <Badge variant={status.variant} className="flex items-center gap-1">
@@ -175,11 +175,11 @@ function StakeCard({
         {/* Stats Grid */}
         <div className="mt-4 grid grid-cols-2 gap-3">
           <div className="space-y-0.5">
-            <div className="flex items-center gap-1 text-xs text-ash-500 dark:text-ash-400">
+            <div className="flex items-center gap-1 text-xs text-muted-foreground">
               <Coins className="h-3 w-3" />
               {t("amount")}
             </div>
-            <p className="font-mono text-sm font-semibold text-ash-900 dark:text-ash-100">
+            <p className="font-mono text-sm font-semibold text-foreground">
               <NumberFlow
                 value={amountFormatted}
                 format={{ maximumFractionDigits: 4 }}
@@ -190,11 +190,11 @@ function StakeCard({
           </div>
 
           <div className="space-y-0.5">
-            <div className="flex items-center gap-1 text-xs text-ash-500 dark:text-ash-400">
+            <div className="flex items-center gap-1 text-xs text-muted-foreground">
               <BarChart3 className="h-3 w-3" />
               {t("shares")}
             </div>
-            <p className="font-mono text-sm font-semibold text-ash-900 dark:text-ash-100">
+            <p className="font-mono text-sm font-semibold text-foreground">
               <NumberFlow
                 value={sharesFormatted}
                 format={{ maximumFractionDigits: 2 }}
@@ -204,11 +204,11 @@ function StakeCard({
           </div>
 
           <div className="space-y-0.5">
-            <div className="flex items-center gap-1 text-xs text-ash-500 dark:text-ash-400">
+            <div className="flex items-center gap-1 text-xs text-muted-foreground">
               <Clock className="h-3 w-3" />
               {t("term")}
             </div>
-            <p className="text-sm font-semibold text-ash-900 dark:text-ash-100">
+            <p className="text-sm font-semibold text-foreground">
               <NumberFlow
                 value={Number(stake.term)}
                 transformTiming={{ duration: 400, easing: "ease-out" }}
@@ -218,11 +218,11 @@ function StakeCard({
           </div>
 
           <div className="space-y-0.5">
-            <div className="flex items-center gap-1 text-xs text-ash-500 dark:text-ash-400">
+            <div className="flex items-center gap-1 text-xs text-muted-foreground">
               <Calendar className="h-3 w-3" />
               {t("maturity")}
             </div>
-            <p className="text-sm font-semibold text-ash-900 dark:text-ash-100">
+            <p className="text-sm font-semibold text-foreground">
               {maturityDate.toLocaleDateString(undefined, {
                 month: "short",
                 day: "numeric",
@@ -236,7 +236,7 @@ function StakeCard({
         {!isEnded && (
           <div className="mt-4 space-y-1.5">
             <div className="flex items-center justify-between text-xs">
-              <span className="text-ash-500 dark:text-ash-400">
+              <span className="text-muted-foreground">
                 {t("progress")}
               </span>
               <span
@@ -244,7 +244,7 @@ function StakeCard({
                   "font-medium",
                   daysInfo.isLate
                     ? "text-ember-500"
-                    : "text-ash-600 dark:text-ash-400"
+                    : "text-foreground-secondary"
                 )}
               >
                 {daysInfo.isLate
@@ -330,6 +330,7 @@ const PAGE_SIZE = 10;
 
 export function StakesList() {
   const t = useTranslations("stakes");
+  const tStake = useTranslations("stake");
   const { chain, address: userAddress } = useAccount();
   const [page, setPage] = useState(0);
   const { data: stakesData, isLoading, stakeCount, totalPages, startIndex } = useUserStakes(chain?.id, page, PAGE_SIZE);
@@ -393,9 +394,22 @@ export function StakesList() {
     [chain?.id, userAddress, deferStake]
   );
 
+  // StakeForm renders directly above this list on the same page, so the empty
+  // state's next action is a scroll, not a route change - a /stake link would
+  // be a no-op. The form's Card carries id="stake-form" (with scroll-mt for the
+  // sticky header); the window fallback only covers the form failing to mount.
+  const scrollToStakeForm = useCallback(() => {
+    const form = document.getElementById("stake-form");
+    if (form) {
+      form.scrollIntoView({ behavior: "smooth", block: "start" });
+    } else {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }, []);
+
   return (
     <div className="w-full space-y-4">
-      <h3 className="text-lg font-semibold text-ash-900 dark:text-ash-100">
+      <h3 className="text-lg font-semibold text-foreground">
         {t("title")}
       </h3>
 
@@ -425,13 +439,17 @@ export function StakesList() {
         </div>
       ) : stakes.length === 0 && stakeCount === 0 ? (
         <Card variant="glow">
-          <CardContent className="flex flex-col items-center justify-center py-12">
-            <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-ash-100 dark:bg-ash-800">
+          <CardContent className="flex flex-col items-center justify-center py-12 text-center">
+            <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-muted">
               <BarChart3 className="h-6 w-6 text-ash-400" />
             </div>
-            <p className="text-sm font-medium text-ash-500 dark:text-ash-400">
+            <p className="text-sm font-medium text-muted-foreground">
               {t("no_stakes")}
             </p>
+            <Button size="sm" className="mt-4" onClick={scrollToStakeForm}>
+              <Coins className="h-4 w-4" />
+              {tStake("stake_button")}
+            </Button>
           </CardContent>
         </Card>
       ) : (
@@ -462,7 +480,7 @@ export function StakesList() {
                 <ChevronLeft className="mr-1 h-4 w-4" />
                 {t("previous")}
               </Button>
-              <span className="text-sm text-ash-600 dark:text-ash-400">
+              <span className="text-sm text-foreground-secondary">
                 {t("page_of", { page: page + 1, total: totalPages })}
               </span>
               <Button

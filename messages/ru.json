@@ -58,7 +58,9 @@
     "approving": "Одобрение...",
     "burning": "Сжигание...",
     "approval_confirmed": "Одобрение подтверждено. Теперь можно сжигать.",
-    "unsupported_network": "Пожалуйста, переключитесь на поддерживаемую сеть"
+    "unsupported_network": "Пожалуйста, переключитесь на поддерживаемую сеть",
+    "error_invalid_amount": "Введите сумму больше 0",
+    "error_exceeds_balance": "Сумма превышает ваш баланс XEN"
   },
   "stake": {
     "title": "Стейкинг FENIX",
@@ -81,11 +83,14 @@
     "success": "Успешно застейкано {amount} FENIX на {term} дней",
     "error": "Ошибка при начале стейкинга",
     "confirming": "Подтверждение...",
-    "staking": "Запуск стейка..."
+    "staking": "Запуск стейка...",
+    "error_invalid_amount": "Введите сумму больше 0",
+    "error_exceeds_balance": "Сумма превышает ваш баланс FENIX"
   },
   "stakes": {
     "title": "Ваши стейки",
     "no_stakes": "Нет активных стейков",
+    "start_staking": "Застейкать FENIX",
     "stake_id": "Стейк #{id}",
     "amount": "Количество",
     "shares": "Доли",
@@ -142,7 +147,9 @@
     "circulating_supply": "В обращении",
     "active": "Активно",
     "error": "Ошибка",
-    "loading": "Загрузка"
+    "loading": "Загрузка",
+    "unavailable": "RPC недоступен",
+    "unavailable_hint": "Ни один публичный эндпоинт не отвечает для этой сети."
   },
   "features": {
     "burn_title": "Доказательство сжигания (Proof of Burn)",

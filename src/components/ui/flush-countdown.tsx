@@ -13,14 +13,14 @@ export function FlushCountdown({ target, readyLabel }: FlushCountdownProps) {
 
   if (ready) {
     return (
-      <span className="text-emerald-600 dark:text-emerald-400">
+      <span className="text-success-foreground">
         {readyLabel}
       </span>
     );
   }
 
   return (
-    <span className="flex items-center gap-0.5 text-ash-900 dark:text-ash-100">
+    <span className="flex items-center gap-0.5 text-foreground">
       {days > 0 && (
         <>
           <NumberFlow

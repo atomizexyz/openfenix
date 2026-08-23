@@ -58,7 +58,9 @@
     "approving": "Wird genehmigt...",
     "burning": "Wird verbrannt...",
     "approval_confirmed": "Genehmigung bestätigt. Sie können jetzt verbrennen.",
-    "unsupported_network": "Bitte zu einem unterstützten Netzwerk wechseln"
+    "unsupported_network": "Bitte zu einem unterstützten Netzwerk wechseln",
+    "error_invalid_amount": "Gib einen Betrag größer als 0 ein",
+    "error_exceeds_balance": "Betrag übersteigt dein XEN-Guthaben"
   },
   "stake": {
     "title": "FENIX Staken",
@@ -81,11 +83,14 @@
     "success": "Erfolgreich {amount} FENIX für {term} Tage gestaket",
     "error": "Fehler beim Starten des Stakes",
     "confirming": "Wird bestätigt...",
-    "staking": "Stake wird gestartet..."
+    "staking": "Stake wird gestartet...",
+    "error_invalid_amount": "Gib einen Betrag größer als 0 ein",
+    "error_exceeds_balance": "Betrag übersteigt dein FENIX-Guthaben"
   },
   "stakes": {
     "title": "Deine Stakes",
     "no_stakes": "Keine aktiven Stakes",
+    "start_staking": "FENIX staken",
     "stake_id": "Stake #{id}",
     "amount": "Menge",
     "shares": "Anteile",
@@ -142,7 +147,9 @@
     "circulating_supply": "Umlaufend",
     "active": "Aktiv",
     "error": "Fehler",
-    "loading": "Laden"
+    "loading": "Laden",
+    "unavailable": "RPC nicht verfügbar",
+    "unavailable_hint": "Für diese Kette antwortet kein öffentlicher Endpunkt."
   },
   "features": {
     "burn_title": "Verbrennungsnachweis (Proof of Burn)",

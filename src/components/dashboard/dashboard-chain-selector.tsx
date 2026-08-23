@@ -34,7 +34,7 @@ export function DashboardChainSelector({
         <button
           type="button"
           aria-label={`${t("chain")}: ${currentChain?.name ?? t("chain")}`}
-          className="group inline-flex min-w-44 items-center justify-between gap-3 rounded-xl border border-ash-200 bg-white px-3 py-2 text-sm font-medium text-ash-700 shadow-sm transition-colors hover:border-ash-300 hover:bg-ash-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fenix-500/50 dark:border-ash-700 dark:bg-ash-900 dark:text-ash-300 dark:hover:border-ash-600 dark:hover:bg-ash-800"
+          className="group inline-flex min-w-44 items-center justify-between gap-3 rounded-xl border border-ash-200 bg-card px-3 py-2 text-sm font-medium text-ash-700 shadow-sm transition-colors hover:border-ash-300 hover:bg-ash-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fenix-500/50 dark:border-ash-700 dark:text-ash-300 dark:hover:border-ash-600 dark:hover:bg-ash-800"
         >
           <span className="flex min-w-0 items-center gap-2">
             {currentConfig ? (
@@ -54,9 +54,9 @@ export function DashboardChainSelector({
 
       <DropdownMenuContent
         align="start"
-        className="max-h-80 w-64 rounded-xl border-ash-200 bg-white p-1.5 shadow-lg dark:border-ash-700 dark:bg-ash-900"
+        className="max-h-80 w-64 rounded-xl border-ash-200 bg-card p-1.5 shadow-lg dark:border-ash-700"
       >
-        <DropdownMenuLabel className="px-2 py-1.5 text-xs font-semibold uppercase tracking-wider text-ash-500 dark:text-ash-400">
+        <DropdownMenuLabel className="px-2 py-1.5 text-xs font-semibold text-muted-foreground">
           {t("chain")}
         </DropdownMenuLabel>
         <DropdownMenuRadioGroup
@@ -67,7 +67,7 @@ export function DashboardChainSelector({
             <DropdownMenuRadioItem
               key={config.chain.id}
               value={String(config.chain.id)}
-              className="rounded-lg py-2.5 pr-3 text-ash-700 focus:bg-ash-100 focus:text-ash-900 dark:text-ash-300 dark:focus:bg-ash-800 dark:focus:text-ash-100"
+              className="rounded-lg py-2.5 pr-3 text-ash-700 focus:bg-accent focus:text-accent-foreground dark:text-ash-300"
             >
               <ChainIcon
                 slug={config.iconSlug}

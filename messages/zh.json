@@ -58,7 +58,9 @@
     "approving": "授权中...",
     "burning": "燃烧中...",
     "approval_confirmed": "授权已确认，现在可以燃烧。",
-    "unsupported_network": "请切换到受支持的网络"
+    "unsupported_network": "请切换到受支持的网络",
+    "error_invalid_amount": "请输入大于 0 的数量",
+    "error_exceeds_balance": "数量超过您的 XEN 余额"
   },
   "stake": {
     "title": "质押FENIX",
@@ -81,11 +83,14 @@
     "success": "成功质押{amount} FENIX，期限{term}天",
     "error": "开始质押时出错",
     "confirming": "确认中...",
-    "staking": "质押启动中..."
+    "staking": "质押启动中...",
+    "error_invalid_amount": "请输入大于 0 的数量",
+    "error_exceeds_balance": "数量超过您的 FENIX 余额"
   },
   "stakes": {
     "title": "您的质押",
     "no_stakes": "没有活跃质押",
+    "start_staking": "质押 FENIX",
     "stake_id": "质押 #{id}",
     "amount": "数量",
     "shares": "份额",
@@ -142,7 +147,9 @@
     "circulating_supply": "流通量",
     "active": "活跃",
     "error": "错误",
-    "loading": "加载中"
+    "loading": "加载中",
+    "unavailable": "RPC 不可用",
+    "unavailable_hint": "该链没有可响应的公共节点。"
   },
   "features": {
     "burn_title": "燃烧证明 (Proof of Burn)",

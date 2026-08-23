@@ -58,7 +58,9 @@
     "approving": "İzin veriliyor...",
     "burning": "Yakılıyor...",
     "approval_confirmed": "Onay tamamlandı. Artık yakabilirsiniz.",
-    "unsupported_network": "Lütfen desteklenen bir ağa geçin"
+    "unsupported_network": "Lütfen desteklenen bir ağa geçin",
+    "error_invalid_amount": "0'dan büyük bir miktar girin",
+    "error_exceeds_balance": "Miktar XEN bakiyenizi aşıyor"
   },
   "stake": {
     "title": "FENIX Stake Et",
@@ -81,11 +83,14 @@
     "success": "{amount} FENIX başarıyla {term} gün için stake edildi",
     "error": "Stake başlatılırken hata oluştu",
     "confirming": "Onaylanıyor...",
-    "staking": "Stake başlatılıyor..."
+    "staking": "Stake başlatılıyor...",
+    "error_invalid_amount": "0'dan büyük bir miktar girin",
+    "error_exceeds_balance": "Miktar FENIX bakiyenizi aşıyor"
   },
   "stakes": {
     "title": "Stake'leriniz",
     "no_stakes": "Aktif stake yok",
+    "start_staking": "FENIX Stake Et",
     "stake_id": "Stake #{id}",
     "amount": "Miktar",
     "shares": "Paylar",
@@ -142,7 +147,9 @@
     "circulating_supply": "Dolaşımda",
     "active": "Aktif",
     "error": "Hata",
-    "loading": "Yukleniyor"
+    "loading": "Yukleniyor",
+    "unavailable": "RPC kullanılamıyor",
+    "unavailable_hint": "Bu zincir için yanıt veren herkese açık uç nokta yok."
   },
   "features": {
     "burn_title": "Yakma Kanıtı (Proof of Burn)",

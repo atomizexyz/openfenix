@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useCallback, useEffect } from "react";
+import { useState, useMemo, useCallback, useEffect, useId } from "react";
 import { useAccount } from "wagmi";
 import { useTranslations } from "next-intl";
 import NumberFlow from "@number-flow/react";
@@ -16,6 +16,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Field } from "@/components/ui/field";
 import { Slider } from "@/components/ui/slider";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "@/components/ui/separator";
@@ -51,11 +52,11 @@ interface BonusRowProps {
 function BonusRow({ icon, label, value, suffix = "x" }: BonusRowProps) {
   return (
     <div className="flex items-center justify-between">
-      <div className="flex items-center gap-2 text-sm text-ash-600 dark:text-ash-400">
+      <div className="flex items-center gap-2 text-sm text-foreground-secondary">
         {icon}
         <span>{label}</span>
       </div>
-      <span className="font-mono text-sm font-semibold text-ash-900 dark:text-ash-100">
+      <span className="font-mono text-sm font-semibold text-foreground">
         <NumberFlow
           value={value}
           format={{ maximumFractionDigits: 4 }}
@@ -72,6 +73,10 @@ export function StakeForm() {
   const { chain, isConnected } = useAccount();
   const [amount, setAmount] = useState("");
   const [term, setTerm] = useState(365);
+  // Owns the id the Input points `aria-describedby` at, so the validation
+  // message is announced with the field rather than only implied by a disabled
+  // button (WCAG 3.3.1).
+  const amountErrorId = useId();
 
   const { data: fenixBalance, isLoading: isBalanceLoading } = useFenixBalance(chain?.id);
 
@@ -130,6 +135,16 @@ export function StakeForm() {
     }
   }, [amount, parsedAmount, fenixBalance]);
 
+  // Null while the field is empty or the balance has not resolved: an
+  // untouched field is not an error, and "exceeds balance" is not a claim we
+  // can make before the balance is known.
+  const amountError = useMemo(() => {
+    if (amount === "") return null;
+    if (parsedAmount <= 0) return t("error_invalid_amount");
+    if (isBalanceLoading || fenixBalance === undefined) return null;
+    return isValidAmount ? null : t("error_exceeds_balance");
+  }, [amount, parsedAmount, isBalanceLoading, fenixBalance, isValidAmount, t]);
+
   const handleMax = useCallback(() => {
     if (fenixBalance) {
       setAmount(formatEther(fenixBalance as bigint));
@@ -144,7 +159,9 @@ export function StakeForm() {
   const isProcessing = isPending || isConfirming;
 
   return (
-    <Card variant="glow" className="w-full max-w-lg">
+    // `id` is the anchor StakesList's empty-state CTA scrolls to; `scroll-mt-20`
+    // clears the 4rem sticky header so the card title is not hidden under it.
+    <Card id="stake-form" variant="glow" className="w-full scroll-mt-20">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Lock className="h-5 w-5 text-fenix-500" />
@@ -155,12 +172,12 @@ export function StakeForm() {
 
       <CardContent className="space-y-6">
         {/* FENIX Amount Input */}
-        <div className="space-y-2">
+        <Field className="space-y-2">
           <div className="flex items-center justify-between">
             <Label className="text-sm font-medium text-ash-700 dark:text-ash-300">
               {t("amount_label")}
             </Label>
-            <div className="flex items-center gap-1.5 text-xs text-ash-500 dark:text-ash-400">
+            <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
               <span>{t("balance")}:</span>
               {isBalanceLoading ? (
                 <Skeleton className="h-3.5 w-16" />
@@ -188,28 +205,48 @@ export function StakeForm() {
                   setAmount(val);
                 }
               }}
-              className="pr-20 font-mono text-lg"
+              className={cn(
+                "pr-20 font-mono text-lg",
+                amountError &&
+                  "border-ember-500 focus-visible:border-ember-500 focus-visible:ring-ember-500/50"
+              )}
               disabled={isProcessing}
+              aria-invalid={amountError ? true : undefined}
+              aria-describedby={amountError ? amountErrorId : undefined}
             />
             <Button
               variant="ghost"
               size="sm"
               onClick={handleMax}
               disabled={isProcessing || !fenixBalance}
-              className="absolute right-1.5 top-1/2 -translate-y-1/2 text-xs font-bold text-fenix-500 hover:text-fenix-600"
+              // fenix-500 on the input's white fill is 2.80:1 -- below AA for
+              // 12px interactive text. text-brand-foreground is the AA-checked
+              // brand text tier: 5.14:1 on #ffffff, 7.77:1 on the dark card.
+              className="absolute right-1.5 top-1/2 -translate-y-1/2 text-xs font-bold text-brand-foreground hover:text-fenix-800 dark:hover:text-fenix-300"
             >
               {t("max")}
             </Button>
           </div>
-        </div>
+
+          {amountError && (
+            <p
+              id={amountErrorId}
+              role="alert"
+              className="flex items-center gap-1.5 text-xs font-medium text-ember-700 dark:text-ember-400"
+            >
+              <AlertCircle className="h-3.5 w-3.5 shrink-0" />
+              {amountError}
+            </p>
+          )}
+        </Field>
 
         {/* Term Slider */}
-        <div className="space-y-3">
+        <Field labelable={false} className="space-y-3">
           <div className="flex items-center justify-between">
             <Label className="text-sm font-medium text-ash-700 dark:text-ash-300">
               {t("term_label")}
             </Label>
-            <span className="rounded-md bg-fenix-500/10 px-2 py-0.5 font-mono text-sm font-semibold text-fenix-600 dark:text-fenix-400">
+            <span className="rounded-md bg-fenix-500/10 px-2 py-0.5 font-mono text-sm font-semibold text-brand-foreground">
               {t("term_days", { days: term.toLocaleString() })}
             </span>
           </div>
@@ -227,12 +264,17 @@ export function StakeForm() {
             {TERM_MARKERS.map((marker) => (
               <button
                 key={marker.value}
+                type="button"
+                // Selection is state, not just a fill: without aria-pressed a
+                // screen reader reads six identical buttons (WCAG 1.3.1/4.1.2),
+                // and the tint alone would carry it (1.4.1).
+                aria-pressed={term === marker.value}
                 onClick={() => setTerm(marker.value)}
                 className={cn(
-                  "rounded px-1.5 py-0.5 text-[10px] font-medium transition-colors",
+                  "inline-flex min-h-6 min-w-8 items-center justify-center rounded px-2 text-[11px] font-medium transition-colors",
                   term === marker.value
-                    ? "bg-fenix-500/10 text-fenix-600 dark:text-fenix-400"
-                    : "text-ash-400 hover:text-ash-600 dark:text-ash-500 dark:hover:text-ash-300"
+                    ? "bg-fenix-500/10 text-brand-foreground"
+                    : "text-muted-foreground hover:text-foreground"
                 )}
               >
                 {marker.label}
@@ -240,14 +282,16 @@ export function StakeForm() {
             ))}
           </div>
 
-          <div className="flex justify-between text-[11px] text-ash-400 dark:text-ash-500">
+          <div className="flex justify-between text-[11px] text-muted-foreground">
             <span>{t("min_term")}</span>
             <span>{t("max_term")}</span>
           </div>
-        </div>
+        </Field>
 
-        {/* Bonus Preview */}
-        <div className="space-y-3 rounded-xl border border-ash-200 bg-ash-50/50 p-4 dark:border-ash-800 dark:bg-ash-800/30">
+        {/* Bonus Preview.
+            LAY-2: hierarchy comes from the surface shift (bg-muted against the
+            card), not from a hairline border on top of a near-invisible tint. */}
+        <div className="space-y-3 rounded-xl bg-muted p-4">
           <h4 className="text-sm font-semibold text-ash-700 dark:text-ash-300">
             {t("bonus_preview")}
           </h4>
@@ -264,7 +308,10 @@ export function StakeForm() {
               value={sizeBonus}
             />
 
-            <Separator className="my-1" />
+            {/* bg-border is #262626 in dark -- the same hex as the bg-muted
+                panel it sits on, so the default Separator would vanish here.
+                One step further from the surface in both themes. */}
+            <Separator className="my-1 bg-ash-300 dark:bg-ash-700" />
 
             <BonusRow
               icon={<Sparkles className="h-3.5 w-3.5 text-fenix-500" />}
@@ -275,12 +322,12 @@ export function StakeForm() {
         </div>
 
         {/* Estimated Outcomes */}
-        <div className="space-y-2.5 rounded-xl border border-ash-200 bg-ash-50/50 p-4 dark:border-ash-800 dark:bg-ash-800/30">
+        <div className="space-y-2.5 rounded-xl bg-muted p-4">
           <div className="flex items-center justify-between">
-            <span className="text-sm text-ash-600 dark:text-ash-400">
+            <span className="text-sm text-foreground-secondary">
               {t("shares_estimate")}
             </span>
-            <span className="font-mono text-sm font-semibold text-ash-900 dark:text-ash-100">
+            <span className="font-mono text-sm font-semibold text-foreground">
               <NumberFlow
                 value={estimatedShares}
                 format={{ maximumFractionDigits: 2 }}
@@ -290,10 +337,10 @@ export function StakeForm() {
           </div>
 
           <div className="flex items-center justify-between">
-            <span className="text-sm text-ash-600 dark:text-ash-400">
+            <span className="text-sm text-foreground-secondary">
               {t("inflation_estimate")}
             </span>
-            <span className="font-mono text-sm font-semibold text-fenix-600 dark:text-fenix-400">
+            <span className="font-mono text-sm font-semibold text-brand-foreground">
               <NumberFlow
                 value={inflationReward}
                 format={{ maximumFractionDigits: 4 }}

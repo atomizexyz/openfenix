@@ -58,7 +58,9 @@
     "approving": "Zatwierdzanie...",
     "burning": "Spalanie...",
     "approval_confirmed": "Zatwierdzenie potwierdzone. Możesz teraz spalić.",
-    "unsupported_network": "Przełącz się na obsługiwaną sieć"
+    "unsupported_network": "Przełącz się na obsługiwaną sieć",
+    "error_invalid_amount": "Podaj kwotę większą niż 0",
+    "error_exceeds_balance": "Kwota przekracza Twoje saldo XEN"
   },
   "stake": {
     "title": "Stakuj FENIX",
@@ -81,11 +83,14 @@
     "success": "Pomyślnie zastakowano {amount} FENIX na {term} dni",
     "error": "Błąd podczas rozpoczynania stakowania",
     "confirming": "Potwierdzanie...",
-    "staking": "Rozpoczynanie stake'u..."
+    "staking": "Rozpoczynanie stake'u...",
+    "error_invalid_amount": "Podaj kwotę większą niż 0",
+    "error_exceeds_balance": "Kwota przekracza Twoje saldo FENIX"
   },
   "stakes": {
     "title": "Twoje Stake'i",
     "no_stakes": "Brak aktywnych stake'ów",
+    "start_staking": "Stakuj FENIX",
     "stake_id": "Stake #{id}",
     "amount": "Ilość",
     "shares": "Udziały",
@@ -142,7 +147,9 @@
     "circulating_supply": "W obiegu",
     "active": "Aktywny",
     "error": "Błąd",
-    "loading": "Ładowanie"
+    "loading": "Ładowanie",
+    "unavailable": "RPC niedostępny",
+    "unavailable_hint": "Żaden publiczny endpoint nie odpowiada dla tego łańcucha."
   },
   "features": {
     "burn_title": "Dowód Spalenia (Proof of Burn)",

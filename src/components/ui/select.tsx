@@ -19,12 +19,11 @@ const SelectTrigger = React.forwardRef<
   <SelectPrimitive.Trigger
     ref={ref}
     className={cn(
-      "flex h-10 w-full items-center justify-between gap-2 rounded-lg border border-ash-300 bg-white px-3 py-2 text-sm text-ash-900 shadow-sm transition-colors",
+      "flex h-10 w-full items-center justify-between gap-2 rounded-lg border border-input bg-card px-3 py-2 text-sm text-foreground shadow-sm transition-colors",
       "placeholder:text-ash-400",
       "focus:outline-none focus:ring-2 focus:ring-fenix-500/50 focus:border-fenix-500",
       "disabled:cursor-not-allowed disabled:opacity-50",
-      "dark:border-ash-700 dark:bg-ash-900 dark:text-ash-100 dark:placeholder:text-ash-500",
-      "dark:focus:ring-fenix-500/50 dark:focus:border-fenix-500",
+      "dark:placeholder:text-ash-500",
       "[&>span]:line-clamp-1",
       className
     )}
@@ -81,11 +80,11 @@ const SelectContent = React.forwardRef<
     <SelectPrimitive.Content
       ref={ref}
       className={cn(
-        "relative z-50 max-h-96 min-w-[8rem] overflow-hidden rounded-lg border border-ash-200 bg-white text-ash-900 shadow-lg",
+        "relative z-50 max-h-96 min-w-[8rem] overflow-hidden rounded-lg border border-ash-200 bg-white text-foreground shadow-lg",
         "data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95",
         "data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95",
         "data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
-        "dark:border-ash-700 dark:bg-ash-800 dark:text-ash-100",
+        "dark:border-ash-700 dark:bg-ash-800",
         position === "popper" &&
           "data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1",
         className
@@ -116,7 +115,7 @@ const SelectLabel = React.forwardRef<
   <SelectPrimitive.Label
     ref={ref}
     className={cn(
-      "px-2 py-1.5 text-sm font-semibold text-ash-900 dark:text-ash-100",
+      "px-2 py-1.5 text-sm font-semibold text-foreground",
       className
     )}
     {...props}
@@ -132,9 +131,9 @@ const SelectItem = React.forwardRef<
     ref={ref}
     className={cn(
       "relative flex w-full cursor-default select-none items-center rounded-md py-1.5 pl-8 pr-2 text-sm outline-none transition-colors",
-      "focus:bg-ash-100 focus:text-ash-900",
+      "focus:bg-ash-100 focus:text-accent-foreground",
       "data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
-      "dark:focus:bg-ash-700 dark:focus:text-ash-100",
+      "dark:focus:bg-ash-700",
       className
     )}
     {...props}

@@ -58,7 +58,9 @@
     "approving": "承認中...",
     "burning": "バーン中...",
     "approval_confirmed": "承認が完了しました。バーンできます。",
-    "unsupported_network": "サポートされているネットワークに切り替えてください"
+    "unsupported_network": "サポートされているネットワークに切り替えてください",
+    "error_invalid_amount": "0より大きい数量を入力してください",
+    "error_exceeds_balance": "数量がXEN残高を超えています"
   },
   "stake": {
     "title": "FENIXをステーク",
@@ -81,11 +83,14 @@
     "success": "{amount} FENIXを{term}日間正常にステークしました",
     "error": "ステーク開始中にエラーが発生しました",
     "confirming": "確認中...",
-    "staking": "ステーク開始中..."
+    "staking": "ステーク開始中...",
+    "error_invalid_amount": "0より大きい数量を入力してください",
+    "error_exceeds_balance": "数量がFENIX残高を超えています"
   },
   "stakes": {
     "title": "あなたのステーク",
     "no_stakes": "アクティブなステークはありません",
+    "start_staking": "FENIXをステークする",
     "stake_id": "ステーク #{id}",
     "amount": "数量",
     "shares": "シェア",
@@ -142,7 +147,9 @@
     "circulating_supply": "流通量",
     "active": "アクティブ",
     "error": "エラー",
-    "loading": "読込中"
+    "loading": "読込中",
+    "unavailable": "RPC 利用不可",
+    "unavailable_hint": "このチェーンに応答する公開エンドポイントがありません。"
   },
   "features": {
     "burn_title": "バーンの証明 (Proof of Burn)",
