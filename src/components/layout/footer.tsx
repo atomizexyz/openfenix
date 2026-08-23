@@ -1,8 +1,8 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { Github, ExternalLink } from "lucide-react";
-import { FenixLogo, FenixWordmark } from "@/components/icons";
+import { ExternalLink } from "lucide-react";
+import { FenixLogo, FenixWordmark, GithubIcon } from "@/components/icons";
 import { SOCIAL_LINKS } from "@/config/constants";
 import { Link } from "@/i18n/routing";
 
@@ -120,7 +120,7 @@ export function Footer() {
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1 text-sm text-ash-500 transition-colors hover:text-fenix-500 dark:text-ash-400"
                 >
-                  <Github className="h-3.5 w-3.5" />
+                  <GithubIcon className="h-3.5 w-3.5" />
                   {t("github")}
                 </a>
               </li>
