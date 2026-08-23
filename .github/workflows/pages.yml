@@ -41,7 +41,7 @@ jobs:
       - name: Build static site
         run: bun run build
         env:
-          NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID: ${{ vars.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID }}
+          NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID }}
 
       # Jekyll would strip the _next/ directory. public/.nojekyll covers this
       # too; this is belt-and-braces in case the file is ever dropped.
