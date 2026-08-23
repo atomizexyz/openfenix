@@ -20,14 +20,17 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - uses: oven-sh/setup-bun@v2
         with:
           bun-version-file: package.json
 
+      # Not --frozen-lockfile: the committed lockfile is written by a canary
+      # bun, and stable bun re-serializes it as changed. Every direct dependency
+      # in package.json is an exact version, so resolution stays deterministic.
       - name: Install dependencies
-        run: bun install --frozen-lockfile
+        run: bun install
 
       - name: Lint
         run: bun run lint
@@ -45,7 +48,10 @@ jobs:
       - name: Disable Jekyll processing
         run: touch out/.nojekyll
 
+      # enablement provisions the Pages site on the first run.
       - uses: actions/configure-pages@v5
+        with:
+          enablement: true
 
       - uses: actions/upload-pages-artifact@v3
         with:
