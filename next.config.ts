@@ -9,13 +9,9 @@ const nextConfig: NextConfig = {
   // GitHub Pages resolves /en/burn/ to /en/burn/index.html.
   trailingSlash: true,
   images: {
+    // No next/image usage in the app; unoptimized keeps the export fully static
+    // and means no remotePatterns are needed at all.
     unoptimized: true,
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "**",
-      },
-    ],
   },
   webpack: (config) => {
     config.resolve.fallback = { ...config.resolve.fallback, "pino-pretty": false };

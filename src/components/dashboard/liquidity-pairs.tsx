@@ -23,13 +23,14 @@ import {
 import { useDexScreenerPrices } from "@/hooks/use-dexscreener-prices";
 import { DEXSCREENER_CHAIN_ID_MAP } from "@/config/dexscreener";
 import { getChainConfig } from "@/config/chains";
-import { formatUsd, formatPercent } from "@/lib/utils";
+import { formatUsd, formatPercent, safeExternalUrl } from "@/lib/utils";
 import type { DexScreenerPair } from "@/types/dexscreener";
 
 function PairRow({ pair }: { pair: DexScreenerPair }) {
   const priceUsd = parseFloat(pair.priceUsd ?? "0");
   const change = pair.priceChange?.h24 ?? 0;
   const isPositive = change >= 0;
+  const url = safeExternalUrl(pair.url);
 
   return (
     <tr className="border-b border-ash-100 transition-colors hover:bg-ash-50/50 dark:border-ash-800 dark:hover:bg-ash-800/30">
@@ -98,14 +99,18 @@ function PairRow({ pair }: { pair: DexScreenerPair }) {
         </span>
       </td>
       <td className="whitespace-nowrap px-3 py-3 sm:px-4">
-        <a
-          href={pair.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-ash-400 transition-colors hover:text-fenix-500"
-        >
-          <ExternalLink className="h-4 w-4" />
-        </a>
+        {url ? (
+          <a
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-ash-400 transition-colors hover:text-fenix-500"
+          >
+            <ExternalLink className="h-4 w-4" />
+          </a>
+        ) : (
+          <ExternalLink className="h-4 w-4 text-ash-300 dark:text-ash-700" />
+        )}
       </td>
     </tr>
   );
@@ -116,6 +121,7 @@ function PairCard({ pair }: { pair: DexScreenerPair }) {
   const priceUsd = parseFloat(pair.priceUsd ?? "0");
   const change = pair.priceChange?.h24 ?? 0;
   const isPositive = change >= 0;
+  const url = safeExternalUrl(pair.url);
 
   return (
     <Card variant="glow" className="overflow-hidden">
@@ -129,14 +135,18 @@ function PairCard({ pair }: { pair: DexScreenerPair }) {
               {pair.chainId} &middot; {pair.dexId}
             </span>
           </div>
-          <a
-            href={pair.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-ash-400 transition-colors hover:text-fenix-500"
-          >
-            <ExternalLink className="h-4 w-4" />
-          </a>
+          {url ? (
+            <a
+              href={url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-ash-400 transition-colors hover:text-fenix-500"
+            >
+              <ExternalLink className="h-4 w-4" />
+            </a>
+          ) : (
+            <ExternalLink className="h-4 w-4 text-ash-300 dark:text-ash-700" />
+          )}
         </div>
 
         <div className="mt-3 grid grid-cols-2 gap-2">

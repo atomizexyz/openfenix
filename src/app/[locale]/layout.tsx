@@ -10,6 +10,7 @@ import { Footer } from "@/components/layout/footer";
 import { LOCALES, RTL_LOCALES, type Locale } from "@/config/constants";
 import { SITE_URL } from "@/config/site";
 import { OG_IMAGE, TWITTER_HANDLE } from "@/lib/metadata";
+import { CSP_CONTENT } from "@/lib/security";
 import "@/styles/globals.css";
 
 const inter = Inter({
@@ -29,6 +30,7 @@ const jetbrainsMono = JetBrains_Mono({
  */
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
+  referrer: "strict-origin-when-cross-origin",
   title: {
     default: "Fenix Protocol",
     template: "%s | Fenix Protocol",
@@ -84,6 +86,10 @@ export default async function LocaleLayout({
 
   return (
     <html lang={locale} dir={dir} suppressHydrationWarning>
+      <head>
+        {/* Static export = no HTTP headers, so the CSP ships as a meta tag. */}
+        <meta httpEquiv="Content-Security-Policy" content={CSP_CONTENT} />
+      </head>
       <body
         className={`${inter.variable} ${jetbrainsMono.variable} font-sans antialiased`}
       >

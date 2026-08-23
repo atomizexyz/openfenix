@@ -6,6 +6,21 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+/**
+ * Returns the URL only if it is an absolute https: URL, otherwise undefined.
+ * Applied to any URL taken from a third-party API before it lands in an href:
+ * React does not block javascript: URLs, so a compromised API could otherwise
+ * turn a rendered link into script execution in this origin.
+ */
+export function safeExternalUrl(url: string | undefined): string | undefined {
+  if (!url) return undefined;
+  try {
+    return new URL(url).protocol === "https:" ? url : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
 export function formatNumber(
   value: number | bigint,
   options?: Intl.NumberFormatOptions
