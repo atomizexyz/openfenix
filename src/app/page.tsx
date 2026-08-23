@@ -1,7 +1,8 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { LOCALES, DEFAULT_LOCALE, LOCALE_NAMES } from "@/config/constants";
 import { FENIX_CHAINS } from "@/config/chains";
 import { SITE_URL, alternatesFor, pageUrl } from "@/config/site";
+import { ROOT_URL, TWITTER_HANDLE } from "@/lib/metadata";
 
 /**
  * The site is a static export on GitHub Pages, so `/` cannot be an HTTP 301 --
@@ -17,17 +18,47 @@ import { SITE_URL, alternatesFor, pageUrl } from "@/config/site";
 
 const enabledChains = FENIX_CHAINS.filter((c) => c.enabled);
 
+// Kept under 160 characters: Google truncates search snippets around there and
+// social cards start dropping text around 125.
+const DESCRIPTION =
+  "Burn XEN to create FENIX, then stake FENIX for trustless yield at a fixed " +
+  "1.618% annual inflation rate. Live on 12 EVM chains. No admin keys.";
+
+const TITLE = "Fenix Protocol: Burn XEN, Stake FENIX, Earn Trustless Yield";
+
 export const metadata: Metadata = {
-  title: "Fenix Protocol: Burn XEN, Stake FENIX, Earn Trustless Yield",
-  description:
-    "Fenix Protocol is a hyperstructure that turns burned XEN into FENIX. " +
-    "Burn XEN at a fixed 10,000:1 ratio, stake FENIX for equity-based yield at " +
-    "a fixed 1.618% annual inflation rate, across 12 EVM chains. No admin keys, " +
-    "no pre-mine, no investor allocation.",
+  metadataBase: new URL(SITE_URL),
+  title: TITLE,
+  description: DESCRIPTION,
   alternates: {
     canonical: pageUrl(DEFAULT_LOCALE),
     languages: alternatesFor(""),
   },
+  openGraph: {
+    title: TITLE,
+    description: DESCRIPTION,
+    url: ROOT_URL,
+    siteName: "Fenix Protocol",
+    type: "website",
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: TITLE,
+    description: DESCRIPTION,
+    site: TWITTER_HANDLE,
+    creator: TWITTER_HANDLE,
+  },
+  icons: {
+    icon: "/favicon.ico",
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#faf9ff" },
+    { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
+  ],
 };
 
 export default function RootPage() {
