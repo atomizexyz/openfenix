@@ -11,16 +11,16 @@ export function Footer() {
   const t = useTranslations("footer");
 
   return (
-    <footer className="border-t border-ash-200/50 bg-ash-50/50 dark:border-ash-800/50 dark:bg-ash-950/50">
+    <footer className="border-t border-border/50 bg-ash-50/50 dark:bg-ash-950/50">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {/* Brand */}
           <div className="space-y-4">
             <div className="flex items-center gap-2">
               <FenixLogo className="h-8 w-8" />
-              <FenixWordmark className="h-4 w-auto text-ash-900 dark:text-ash-100" />
+              <FenixWordmark className="h-4 w-auto text-foreground" />
             </div>
-            <p className="text-sm text-ash-500 dark:text-ash-400">
+            <p className="text-sm text-muted-foreground">
               {t("copyright")}
             </p>
             <div className="-ms-2">
@@ -30,14 +30,14 @@ export function Footer() {
 
           {/* Protocol */}
           <div className="space-y-3">
-            <h3 className="text-sm font-semibold text-ash-900 dark:text-ash-100">
+            <h3 className="text-sm font-semibold text-foreground">
               {t("protocol")}
             </h3>
             <ul className="space-y-2">
               <li>
                 <Link
                   href="/dashboard"
-                  className="text-sm text-ash-500 transition-colors hover:text-fenix-500 dark:text-ash-400"
+                  className="text-sm text-muted-foreground transition-colors hover:text-fenix-500"
                 >
                   Dashboard
                 </Link>
@@ -45,7 +45,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/burn"
-                  className="text-sm text-ash-500 transition-colors hover:text-fenix-500 dark:text-ash-400"
+                  className="text-sm text-muted-foreground transition-colors hover:text-fenix-500"
                 >
                   Burn
                 </Link>
@@ -53,7 +53,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/stake"
-                  className="text-sm text-ash-500 transition-colors hover:text-fenix-500 dark:text-ash-400"
+                  className="text-sm text-muted-foreground transition-colors hover:text-fenix-500"
                 >
                   Stake
                 </Link>
@@ -61,7 +61,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/rewards"
-                  className="text-sm text-ash-500 transition-colors hover:text-fenix-500 dark:text-ash-400"
+                  className="text-sm text-muted-foreground transition-colors hover:text-fenix-500"
                 >
                   Rewards
                 </Link>
@@ -71,7 +71,7 @@ export function Footer() {
 
           {/* Resources */}
           <div className="space-y-3">
-            <h3 className="text-sm font-semibold text-ash-900 dark:text-ash-100">
+            <h3 className="text-sm font-semibold text-foreground">
               {t("resources")}
             </h3>
             <ul className="space-y-2">
@@ -80,7 +80,7 @@ export function Footer() {
                   href={SOCIAL_LINKS.litepaper}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 text-sm text-ash-500 transition-colors hover:text-fenix-500 dark:text-ash-400"
+                  className="inline-flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-fenix-500"
                 >
                   {t("litepaper")}
                   <ExternalLink className="h-3 w-3" />
@@ -91,7 +91,7 @@ export function Footer() {
                   href={SOCIAL_LINKS.certik}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 text-sm text-ash-500 transition-colors hover:text-fenix-500 dark:text-ash-400"
+                  className="inline-flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-fenix-500"
                 >
                   {t("audit")}
                   <ExternalLink className="h-3 w-3" />
@@ -102,7 +102,7 @@ export function Footer() {
                   href={SOCIAL_LINKS.merch}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 text-sm text-ash-500 transition-colors hover:text-fenix-500 dark:text-ash-400"
+                  className="inline-flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-fenix-500"
                 >
                   {t("merch")}
                   <ExternalLink className="h-3 w-3" />
@@ -113,7 +113,7 @@ export function Footer() {
 
           {/* Community */}
           <div className="space-y-3">
-            <h3 className="text-sm font-semibold text-ash-900 dark:text-ash-100">
+            <h3 className="text-sm font-semibold text-foreground">
               {t("community")}
             </h3>
             <ul className="space-y-2">
@@ -122,7 +122,7 @@ export function Footer() {
                   href={SOCIAL_LINKS.github}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 text-sm text-ash-500 transition-colors hover:text-fenix-500 dark:text-ash-400"
+                  className="inline-flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-fenix-500"
                 >
                   <GithubIcon className="h-3.5 w-3.5" />
                   {t("github")}
@@ -133,7 +133,7 @@ export function Footer() {
                   href={SOCIAL_LINKS.twitter}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 text-sm text-ash-500 transition-colors hover:text-fenix-500 dark:text-ash-400"
+                  className="inline-flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-fenix-500"
                 >
                   {t("twitter")}
                   <ExternalLink className="h-3 w-3" />
@@ -144,7 +144,7 @@ export function Footer() {
                   href={SOCIAL_LINKS.telegram}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 text-sm text-ash-500 transition-colors hover:text-fenix-500 dark:text-ash-400"
+                  className="inline-flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-fenix-500"
                 >
                   {t("telegram")}
                   <ExternalLink className="h-3 w-3" />
@@ -154,7 +154,7 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-8 border-t border-ash-200 pt-8 dark:border-ash-800">
+        <div className="mt-8 border-t border-border pt-8">
           <p className="text-center text-xs text-ash-400 dark:text-ash-500">
             &copy; {new Date().getFullYear()} {t("copyright")}
           </p>

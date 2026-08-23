@@ -58,7 +58,9 @@
     "approving": "Menyetujui...",
     "burning": "Membakar...",
     "approval_confirmed": "Persetujuan dikonfirmasi. Anda sekarang dapat membakar.",
-    "unsupported_network": "Silakan beralih ke jaringan yang didukung"
+    "unsupported_network": "Silakan beralih ke jaringan yang didukung",
+    "error_invalid_amount": "Masukkan jumlah lebih dari 0",
+    "error_exceeds_balance": "Jumlah melebihi saldo XEN Anda"
   },
   "stake": {
     "title": "Stake FENIX",
@@ -81,11 +83,14 @@
     "success": "Berhasil men-stake {amount} FENIX selama {term} hari",
     "error": "Kesalahan saat memulai stake",
     "confirming": "Mengonfirmasi...",
-    "staking": "Memulai stake..."
+    "staking": "Memulai stake...",
+    "error_invalid_amount": "Masukkan jumlah lebih dari 0",
+    "error_exceeds_balance": "Jumlah melebihi saldo FENIX Anda"
   },
   "stakes": {
     "title": "Stake Anda",
     "no_stakes": "Tidak ada stake aktif",
+    "start_staking": "Stake FENIX",
     "stake_id": "Stake #{id}",
     "amount": "Jumlah",
     "shares": "Bagian",
@@ -142,7 +147,9 @@
     "circulating_supply": "Beredar",
     "active": "Aktif",
     "error": "Error",
-    "loading": "Memuat"
+    "loading": "Memuat",
+    "unavailable": "RPC tidak tersedia",
+    "unavailable_hint": "Tidak ada endpoint publik yang merespons untuk rantai ini."
   },
   "features": {
     "burn_title": "Bukti Pembakaran (Proof of Burn)",

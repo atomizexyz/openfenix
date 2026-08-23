@@ -58,7 +58,9 @@
     "approving": "جارٍ الموافقة...",
     "burning": "جارٍ الحرق...",
     "approval_confirmed": "تم تأكيد الموافقة. يمكنك الحرق الآن.",
-    "unsupported_network": "يرجى التبديل إلى شبكة مدعومة"
+    "unsupported_network": "يرجى التبديل إلى شبكة مدعومة",
+    "error_invalid_amount": "أدخل مبلغًا أكبر من 0",
+    "error_exceeds_balance": "المبلغ يتجاوز رصيدك من XEN"
   },
   "stake": {
     "title": "رهن FENIX",
@@ -81,11 +83,14 @@
     "success": "تم رهن {amount} FENIX لمدة {term} يوم بنجاح",
     "error": "خطأ في بدء الرهن",
     "confirming": "جارٍ التأكيد...",
-    "staking": "جارٍ بدء الرهن..."
+    "staking": "جارٍ بدء الرهن...",
+    "error_invalid_amount": "أدخل مبلغًا أكبر من 0",
+    "error_exceeds_balance": "المبلغ يتجاوز رصيدك من FENIX"
   },
   "stakes": {
     "title": "رهوناتك",
     "no_stakes": "لا توجد رهونات نشطة",
+    "start_staking": "رهن FENIX",
     "stake_id": "رهن #{id}",
     "amount": "الكمية",
     "shares": "الحصص",
@@ -142,7 +147,9 @@
     "circulating_supply": "متداولة",
     "active": "نشط",
     "error": "خطأ",
-    "loading": "جاري التحميل"
+    "loading": "جاري التحميل",
+    "unavailable": "RPC غير متاح",
+    "unavailable_hint": "لا تستجيب أي نقطة نهاية عامة لهذه السلسلة."
   },
   "features": {
     "burn_title": "إثبات الحرق (Proof of Burn)",

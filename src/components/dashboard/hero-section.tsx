@@ -20,7 +20,7 @@ const ORB_CONFIG = [
   { size: 200, x: "25%", y: "75%", delay: 3, duration: 24, color: "rgba(220, 38, 38, 0.10)" },
 ];
 
-const PARTICLE_COUNT = 48;
+const PARTICLE_COUNT = 56;
 
 const EMBER_COLORS = [
   "bg-fenix-400/80",
@@ -29,6 +29,27 @@ const EMBER_COLORS = [
   "bg-amber-400/70",
   "bg-orange-300/80",
 ];
+
+function seededRandom(seed: number) {
+  const value = Math.sin(seed * 12.9898) * 43758.5453;
+  return value - Math.floor(value);
+}
+
+const PARTICLES = Array.from({ length: PARTICLE_COUNT }, (_, i) => {
+  const random = (offset: number) => seededRandom(i * 7.31 + offset);
+  const duration = 6 + random(3) * 7;
+
+  return {
+    size: 3 + random(1) * 6,
+    startX: random(2) * 100,
+    duration,
+    delay: -random(4) * duration,
+    color: EMBER_COLORS[i % EMBER_COLORS.length],
+    drift: (random(5) - 0.5) * 170,
+    flickerMid: 0.65 + random(6) * 0.35,
+    travel: 850 + random(7) * 400,
+  };
+});
 
 function FloatingOrbs() {
   return (
@@ -64,41 +85,36 @@ function FloatingOrbs() {
 function FloatingParticles() {
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden">
-      {Array.from({ length: PARTICLE_COUNT }).map((_, i) => {
-        const size = 3 + Math.random() * 7;
-        const startX = Math.random() * 100;
-        const duration = 4 + Math.random() * 7;
-        const delay = Math.random() * 3;
-        const color = EMBER_COLORS[i % EMBER_COLORS.length];
-        const drift = (Math.random() - 0.5) * 160;
-        const flickerMid = 0.6 + Math.random() * 0.4;
-
-        return (
-          <motion.div
-            key={i}
-            className={`absolute rounded-full ${color}`}
-            style={{
-              width: size,
-              height: size,
-              left: `${startX}%`,
-              bottom: -10,
-              boxShadow: `0 0 ${size * 2.5}px ${size * 1.2}px rgba(249, 115, 22, 0.5)`,
-            }}
-            animate={{
-              y: [0, -900],
-              x: [0, drift * 0.4, drift, drift * 0.6],
-              opacity: [0, 1, flickerMid, 1, 0.7, 0],
-              scale: [1, 1.3, 0.8, 1.1, 0.6],
-            }}
-            transition={{
-              duration,
-              delay,
-              repeat: Infinity,
-              ease: "easeOut",
-            }}
-          />
-        );
-      })}
+      {PARTICLES.map((particle, i) => (
+        <motion.div
+          key={i}
+          className={`hero-ember absolute rounded-full ${particle.color}`}
+          style={{
+            width: particle.size,
+            height: particle.size,
+            left: `${particle.startX}%`,
+            bottom: -10,
+            boxShadow: `0 0 0 1px rgba(124, 45, 18, 0.24), 0 0 ${particle.size * 2.8}px ${particle.size * 1.2}px rgba(249, 115, 22, 0.58)`,
+          }}
+          animate={{
+            y: [0, -particle.travel],
+            x: [
+              0,
+              particle.drift * 0.4,
+              particle.drift,
+              particle.drift * 0.6,
+            ],
+            opacity: [0, 1, particle.flickerMid, 1, 0.7, 0],
+            scale: [1, 1.3, 0.8, 1.1, 0.6],
+          }}
+          transition={{
+            duration: particle.duration,
+            delay: particle.delay,
+            repeat: Infinity,
+            ease: "easeOut",
+          }}
+        />
+      ))}
     </div>
   );
 }
@@ -121,17 +137,17 @@ function FlushCountdownDisplay() {
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.5 }}
-      className="mt-8 inline-flex items-center gap-3 rounded-2xl border border-ash-200/60 bg-white/60 px-5 py-3 backdrop-blur-md dark:border-ash-800/60 dark:bg-ash-900/60"
+      className="mt-8 inline-flex items-center gap-3 rounded-2xl border border-border/60 bg-card/60 px-5 py-3 backdrop-blur-md"
     >
-      <span className="text-sm font-medium text-ash-500 dark:text-ash-400">
+      <span className="text-sm font-medium text-muted-foreground">
         {t("next_flush")}
       </span>
       {ready ? (
-        <span className="text-sm font-bold text-emerald-600 dark:text-emerald-400">
+        <span className="text-sm font-bold text-success-foreground">
           {t("flush_ready")}
         </span>
       ) : (
-        <span className="flex items-center gap-1 font-mono text-sm font-bold text-ash-900 dark:text-ash-100">
+        <span className="flex items-center gap-1 font-mono text-sm font-bold text-foreground">
           {days > 0 && (
             <>
               <NumberFlow
@@ -169,13 +185,18 @@ export function HeroSection() {
   const t = useTranslations("hero");
 
   return (
-    <section className="relative flex min-h-[85vh] items-center justify-center overflow-hidden px-4 py-20 sm:px-6 lg:px-8">
+    <section className="relative isolate flex min-h-[85vh] items-center justify-center overflow-hidden bg-fenix-50/40 px-4 py-20 dark:bg-transparent sm:px-6 lg:px-8">
       {/* Background effects */}
+      <div
+        aria-hidden="true"
+        className="hero-sunset pointer-events-none absolute inset-0 dark:hidden"
+      />
       <FloatingOrbs />
+
+      {/* Preserve the darker vignette in dark mode. */}
       <FloatingParticles />
 
-      {/* Radial gradient overlay */}
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,_transparent_0%,_rgba(255,255,255,0.8)_70%)] dark:bg-[radial-gradient(ellipse_at_center,_transparent_0%,_rgba(10,10,10,0.85)_70%)]" />
+      <div className="pointer-events-none absolute inset-0 hidden bg-[radial-gradient(ellipse_at_center,_transparent_0%,_rgba(10,10,10,0.85)_70%)] dark:block" />
 
       {/* Content */}
       <div className="relative z-10 mx-auto max-w-4xl text-center">
@@ -214,7 +235,7 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.4, ease: "easeOut" }}
-          className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-ash-600 dark:text-ash-400 sm:text-xl"
+          className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-ash-700 dark:text-ash-400 sm:text-xl"
         >
           {t("subtitle")}
         </motion.p>

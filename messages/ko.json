@@ -58,7 +58,9 @@
     "approving": "승인 중...",
     "burning": "소각 중...",
     "approval_confirmed": "승인이 완료되었습니다. 이제 소각할 수 있습니다.",
-    "unsupported_network": "지원되는 네트워크로 전환해 주세요"
+    "unsupported_network": "지원되는 네트워크로 전환해 주세요",
+    "error_invalid_amount": "0보다 큰 수량을 입력하세요",
+    "error_exceeds_balance": "수량이 XEN 잔액을 초과합니다"
   },
   "stake": {
     "title": "FENIX 스테이킹",
@@ -81,11 +83,14 @@
     "success": "{amount} FENIX를 {term}일 동안 성공적으로 스테이킹했습니다",
     "error": "스테이크 시작 중 오류 발생",
     "confirming": "확인 중...",
-    "staking": "스테이크 시작 중..."
+    "staking": "스테이크 시작 중...",
+    "error_invalid_amount": "0보다 큰 수량을 입력하세요",
+    "error_exceeds_balance": "수량이 FENIX 잔액을 초과합니다"
   },
   "stakes": {
     "title": "나의 스테이크",
     "no_stakes": "활성 스테이크 없음",
+    "start_staking": "FENIX 스테이킹하기",
     "stake_id": "스테이크 #{id}",
     "amount": "수량",
     "shares": "지분",
@@ -142,7 +147,9 @@
     "circulating_supply": "유통량",
     "active": "활성",
     "error": "오류",
-    "loading": "로딩"
+    "loading": "로딩",
+    "unavailable": "RPC 사용 불가",
+    "unavailable_hint": "이 체인에 응답하는 공개 엔드포인트가 없습니다."
   },
   "features": {
     "burn_title": "소각 증명 (Proof of Burn)",

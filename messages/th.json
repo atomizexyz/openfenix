@@ -58,7 +58,9 @@
     "approving": "กำลังอนุมัติ...",
     "burning": "กำลังเผา...",
     "approval_confirmed": "อนุมัติเรียบร้อยแล้ว ตอนนี้คุณสามารถเผาได้",
-    "unsupported_network": "โปรดสลับไปยังเครือข่ายที่รองรับ"
+    "unsupported_network": "โปรดสลับไปยังเครือข่ายที่รองรับ",
+    "error_invalid_amount": "กรุณาระบุจำนวนที่มากกว่า 0",
+    "error_exceeds_balance": "จำนวนเกินยอดคงเหลือ XEN ของคุณ"
   },
   "stake": {
     "title": "สเตค FENIX",
@@ -81,11 +83,14 @@
     "success": "สเตค {amount} FENIX เป็นเวลา {term} วัน สำเร็จ",
     "error": "เกิดข้อผิดพลาดในการเริ่มสเตค",
     "confirming": "กำลังยืนยัน...",
-    "staking": "กำลังเริ่มสเตค..."
+    "staking": "กำลังเริ่มสเตค...",
+    "error_invalid_amount": "กรุณาระบุจำนวนที่มากกว่า 0",
+    "error_exceeds_balance": "จำนวนเกินยอดคงเหลือ FENIX ของคุณ"
   },
   "stakes": {
     "title": "สเตคของคุณ",
     "no_stakes": "ไม่มีสเตคที่ใช้งานอยู่",
+    "start_staking": "สเตค FENIX",
     "stake_id": "สเตค #{id}",
     "amount": "จำนวน",
     "shares": "ส่วนแบ่ง",
@@ -142,7 +147,9 @@
     "circulating_supply": "หมุนเวียน",
     "active": "ใช้งานอยู่",
     "error": "ข้อผิดพลาด",
-    "loading": "กำลังโหลด"
+    "loading": "กำลังโหลด",
+    "unavailable": "RPC ไม่พร้อมใช้งาน",
+    "unavailable_hint": "ไม่มีเอนด์พอยต์สาธารณะที่ตอบสนองสำหรับเชนนี้"
   },
   "features": {
     "burn_title": "หลักฐานการเผา (Proof of Burn)",

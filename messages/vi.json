@@ -58,7 +58,9 @@
     "approving": "Đang phê duyệt...",
     "burning": "Đang đốt...",
     "approval_confirmed": "Đã phê duyệt. Bây giờ bạn có thể đốt.",
-    "unsupported_network": "Vui lòng chuyển sang mạng được hỗ trợ"
+    "unsupported_network": "Vui lòng chuyển sang mạng được hỗ trợ",
+    "error_invalid_amount": "Nhập số lượng lớn hơn 0",
+    "error_exceeds_balance": "Số lượng vượt quá số dư XEN của bạn"
   },
   "stake": {
     "title": "Stake FENIX",
@@ -81,11 +83,14 @@
     "success": "Đã stake thành công {amount} FENIX trong {term} ngày",
     "error": "Lỗi khi bắt đầu stake",
     "confirming": "Đang xác nhận...",
-    "staking": "Đang bắt đầu stake..."
+    "staking": "Đang bắt đầu stake...",
+    "error_invalid_amount": "Nhập số lượng lớn hơn 0",
+    "error_exceeds_balance": "Số lượng vượt quá số dư FENIX của bạn"
   },
   "stakes": {
     "title": "Stake Của Bạn",
     "no_stakes": "Không có stake đang hoạt động",
+    "start_staking": "Stake FENIX",
     "stake_id": "Stake #{id}",
     "amount": "Số Lượng",
     "shares": "Cổ Phần",
@@ -142,7 +147,9 @@
     "circulating_supply": "Lưu hành",
     "active": "Hoat dong",
     "error": "Loi",
-    "loading": "Dang tai"
+    "loading": "Dang tai",
+    "unavailable": "RPC không khả dụng",
+    "unavailable_hint": "Không có điểm cuối công khai nào phản hồi cho chuỗi này."
   },
   "features": {
     "burn_title": "Bằng Chứng Đốt (Proof of Burn)",

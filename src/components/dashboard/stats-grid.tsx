@@ -37,7 +37,7 @@ function StatCard({ icon, label, value, suffix, isLoading, usdValue, usdIsLoadin
         </div>
 
         <div className="mt-4">
-          <p className="text-sm font-medium text-ash-500 dark:text-ash-400">
+          <p className="text-sm font-medium text-muted-foreground">
             {label}
           </p>
 
@@ -45,7 +45,7 @@ function StatCard({ icon, label, value, suffix, isLoading, usdValue, usdIsLoadin
             <Skeleton className="mt-1.5 h-7 w-28" />
           ) : (
             <div className="mt-1 flex items-baseline gap-1">
-              <span className="text-2xl font-bold tracking-tight text-ash-900 dark:text-ash-100">
+              <span className="text-2xl font-bold tracking-tight text-foreground">
                 {value !== undefined ? (
                   <NumberFlow
                     value={value}

@@ -21,9 +21,25 @@
   --destructive: #ef4444;
   --destructive-foreground: #ffffff;
   --border: #e5e5e5;
-  --input: #e5e5e5;
+  /* --input is ash-300/ash-700: what form controls actually render today.
+     Verified 0 consumers of border-input/bg-input before the change. */
+  --input: #d4d4d4;
   --ring: #f97316;
   --radius: 0.5rem;
+
+  /* Extended semantic tokens. Each is a reference into the scale the
+     components already reference; --foreground-secondary and the three
+     status tokens are the exact hex those components rendered before, and
+     --brand-foreground is one step darker for the AA reason below. */
+  --foreground-secondary: #525252; /* ash-600 */
+  /* fenix-700, not fenix-600: brand-hue *text* on a light surface has to clear
+     4.5:1, and fenix-600 (#ea580c) is only 3.54:1 on #ffffff and 3.20:1 on the
+     bg-fenix-500/10 chips it is used on. fenix-700 (#c2410c) is 5.14 / 4.68 /
+     4.64 on those three. The brand *fills* are unaffected -- this token names
+     the readable-text tier of the ramp, not the ramp. */
+  --brand-foreground: var(--color-fenix-700);
+  --success-foreground: var(--color-emerald-600);
+  --warning-foreground: var(--color-amber-600);
 }
 
 .dark {
@@ -44,8 +60,19 @@
   --destructive: #dc2626;
   --destructive-foreground: #ffffff;
   --border: #262626;
-  --input: #262626;
+  --input: #404040;
+  /* Brand hue is deliberately identical in both themes: --primary/--ring feed
+     the slider fill, the thumb border and 3 focus rings, which sit next to 9
+     hard-coded ring-fenix-500/50 rings. Any dark-only retune here desyncs the
+     two. #f97316 already clears AA on every dark surface in the palette
+     (7.06:1 on #0a0a0a, 6.27:1 on #171717, 5.38:1 on #262626). */
   --ring: #f97316;
+
+  /* Extended semantic tokens. */
+  --foreground-secondary: #a3a3a3; /* ash-400 */
+  --brand-foreground: var(--color-fenix-400);
+  --success-foreground: var(--color-emerald-400);
+  --warning-foreground: var(--color-amber-400);
 }
 
 @theme inline {
@@ -68,6 +95,10 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  --color-foreground-secondary: var(--foreground-secondary);
+  --color-brand-foreground: var(--brand-foreground);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning-foreground: var(--warning-foreground);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -156,7 +187,7 @@ html {
 }
 
 body {
-  @apply bg-white text-ash-900 dark:bg-ash-950 dark:text-ash-100;
+  @apply bg-background text-foreground;
   font-feature-settings: "rlig" 1, "calt" 1;
 }
 
@@ -167,7 +198,7 @@ body {
 
 /* Glow card effect */
 .glow-card {
-  @apply relative overflow-hidden rounded-2xl border border-ash-200 bg-white/80 backdrop-blur-sm dark:border-ash-800 dark:bg-ash-900/80;
+  @apply relative overflow-hidden rounded-2xl border border-border bg-card/80 backdrop-blur-sm;
 }
 
 .glow-card::before {
@@ -200,6 +231,76 @@ body {
     rgba(249, 115, 22, 0.1) 0%,
     rgba(239, 68, 68, 0.05) 100%
   );
+}
+
+/* Light-mode hero sunset. The dark theme keeps its original vignette. */
+.hero-sunset {
+  background:
+    radial-gradient(
+      ellipse 62% 46% at 50% 72%,
+      rgba(255, 251, 235, 0.96) 0%,
+      rgba(253, 186, 116, 0.6) 24%,
+      rgba(244, 63, 94, 0.18) 52%,
+      transparent 74%
+    ),
+    linear-gradient(
+      180deg,
+      #faf9ff 0%,
+      #f3e8ff 25%,
+      #ffe4e6 47%,
+      #fdba74 72%,
+      #c2410c 100%
+    );
+}
+
+.hero-sunset::before {
+  position: absolute;
+  top: 65%;
+  left: 50%;
+  width: clamp(8rem, 16vw, 14rem);
+  aspect-ratio: 1;
+  content: "";
+  transform: translate(-50%, -50%);
+  border-radius: 9999px;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.98) 0 32%,
+    rgba(254, 243, 199, 0.92) 48%,
+    rgba(251, 146, 60, 0.42) 70%,
+    transparent 72%
+  );
+  box-shadow:
+    0 0 5rem rgba(251, 146, 60, 0.55),
+    0 0 11rem rgba(244, 63, 94, 0.2);
+}
+
+.hero-sunset::after {
+  position: absolute;
+  inset: auto -10% 0;
+  height: 28%;
+  content: "";
+  background:
+    repeating-linear-gradient(
+      176deg,
+      transparent 0 1.4rem,
+      rgba(124, 45, 18, 0.045) 1.45rem 1.5rem
+    ),
+    linear-gradient(
+      180deg,
+      transparent 0%,
+      rgba(255, 247, 237, 0.28) 40%,
+      rgba(255, 255, 255, 0.94) 100%
+    );
+}
+
+.hero-ember {
+  mix-blend-mode: multiply;
+  filter: saturate(1.25) contrast(1.08);
+}
+
+.dark .hero-ember {
+  mix-blend-mode: normal;
+  filter: none;
 }
 
 /* Scrollbar styling */

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useCallback, useEffect } from "react";
+import { useState, useMemo, useCallback, useEffect, useId } from "react";
 import { useAccount } from "wagmi";
 import { useTranslations } from "next-intl";
 import NumberFlow from "@number-flow/react";
@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Label } from "@/components/ui/label";
+import { Field } from "@/components/ui/field";
 
 import {
   useBurnXen,
@@ -19,7 +20,7 @@ import {
   useXenAllowance,
 } from "@/hooks/use-fenix-contract";
 import { getChainConfig } from "@/config/chains";
-import { formatEther } from "@/lib/utils";
+import { formatEther, cn } from "@/lib/utils";
 import { XEN_TO_FENIX_RATIO } from "@/config/constants";
 import { parseEther } from "viem";
 
@@ -27,6 +28,14 @@ export function BurnForm() {
   const t = useTranslations("burn");
   const { chain, isConnected } = useAccount();
   const [amount, setAmount] = useState("");
+  // Ties the "you receive" Label to the read-only <output> below. The shared
+  // <Field> cannot supply this one: its context is only readable by components
+  // rendered inside it, and the readout is a plain element in this file.
+  const receiveId = useId();
+  // Owns the id the Input points `aria-describedby` at, so the validation
+  // message is announced with the field rather than only implied by a disabled
+  // button (WCAG 3.3.1).
+  const amountErrorId = useId();
 
   const { data: xenBalance, isLoading: isBalanceLoading, refetch: refetchBalance } = useXenBalance(chain?.id);
   const { data: xenAllowance, refetch: refetchAllowance } = useXenAllowance(chain?.id);
@@ -96,6 +105,17 @@ export function BurnForm() {
     }
   }, [amount, xenBalance]);
 
+  // Null while the field is empty or the balance has not resolved: an
+  // untouched field is not an error, and "exceeds balance" is not a claim we
+  // can make before the balance is known.
+  const amountError = useMemo(() => {
+    if (amount === "") return null;
+    const parsed = parseFloat(amount);
+    if (isNaN(parsed) || parsed <= 0) return t("error_invalid_amount");
+    if (isBalanceLoading || xenBalance === undefined) return null;
+    return isValidAmount ? null : t("error_exceeds_balance");
+  }, [amount, isBalanceLoading, xenBalance, isValidAmount, t]);
+
   const handleMax = useCallback(() => {
     if (xenBalance) {
       setAmount(formatEther(xenBalance as bigint));
@@ -116,7 +136,7 @@ export function BurnForm() {
   const chainSupported = chain?.id ? !!getChainConfig(chain.id) : false;
 
   return (
-    <Card variant="glow" className="w-full max-w-lg">
+    <Card variant="glow" className="w-full">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Flame className="h-5 w-5 text-fenix-500" />
@@ -127,12 +147,12 @@ export function BurnForm() {
 
       <CardContent className="space-y-6">
         {/* XEN Input */}
-        <div className="space-y-2">
+        <Field className="space-y-2">
           <div className="flex items-center justify-between">
             <Label className="text-sm font-medium text-ash-700 dark:text-ash-300">
               {t("amount_label")}
             </Label>
-            <div className="flex items-center gap-1.5 text-xs text-ash-500 dark:text-ash-400">
+            <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
               <span>{t("balance")}:</span>
               {isBalanceLoading ? (
                 <Skeleton className="h-3.5 w-16" />
@@ -160,46 +180,76 @@ export function BurnForm() {
                   setAmount(val);
                 }
               }}
-              className="pr-20 font-mono text-lg"
+              className={cn(
+                "pr-20 font-mono text-lg",
+                amountError &&
+                  "border-ember-500 focus-visible:border-ember-500 focus-visible:ring-ember-500/50"
+              )}
               disabled={isProcessing}
+              aria-invalid={amountError ? true : undefined}
+              aria-describedby={amountError ? amountErrorId : undefined}
             />
             <Button
               variant="ghost"
               size="sm"
               onClick={handleMax}
               disabled={isProcessing || !xenBalance}
-              className="absolute right-1.5 top-1/2 -translate-y-1/2 text-xs font-bold text-fenix-500 hover:text-fenix-600"
+              // fenix-500 on the input's white fill is 2.80:1 -- below AA for
+              // 12px interactive text. text-brand-foreground is the AA-checked
+              // brand text tier: 5.14:1 on #ffffff, 7.77:1 on the dark card.
+              className="absolute right-1.5 top-1/2 -translate-y-1/2 text-xs font-bold text-brand-foreground hover:text-fenix-800 dark:hover:text-fenix-300"
             >
               {t("max")}
             </Button>
           </div>
-        </div>
+
+          {amountError && (
+            <p
+              id={amountErrorId}
+              role="alert"
+              className="flex items-center gap-1.5 text-xs font-medium text-ember-700 dark:text-ember-400"
+            >
+              <AlertCircle className="h-3.5 w-3.5 shrink-0" />
+              {amountError}
+            </p>
+          )}
+        </Field>
 
         {/* Arrow indicator */}
         <div className="flex justify-center">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-ash-200 bg-white dark:border-ash-700 dark:bg-ash-900">
-            <ArrowDown className="h-4 w-4 text-ash-400" />
+          {/* LAY-2: a filled chip on the card surface rather than a ringed
+              hole punched in it. */}
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-muted">
+            <ArrowDown className="h-4 w-4 text-muted-foreground" />
           </div>
         </div>
 
         {/* FENIX Output */}
         <div className="space-y-2">
-          <Label className="text-sm font-medium text-ash-700 dark:text-ash-300">
+          <Label
+            htmlFor={receiveId}
+            className="text-sm font-medium text-ash-700 dark:text-ash-300"
+          >
             {t("receive_label")}
           </Label>
-          <div className="flex h-12 items-center rounded-lg border border-ash-200 bg-ash-50 px-4 dark:border-ash-700 dark:bg-ash-800/50">
-            <span className="font-mono text-lg font-semibold text-ash-900 dark:text-ash-100">
+          {/* <output> is a labelable element, so the Label above names this
+              read-only readout exactly as it would name an <input>. */}
+          <output
+            id={receiveId}
+            className="flex h-12 items-center rounded-lg bg-muted px-4"
+          >
+            <span className="font-mono text-lg font-semibold text-foreground">
               <NumberFlow
                 value={fenixReceived}
                 format={{ maximumFractionDigits: 4 }}
                 transformTiming={{ duration: 400, easing: "ease-out" }}
               />
             </span>
-            <span className="ml-2 text-sm font-medium text-ash-500 dark:text-ash-400">
+            <span className="ml-2 text-sm font-medium text-muted-foreground">
               FENIX
             </span>
-          </div>
-          <p className="text-xs text-ash-400 dark:text-ash-500">{t("ratio")}</p>
+          </output>
+          <p className="text-xs text-muted-foreground">{t("ratio")}</p>
         </div>
 
         {/* Action Buttons */}

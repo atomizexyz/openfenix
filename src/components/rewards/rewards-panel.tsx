@@ -37,14 +37,14 @@ interface StatRowProps {
 function StatRow({ icon, label, value, isLoading }: StatRowProps) {
   return (
     <div className="flex items-center justify-between py-3">
-      <div className="flex items-center gap-2.5 text-sm text-ash-600 dark:text-ash-400">
+      <div className="flex items-center gap-2.5 text-sm text-foreground-secondary">
         {icon}
         <span>{label}</span>
       </div>
       {isLoading ? (
         <Skeleton className="h-5 w-24" />
       ) : (
-        <div className="text-right font-mono text-sm font-semibold text-ash-900 dark:text-ash-100">
+        <div className="text-right font-mono text-sm font-semibold text-foreground">
           {value}
         </div>
       )}
@@ -196,17 +196,19 @@ export function RewardsPanel() {
           />
         </div>
 
-        {/* User Share Info */}
-        <div className="mt-4 space-y-3 rounded-xl border border-ash-200 bg-ash-50/50 p-4 dark:border-ash-800 dark:bg-ash-800/30">
+        {/* User Share Info.
+            LAY-2: hierarchy comes from the surface shift (bg-muted against the
+            card), not from a hairline border on top of a near-invisible tint. */}
+        <div className="mt-4 space-y-3 rounded-xl bg-muted p-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 text-sm text-ash-600 dark:text-ash-400">
+            <div className="flex items-center gap-2 text-sm text-foreground-secondary">
               <Percent className="h-3.5 w-3.5" />
               {t("your_share")}
             </div>
             {isLoading ? (
               <Skeleton className="h-5 w-16" />
             ) : (
-              <span className="font-mono text-sm font-semibold text-fenix-600 dark:text-fenix-400">
+              <span className="font-mono text-sm font-semibold text-brand-foreground">
                 <NumberFlow
                   value={userShareInfo.sharePercent}
                   format={{ maximumFractionDigits: 4 }}
@@ -218,14 +220,14 @@ export function RewardsPanel() {
           </div>
 
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 text-sm text-ash-600 dark:text-ash-400">
+            <div className="flex items-center gap-2 text-sm text-foreground-secondary">
               <Zap className="h-3.5 w-3.5" />
               {t("estimated_reward")}
             </div>
             {isLoading ? (
               <Skeleton className="h-5 w-20" />
             ) : (
-              <span className="font-mono text-sm font-semibold text-fenix-600 dark:text-fenix-400">
+              <span className="font-mono text-sm font-semibold text-brand-foreground">
                 <NumberFlow
                   value={userShareInfo.estimatedReward}
                   format={{ maximumFractionDigits: 4 }}

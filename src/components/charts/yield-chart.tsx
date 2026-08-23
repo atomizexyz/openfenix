@@ -82,8 +82,8 @@ function CustomTooltip({
   if (!active || !payload || payload.length === 0) return null;
 
   return (
-    <div className="rounded-lg border border-ash-200 bg-white/95 px-3 py-2 shadow-lg backdrop-blur-sm dark:border-ash-700 dark:bg-ash-900/95">
-      <p className="text-xs font-medium text-ash-500 dark:text-ash-400">
+    <div className="rounded-lg border border-ash-200 bg-card/95 px-3 py-2 shadow-lg backdrop-blur-sm dark:border-ash-700">
+      <p className="text-xs font-medium text-muted-foreground">
         Day {label}
       </p>
       {payload.map((entry, index) => (
@@ -160,7 +160,7 @@ export function YieldChart({ amount, term, className }: YieldChartProps) {
               <CartesianGrid
                 strokeDasharray="3 3"
                 stroke="currentColor"
-                className="text-ash-200 dark:text-ash-800"
+                className="text-border"
                 vertical={false}
               />
 

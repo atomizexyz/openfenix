@@ -58,7 +58,9 @@
     "approving": "अनुमोदन हो रहा है...",
     "burning": "जलाया जा रहा है...",
     "approval_confirmed": "अनुमोदन की पुष्टि हो गई। अब आप जला सकते हैं।",
-    "unsupported_network": "कृपया समर्थित नेटवर्क पर स्विच करें"
+    "unsupported_network": "कृपया समर्थित नेटवर्क पर स्विच करें",
+    "error_invalid_amount": "0 से अधिक राशि दर्ज करें",
+    "error_exceeds_balance": "राशि आपके XEN बैलेंस से अधिक है"
   },
   "stake": {
     "title": "FENIX स्टेक करें",
@@ -81,11 +83,14 @@
     "success": "{amount} FENIX को {term} दिनों के लिए सफलतापूर्वक स्टेक किया गया",
     "error": "स्टेक शुरू करने में त्रुटि",
     "confirming": "पुष्टि हो रही है...",
-    "staking": "स्टेक शुरू हो रहा है..."
+    "staking": "स्टेक शुरू हो रहा है...",
+    "error_invalid_amount": "0 से अधिक राशि दर्ज करें",
+    "error_exceeds_balance": "राशि आपके FENIX बैलेंस से अधिक है"
   },
   "stakes": {
     "title": "आपके स्टेक",
     "no_stakes": "कोई सक्रिय स्टेक नहीं",
+    "start_staking": "FENIX स्टेक करें",
     "stake_id": "स्टेक #{id}",
     "amount": "राशि",
     "shares": "शेयर",
@@ -142,7 +147,9 @@
     "circulating_supply": "प्रचलित",
     "active": "सक्रिय",
     "error": "त्रुटि",
-    "loading": "लोड हो रहा"
+    "loading": "लोड हो रहा",
+    "unavailable": "RPC उपलब्ध नहीं",
+    "unavailable_hint": "इस चेन के लिए कोई सार्वजनिक एंडपॉइंट प्रतिक्रिया नहीं दे रहा है।"
   },
   "features": {
     "burn_title": "बर्न का प्रमाण (Proof of Burn)",

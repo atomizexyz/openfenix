@@ -18,9 +18,24 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
 import { ChainSelector } from "@/components/wallet/chain-selector";
 import { WalletQR } from "@/components/wallet/wallet-qr";
 
+/**
+ * The header wallet control. Deliberately NOT the `default` (brand gradient)
+ * button variant: the header is persistent chrome on every screen, so a
+ * gradient here would tie with each page's own primary CTA -- the hero's "Burn
+ * XEN", then "Burn XEN"/"Start Stake"/"Claim" on the three utility pages --
+ * and leave two equally-weighted brand fills competing (BTN-1).
+ *
+ * It is not demoted to a neutral fill either: connecting is the gate on every
+ * other action, so on the dashboard, which has no page-level CTA of its own, a
+ * grey `secondary` would make the most important control the quietest thing on
+ * screen. `brand` keeps the brand hue and a visible edge one tier below the
+ * gradient. Once connected the control is a status chip and menu rather than a
+ * call to action, so it drops to `outline`.
+ */
 function WalletButton() {
   const t = useTranslations("nav");
   const { disconnect } = useDisconnect();
@@ -35,21 +50,16 @@ function WalletButton() {
       {({ isConnected, show, truncatedAddress, ensName, address }) => {
         if (!isConnected) {
           return (
-            <button
-              onClick={show}
-              className="rounded-xl bg-gradient-to-r from-fenix-500 to-ember-500 px-4 py-2 text-sm font-medium text-white shadow-lg shadow-fenix-500/25 transition-all hover:shadow-fenix-500/40"
-            >
+            <Button variant="brand" onClick={show}>
               {t("connect")}
-            </button>
+            </Button>
           );
         }
 
         return (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button className="rounded-xl border border-ash-200 bg-white px-4 py-2 text-sm font-medium text-ash-900 transition-all hover:bg-ash-50 dark:border-ash-700 dark:bg-ash-800 dark:text-ash-100 dark:hover:bg-ash-700">
-                {ensName || truncatedAddress}
-              </button>
+              <Button variant="outline">{ensName || truncatedAddress}</Button>
             </DropdownMenuTrigger>
 
             <DropdownMenuContent align="end" className="w-52">
@@ -100,12 +110,12 @@ export function Header() {
   ] as const;
 
   return (
-    <header className="sticky top-0 z-50 border-b border-ash-200/50 bg-white/80 backdrop-blur-xl dark:border-ash-800/50 dark:bg-ash-950/80">
+    <header className="sticky top-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
           <FenixLogo className="h-9 w-9" />
-          <FenixWordmark className="hidden h-5 w-auto text-ash-900 dark:text-ash-100 sm:block" />
+          <FenixWordmark className="hidden h-5 w-auto text-foreground sm:block" />
         </Link>
 
         {/* Desktop Nav */}
@@ -118,7 +128,7 @@ export function Header() {
                 "rounded-lg px-3 py-2 text-sm font-medium transition-colors",
                 pathname === item.href
                   ? "bg-fenix-500/10 text-fenix-600 dark:text-fenix-400"
-                  : "text-ash-600 hover:bg-ash-100 hover:text-ash-900 dark:text-ash-400 dark:hover:bg-ash-800 dark:hover:text-ash-100"
+                  : "text-foreground-secondary hover:bg-accent hover:text-foreground"
               )}
             >
               {item.label}
@@ -132,7 +142,7 @@ export function Header() {
           <WalletQR />
           <button
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-            className="rounded-lg p-2 text-ash-600 transition-colors hover:bg-ash-100 dark:text-ash-400 dark:hover:bg-ash-800"
+            className="rounded-lg p-2 text-foreground-secondary transition-colors hover:bg-accent"
             aria-label="Toggle theme"
           >
             <Sun className="hidden h-4 w-4 dark:block" />
@@ -144,7 +154,7 @@ export function Header() {
           {/* Mobile menu button */}
           <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
             <SheetTrigger asChild>
-              <button className="rounded-lg p-2 text-ash-600 md:hidden dark:text-ash-400">
+              <button className="rounded-lg p-2 text-foreground-secondary md:hidden">
                 {mobileOpen ? (
                   <X className="h-5 w-5" />
                 ) : (
@@ -157,7 +167,7 @@ export function Header() {
             <SheetContent
               side="top"
               aria-label="Menu"
-              className="border-ash-200 bg-white px-4 py-3 dark:border-ash-800 dark:bg-ash-950 md:hidden"
+              className="border-border bg-background px-4 py-3 md:hidden"
             >
               <nav className="flex flex-col gap-1">
                 {navItems.map((item) => (
@@ -169,7 +179,7 @@ export function Header() {
                       "rounded-lg px-3 py-2 text-sm font-medium transition-colors",
                       pathname === item.href
                         ? "bg-fenix-500/10 text-fenix-600 dark:text-fenix-400"
-                        : "text-ash-600 hover:bg-ash-100 dark:text-ash-400 dark:hover:bg-ash-800"
+                        : "text-foreground-secondary hover:bg-accent"
                     )}
                   >
                     {item.label}

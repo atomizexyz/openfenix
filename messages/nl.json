@@ -58,7 +58,9 @@
     "approving": "Goedkeuren...",
     "burning": "Verbranden...",
     "approval_confirmed": "Goedkeuring bevestigd. Je kunt nu verbranden.",
-    "unsupported_network": "Schakel over naar een ondersteund netwerk"
+    "unsupported_network": "Schakel over naar een ondersteund netwerk",
+    "error_invalid_amount": "Voer een bedrag groter dan 0 in",
+    "error_exceeds_balance": "Bedrag is hoger dan je XEN-saldo"
   },
   "stake": {
     "title": "FENIX Staken",
@@ -81,11 +83,14 @@
     "success": "Succesvol {amount} FENIX gestaked voor {term} dagen",
     "error": "Fout bij het starten van de stake",
     "confirming": "Bevestigen...",
-    "staking": "Stake starten..."
+    "staking": "Stake starten...",
+    "error_invalid_amount": "Voer een bedrag groter dan 0 in",
+    "error_exceeds_balance": "Bedrag is hoger dan je FENIX-saldo"
   },
   "stakes": {
     "title": "Uw Stakes",
     "no_stakes": "Geen actieve stakes",
+    "start_staking": "FENIX staken",
     "stake_id": "Stake #{id}",
     "amount": "Bedrag",
     "shares": "Aandelen",
@@ -142,7 +147,9 @@
     "circulating_supply": "In omloop",
     "active": "Actief",
     "error": "Fout",
-    "loading": "Laden"
+    "loading": "Laden",
+    "unavailable": "RPC niet beschikbaar",
+    "unavailable_hint": "Geen enkel openbaar eindpunt reageert voor deze keten."
   },
   "features": {
     "burn_title": "Bewijs van Verbranding (Proof of Burn)",
