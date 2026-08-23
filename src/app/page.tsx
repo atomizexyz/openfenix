@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { LOCALES, DEFAULT_LOCALE, LOCALE_NAMES } from "@/config/constants";
 import { FENIX_CHAINS } from "@/config/chains";
 import { SITE_URL, alternatesFor, pageUrl } from "@/config/site";
-import { ROOT_URL, TWITTER_HANDLE } from "@/lib/metadata";
+import { OG_IMAGE, ROOT_URL, TWITTER_HANDLE } from "@/lib/metadata";
 
 /**
  * The site is a static export on GitHub Pages, so `/` cannot be an HTTP 301 --
@@ -41,6 +41,7 @@ export const metadata: Metadata = {
     siteName: "Fenix Protocol",
     type: "website",
     locale: "en_US",
+    images: [OG_IMAGE],
   },
   twitter: {
     card: "summary_large_image",
@@ -48,6 +49,7 @@ export const metadata: Metadata = {
     description: DESCRIPTION,
     site: TWITTER_HANDLE,
     creator: TWITTER_HANDLE,
+    images: [OG_IMAGE],
   },
   icons: {
     icon: "/favicon.ico",

@@ -9,7 +9,7 @@ import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { LOCALES, RTL_LOCALES, type Locale } from "@/config/constants";
 import { SITE_URL } from "@/config/site";
-import { TWITTER_HANDLE } from "@/lib/metadata";
+import { OG_IMAGE, TWITTER_HANDLE } from "@/lib/metadata";
 import "@/styles/globals.css";
 
 const inter = Inter({
@@ -38,11 +38,13 @@ export const metadata: Metadata = {
   openGraph: {
     siteName: "Fenix Protocol",
     type: "website",
+    images: [OG_IMAGE],
   },
   twitter: {
     card: "summary_large_image",
     site: TWITTER_HANDLE,
     creator: TWITTER_HANDLE,
+    images: [OG_IMAGE],
   },
   icons: {
     icon: "/favicon.ico",

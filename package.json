@@ -12,7 +12,8 @@
     "test:run": "vitest run",
     "flush": "rm -rf node_modules && bun install",
     "scan:rpcs": "bun run scripts/scan-rpcs.ts",
-    "gen:llms": "bun run scripts/generate-llms-txt.ts"
+    "gen:llms": "bun run scripts/generate-llms-txt.ts",
+    "gen:og": "bun run scripts/generate-og-image.ts"
   },
   "dependencies": {
     "@number-flow/react": "0.6.2",

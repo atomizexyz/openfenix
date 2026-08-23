@@ -56,6 +56,22 @@ const ROUTE_COPY: Record<Route, { namespace: string; description: string }> = {
   rewards: { namespace: "rewards", description: "rewards.description" },
 };
 
+/**
+ * The Open Graph card.
+ *
+ * A real `.png` rather than Next's `opengraph-image` route: that route emits a
+ * file with no extension, and GitHub Pages types static files purely by
+ * extension, so the card went out as `application/octet-stream` -- which
+ * Facebook, X, LinkedIn, Slack and Discord all refuse. Regenerate the file with
+ * `bun run gen:og`.
+ */
+export const OG_IMAGE = {
+  url: "/og.png",
+  width: 1200,
+  height: 630,
+  alt: "Fenix Protocol — Burn XEN, Stake FENIX, Earn Trustless Yield",
+} as const;
+
 /** The message keys a route's title and description come from. */
 export function copyKeysFor(route: Route): {
   title: string;
@@ -98,6 +114,9 @@ export function buildMetadata(
       alternateLocale: LOCALES.filter((l) => l !== locale).map(
         (l) => OG_LOCALES[l]
       ),
+      // Repeated per page rather than inherited: a page's openGraph block
+      // replaces the layout's outright, so omitting it here drops the card.
+      images: [OG_IMAGE],
     },
     twitter: {
       card: "summary_large_image",
@@ -105,6 +124,7 @@ export function buildMetadata(
       description,
       site: TWITTER_HANDLE,
       creator: TWITTER_HANDLE,
+      images: [OG_IMAGE],
     },
   };
 }
