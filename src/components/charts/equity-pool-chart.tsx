@@ -241,6 +241,49 @@ export function SupplyChart({ chainId, className }: SupplyChartProps) {
 
 /* ── Mini chart card (per-chain, data-driven) ──────────────────── */
 
+/**
+ * A chain whose RPC is unreachable still gets a donut, drawn as one flat ring
+ * instead of a bare "--". Keeping the shape holds the card's height so the grid
+ * does not go ragged, and reads as an empty slot rather than as a chart that
+ * failed to draw.
+ *
+ * The ring is `currentColor` and the wrapper sets a muted tone, so it follows
+ * the theme instead of hard-coding two greys. No labels, no glow filter, and no
+ * entry animation -- nothing here is data, so nothing should draw the eye.
+ */
+const UNAVAILABLE_RING = [{ name: "unavailable", value: 1 }];
+
+function UnavailableSupplyChart() {
+  const t = useTranslations("chain_table");
+
+  return (
+    <div className="flex flex-col items-center">
+      <div
+        className="w-full text-ash-200 dark:text-ash-700"
+        aria-hidden="true"
+      >
+        <ResponsiveContainer width="100%" height={140}>
+          <PieChart>
+            <Pie
+              data={UNAVAILABLE_RING}
+              cx="50%"
+              cy="50%"
+              innerRadius={35}
+              outerRadius={58}
+              dataKey="value"
+              stroke="none"
+              fill="currentColor"
+              isAnimationActive={false}
+            />
+          </PieChart>
+        </ResponsiveContainer>
+      </div>
+      {/* Reuses the string the chain table already ships in all 21 locales. */}
+      <p className="text-xs text-muted-foreground">{t("unavailable")}</p>
+    </div>
+  );
+}
+
 function MiniSupplyChart({ stats }: { stats: ChainStats }) {
   const t = useTranslations("stats");
   const { chainConfig, totalSupply, equityPoolSupply, rewardPoolSupply, status } = stats;
@@ -268,6 +311,8 @@ function MiniSupplyChart({ stats }: { stats: ChainStats }) {
           <div className="flex h-[160px] items-center justify-center">
             <Skeleton className="h-28 w-28 rounded-full" />
           </div>
+        ) : status === "unavailable" ? (
+          <UnavailableSupplyChart />
         ) : data.length === 0 ? (
           <div className="flex h-[160px] items-center justify-center">
             <p className="text-xs text-ash-400 dark:text-ash-500">--</p>
