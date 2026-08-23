@@ -64,6 +64,35 @@ function readUrls(chainId: number): string[] {
   return [...chain.rpcUrls.default.http];
 }
 
+/**
+ * Retry and timeout budget: viem's, untouched. Verified against the pinned
+ * viem 2.55.19, because the obvious "tuning" here is all backwards.
+ *
+ * - `fallback` instantiates every child as `transports[i]({ ...rest, chain,
+ *   retryCount: 0, timeout })`, so endpoints inside a fallback already get
+ *   exactly one attempt each. `http` resolves `config.retryCount ??
+ *   retryCount_`, i.e. a value passed to `http()` OVERRIDES that 0 -- adding
+ *   `retryCount: 1` here does not bound anything, it doubles the attempts per
+ *   endpoint (6s + 150ms backoff + 6s instead of one pass) and doubles the
+ *   request count per refetch.
+ * - `http` already defaults to `timeout: 10_000`, not "no timeout"
+ *   (`timeout_ ?? config.timeout ?? 10_000`, and no client-level timeout is
+ *   set). Anything tighter is a strict downgrade for a slow-but-healthy
+ *   endpoint, and Ethereum PoW (1 endpoint) and OKC (2) have no fast sibling
+ *   to fall through to -- the chain just goes red where it used to render.
+ * - Both settings apply to `eth_sendRawTransaction` on the nine chains with no
+ *   Blink endpoint, where `methods` is undefined and the read transports carry
+ *   every method. A timeout there aborts a broadcast, and a retry re-sends a
+ *   signed transaction -- exactly the "user thinks it failed but it landed"
+ *   case the MEV carve-out was supposed to prevent.
+ *
+ * The remaining tail cost is the outer `fallback`'s own default `retryCount: 3`
+ * (createTransport's default), which re-walks the whole endpoint list four
+ * times. Deliberately left alone: it is the only thing that retries a rate
+ * limit or a network blip, and on the one- and two-endpoint chains there is no
+ * breadth to substitute for it. Bounding it is a behaviour change that needs
+ * its own measurement, not a rider on a rendering change.
+ */
 export function createChainTransport(chainId: number): Transport {
   const readTransportUrls = readUrls(chainId);
   const mevUrl = blinkUrl(chainId);
@@ -73,6 +102,8 @@ export function createChainTransport(chainId: number): Transport {
   // scan; a fallback list is only as batchable as its least capable member.
   const batch = config?.batch ? ({ wait: 16 } as const) : false;
 
+  // Do not add `retryCount` or `timeout` here -- see the note above. Locked by
+  // "never tightens viem's per-endpoint budget" in src/__tests__/rpc.test.ts.
   const readTransports = readTransportUrls.map((url) =>
     http(url, {
       batch,

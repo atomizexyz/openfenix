@@ -360,7 +360,7 @@ function ChainCard({ stats }: { stats: ChainStats }) {
             </p>
             <p className="font-mono text-sm font-semibold text-foreground">
               {status === "loading" ? (
-                <Skeleton className="h-4 w-16" />
+                <Skeleton className="h-5 w-16" />
               ) : equityNum !== undefined ? (
                 <NumberFlow
                   value={equityNum}
@@ -381,7 +381,7 @@ function ChainCard({ stats }: { stats: ChainStats }) {
             </p>
             <p className="font-mono text-sm font-semibold text-foreground">
               {status === "loading" ? (
-                <Skeleton className="h-4 w-16" />
+                <Skeleton className="h-5 w-16" />
               ) : rewardNum !== undefined ? (
                 <NumberFlow
                   value={rewardNum}
@@ -402,7 +402,7 @@ function ChainCard({ stats }: { stats: ChainStats }) {
             </p>
             <p className="font-mono text-sm font-semibold text-foreground">
               {status === "loading" ? (
-                <Skeleton className="h-4 w-16" />
+                <Skeleton className="h-5 w-16" />
               ) : circulatingNum !== undefined ? (
                 <NumberFlow
                   value={circulatingNum}
@@ -423,7 +423,7 @@ function ChainCard({ stats }: { stats: ChainStats }) {
             </p>
             <p className="font-mono text-sm font-semibold text-brand-foreground">
               {status === "loading" ? (
-                <Skeleton className="h-4 w-12" />
+                <Skeleton className="h-5 w-12" />
               ) : shareRateNum !== undefined ? (
                 <NumberFlow
                   value={shareRateNum}
