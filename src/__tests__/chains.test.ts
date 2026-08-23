@@ -6,10 +6,11 @@ describe("Chain Configuration", () => {
     expect(FENIX_CHAINS).toHaveLength(12);
   });
 
-  it("all chains are enabled", () => {
-    for (const config of FENIX_CHAINS) {
-      expect(config.enabled).toBe(true);
-    }
+  it("disables exactly the chains with no reachable RPC", () => {
+    // Evmos and Dogechain: every public endpoint is dead. They stay in the
+    // list because the contracts are still deployed.
+    const disabled = FENIX_CHAINS.filter((c) => !c.enabled).map((c) => c.chain.id);
+    expect(disabled.sort((a, b) => a - b)).toEqual([2000, 9001]);
   });
 
   it("SUPPORTED_CHAINS matches enabled chains", () => {

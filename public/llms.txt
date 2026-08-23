@@ -2,7 +2,7 @@
 
 > Fenix Protocol is a hyperstructure that turns burned XEN into FENIX: burn XEN at a fixed 10,000:1 ratio, then stake FENIX for equity-based yield at a fixed 1.618% annual inflation rate. No admin keys, no pre-mine, no investor allocation.
 
-Fenix Protocol is a set of immutable smart contracts deployed across 12 EVM chains. This site is the reference front end: a fully static, server-rendered application with no account system and no API keys. Every page is available in 21 languages under a `/{locale}/` prefix with a trailing slash.
+Fenix Protocol is a set of immutable smart contracts deployed across 10 EVM chains. This site is the reference front end: a fully static, server-rendered application with no account system and no API keys. Every page is available in 21 languages under a `/{locale}/` prefix with a trailing slash.
 
 ## Core pages
 
@@ -31,9 +31,7 @@ Fenix Protocol is a set of immutable smart contracts deployed across 12 EVM chai
 - BNB Smart Chain (chain ID 56): FENIX at `0xC3e8abfA04B0EC442c2A4D65699a40F7FcEd8055`
 - Avalanche (chain ID 43114): FENIX at `0xC3e8abfA04B0EC442c2A4D65699a40F7FcEd8055`
 - Moonbeam (chain ID 1284): FENIX at `0xC3e8abfA04B0EC442c2A4D65699a40F7FcEd8055`
-- Evmos (chain ID 9001): FENIX at `0x7c27d2D2044FE90Cb98f5ECdc235839FdE740124`
 - Fantom (chain ID 250): FENIX at `0xC3e8abfA04B0EC442c2A4D65699a40F7FcEd8055`
-- Dogechain (chain ID 2000): FENIX at `0xC3e8abfA04B0EC442c2A4D65699a40F7FcEd8055`
 - OKC (chain ID 66): FENIX at `0xC3e8abfA04B0EC442c2A4D65699a40F7FcEd8055`
 - EthereumPoW (chain ID 10001): FENIX at `0xC3e8abfA04B0EC442c2A4D65699a40F7FcEd8055`
 - Base (chain ID 8453): FENIX at `0x07FdE3eD7727c1D84171A6e5815964d50827CF69`

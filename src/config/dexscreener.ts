@@ -16,7 +16,7 @@ import { ethereumPow } from "./chains";
 export const DEXSCREENER_API_BASE =
   "https://api.dexscreener.com/latest/dex/tokens";
 
-// The 3 unique FENIX contract addresses across all 12 chains
+// The 3 unique FENIX contract addresses across all FENIX deployments
 export const FENIX_TOKEN_ADDRESSES = [
   "0xC3e8abfA04B0EC442c2A4D65699a40F7FcEd8055",
   "0x7c27d2D2044FE90Cb98f5ECdc235839FdE740124",

@@ -24,7 +24,7 @@ export const config = createConfig({
     appUrl: "https://fenix.fyi",
     appIcon: "https://fenix.fyi/images/fenix-logo.svg",
     // Coalesce concurrent reads into one Multicall3 call per chain. The
-    // dashboard fans out across all 12 chains at once, so this collapses
+    // dashboard fans out across every live chain at once, so this collapses
     // dozens of round-trips into one per chain. Passed through getDefaultConfig
     // rather than alongside it so it lands on the same config branch as
     // `transports`.

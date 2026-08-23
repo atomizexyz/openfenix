@@ -20,8 +20,13 @@ const FUNCTIONS = [
   "shareRate",
 ] as const;
 
-// Build all contract calls for all chains upfront
-const allContracts = FENIX_CHAINS.flatMap((chainConfig) =>
+// Only chains with a reachable RPC. Reading a disabled chain would fire
+// requests at dead endpoints and render a permanently-loading card.
+const activeChains = FENIX_CHAINS.filter((chainConfig) => chainConfig.enabled);
+
+// Build all contract calls for every active chain upfront, so wagmi can
+// coalesce them into one Multicall3 call per chain.
+const allContracts = activeChains.flatMap((chainConfig) =>
   FUNCTIONS.map((functionName) => ({
     address: chainConfig.fenixContract,
     abi: FENIX_ABI,
@@ -38,7 +43,7 @@ export function useAllChainsStats() {
     },
   });
 
-  const chainsStats: ChainStats[] = FENIX_CHAINS.map((chainConfig, i) => {
+  const chainsStats: ChainStats[] = activeChains.map((chainConfig, i) => {
     const offset = i * FUNCTIONS.length;
 
     if (!data) {

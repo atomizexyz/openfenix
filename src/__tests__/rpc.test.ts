@@ -8,9 +8,18 @@ import {
 } from "@/config/rpc";
 import { GENERATED_RPC_ENDPOINTS } from "@/config/rpc-endpoints.generated";
 
-const EXPECTED_CHAIN_IDS = [
+/** Every chain FENIX is deployed on, live or not. */
+const ALL_CHAIN_IDS = [
   1, 137, 56, 43114, 1284, 9001, 250, 2000, 66, 10001, 8453, 369,
 ];
+
+/** Chains with no reachable public RPC, switched off in FENIX_CHAINS. */
+const DISABLED_CHAIN_IDS = [9001, 2000];
+
+/** Chains the app actually talks to. */
+const EXPECTED_CHAIN_IDS = ALL_CHAIN_IDS.filter(
+  (id) => !DISABLED_CHAIN_IDS.includes(id),
+);
 
 /** Chains BlinkLabs covers that also have a FENIX deployment. */
 const MEV_CHAIN_IDS = [1, 56, 8453];
@@ -29,8 +38,8 @@ afterEach(() => {
 });
 
 describe("GENERATED_RPC_ENDPOINTS", () => {
-  it("has an entry for all 12 chains", () => {
-    for (const id of EXPECTED_CHAIN_IDS) {
+  it("has an entry for every deployment, including disabled ones", () => {
+    for (const id of ALL_CHAIN_IDS) {
       expect(GENERATED_RPC_ENDPOINTS[id]).toBeDefined();
     }
     expect(Object.keys(GENERATED_RPC_ENDPOINTS)).toHaveLength(12);
@@ -54,7 +63,7 @@ describe("GENERATED_RPC_ENDPOINTS", () => {
 });
 
 describe("createChainTransport", () => {
-  it("returns a transport for all 12 chains", () => {
+  it("returns a transport for every live chain", () => {
     for (const id of EXPECTED_CHAIN_IDS) {
       expect(typeof createChainTransport(id)).toBe("function");
     }
@@ -116,10 +125,13 @@ describe("MEV-protected writes", () => {
 });
 
 describe("chainTransports", () => {
-  it("has a transport for all 12 chains", () => {
+  it("has a transport for every live chain and none for disabled ones", () => {
     for (const id of EXPECTED_CHAIN_IDS) {
       expect(typeof chainTransports[id]).toBe("function");
     }
-    expect(Object.keys(chainTransports)).toHaveLength(12);
+    for (const id of DISABLED_CHAIN_IDS) {
+      expect(chainTransports[id]).toBeUndefined();
+    }
+    expect(Object.keys(chainTransports)).toHaveLength(EXPECTED_CHAIN_IDS.length);
   });
 });

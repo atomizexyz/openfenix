@@ -48,7 +48,9 @@ const FENIX_CONTRACT_EVMOS =
 const FENIX_CONTRACT_BASE =
   "0x07FdE3eD7727c1D84171A6e5815964d50827CF69" as `0x${string}`;
 
-// FENIX chain configurations for all 12 supported chains
+// Every chain FENIX is deployed on. `enabled` gates what the app actually
+// talks to -- a deployment with no reachable RPC stays here (the contracts
+// are still onchain) but is switched off until an endpoint exists again.
 export const FENIX_CHAINS: FenixChainConfig[] = [
   {
     chain: mainnet,
@@ -96,7 +98,9 @@ export const FENIX_CHAINS: FenixChainConfig[] = [
       "0x2AB0e9e4eE70FFf1fB9D67031E44F6410170d00e" as `0x${string}`,
     fenixContract: FENIX_CONTRACT_EVMOS,
     iconSlug: "evmos",
-    enabled: true,
+    // Disabled: every public Evmos RPC is dead (403/404/refused). Verified
+    // against all 32 endpoints chainlist.org lists -- see `bun run scan:rpcs`.
+    enabled: false,
   },
   {
     chain: fantom,
@@ -112,7 +116,9 @@ export const FENIX_CHAINS: FenixChainConfig[] = [
       "0x948eed4490833D526688fD1E5Ba0b9B35CD2c32e" as `0x${string}`,
     fenixContract: FENIX_CONTRACT,
     iconSlug: "dogechain",
-    enabled: true,
+    // Disabled: every public Dogechain RPC is dead. Verified against all 9
+    // endpoints chainlist.org lists -- see `bun run scan:rpcs`.
+    enabled: false,
   },
   {
     chain: okc,
