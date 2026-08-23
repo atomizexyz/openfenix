@@ -1,6 +1,17 @@
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import { StakeForm } from "@/components/stake/stake-form";
 import { StakesList } from "@/components/stake/stakes-list";
+import type { Metadata } from "next";
+import { buildPageMetadata } from "@/lib/metadata";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  return buildPageMetadata(locale, "stake");
+}
 
 export default async function StakePage({
   params,

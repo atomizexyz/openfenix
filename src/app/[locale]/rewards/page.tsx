@@ -1,6 +1,17 @@
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import { RewardsPanel } from "@/components/rewards/rewards-panel";
 import { YieldChart } from "@/components/charts/yield-chart";
+import type { Metadata } from "next";
+import { buildPageMetadata } from "@/lib/metadata";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  return buildPageMetadata(locale, "rewards");
+}
 
 export default async function RewardsPage({
   params,

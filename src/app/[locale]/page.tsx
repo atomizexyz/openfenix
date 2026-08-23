@@ -4,6 +4,17 @@ import { ChainTable } from "@/components/dashboard/chain-table";
 import { LiquidityPairsSection } from "@/components/dashboard/liquidity-pairs";
 import { ChainSupplyGrid } from "@/components/charts/equity-pool-chart";
 import { FeaturesSection } from "@/components/dashboard/features-section";
+import type { Metadata } from "next";
+import { buildPageMetadata } from "@/lib/metadata";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  return buildPageMetadata(locale, "");
+}
 
 export default async function HomePage({
   params,
