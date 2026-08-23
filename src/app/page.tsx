@@ -3,6 +3,7 @@ import { LOCALES, DEFAULT_LOCALE, LOCALE_NAMES } from "@/config/constants";
 import { FENIX_CHAINS } from "@/config/chains";
 import { SITE_URL, alternatesFor, pageUrl } from "@/config/site";
 import { OG_IMAGE, ROOT_URL, TWITTER_HANDLE } from "@/lib/metadata";
+import { CSP_CONTENT } from "@/lib/security";
 
 /**
  * The site is a static export on GitHub Pages, so `/` cannot be an HTTP 301 --
@@ -28,6 +29,7 @@ const TITLE = "Fenix Protocol: Burn XEN, Stake FENIX, Earn Trustless Yield";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
+  referrer: "strict-origin-when-cross-origin",
   title: TITLE,
   description: DESCRIPTION,
   alternates: {
@@ -90,6 +92,7 @@ export default function RootPage() {
     <html lang={DEFAULT_LOCALE}>
       <head>
         <meta charSet="utf-8" />
+        <meta httpEquiv="Content-Security-Policy" content={CSP_CONTENT} />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
         <script dangerouslySetInnerHTML={{ __html: script }} />
