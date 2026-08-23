@@ -21,11 +21,23 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://fenix.fyi"),
   title: {
     default: "Fenix Protocol",
     template: "%s | Fenix Protocol",
   },
   description: "Burn XEN, Stake FENIX, Earn Trustless Yield",
+  openGraph: {
+    title: "Fenix Protocol",
+    description: "Burn XEN, Stake FENIX, Earn Trustless Yield",
+    siteName: "Fenix Protocol",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Fenix Protocol",
+    description: "Burn XEN, Stake FENIX, Earn Trustless Yield",
+  },
   icons: {
     icon: "/favicon.ico",
   },
