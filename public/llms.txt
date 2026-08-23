@@ -1,0 +1,69 @@
+# Fenix Protocol
+
+> Fenix Protocol is a hyperstructure that turns burned XEN into FENIX: burn XEN at a fixed 10,000:1 ratio, then stake FENIX for equity-based yield at a fixed 1.618% annual inflation rate. No admin keys, no pre-mine, no investor allocation.
+
+Fenix Protocol is a set of immutable smart contracts deployed across 12 EVM chains. This site is the reference front end: a fully static, server-rendered application with no account system and no API keys. Every page is available in 21 languages under a `/{locale}/` prefix with a trailing slash.
+
+## Core pages
+
+- [Home](https://fenix.fyi/en/): protocol overview, live cross-chain statistics, and liquidity pairs.
+- [Dashboard](https://fenix.fyi/en/dashboard/): real-time protocol statistics including total burned, total staked, share rate, and equity and reward pool sizes.
+- [Burn](https://fenix.fyi/en/burn/): burn XEN to mint FENIX at a fixed ratio of 10,000 XEN to 1 FENIX.
+- [Stake](https://fenix.fyi/en/stake/): lock FENIX for a term of 1 to 7,777 days to earn equity-based yield, with bonus shares for longer and larger stakes.
+- [Rewards](https://fenix.fyi/en/rewards/): view accumulated adoption and equity pool rewards and flush them to stakers.
+
+## Protocol mechanics
+
+- [Litepaper](https://github.com/atomizexyz/litepaper): full protocol design and mechanism specification.
+- [Source code](https://github.com/atomizexyz): Solidity contracts and this front end.
+- [Security audit](https://skynet.certik.com/projects/fenix): third-party CertiK review of the contracts.
+
+## Machine-readable resources
+
+- [llms-full.txt](https://fenix.fyi/llms-full.txt): expanded version of this file with protocol constants and per-chain contract addresses inline.
+- [sitemap.xml](https://fenix.fyi/sitemap.xml): every page in every language, with hreflang alternates.
+- [robots.txt](https://fenix.fyi/robots.txt): crawl policy. All crawlers are allowed.
+
+## Deployments
+
+- Ethereum (chain ID 1): FENIX at `0xC3e8abfA04B0EC442c2A4D65699a40F7FcEd8055`
+- Polygon (chain ID 137): FENIX at `0xC3e8abfA04B0EC442c2A4D65699a40F7FcEd8055`
+- BNB Smart Chain (chain ID 56): FENIX at `0xC3e8abfA04B0EC442c2A4D65699a40F7FcEd8055`
+- Avalanche (chain ID 43114): FENIX at `0xC3e8abfA04B0EC442c2A4D65699a40F7FcEd8055`
+- Moonbeam (chain ID 1284): FENIX at `0xC3e8abfA04B0EC442c2A4D65699a40F7FcEd8055`
+- Evmos (chain ID 9001): FENIX at `0x7c27d2D2044FE90Cb98f5ECdc235839FdE740124`
+- Fantom (chain ID 250): FENIX at `0xC3e8abfA04B0EC442c2A4D65699a40F7FcEd8055`
+- Dogechain (chain ID 2000): FENIX at `0xC3e8abfA04B0EC442c2A4D65699a40F7FcEd8055`
+- OKC (chain ID 66): FENIX at `0xC3e8abfA04B0EC442c2A4D65699a40F7FcEd8055`
+- EthereumPoW (chain ID 10001): FENIX at `0xC3e8abfA04B0EC442c2A4D65699a40F7FcEd8055`
+- Base (chain ID 8453): FENIX at `0x07FdE3eD7727c1D84171A6e5815964d50827CF69`
+- PulseChain (chain ID 369): FENIX at `0xC3e8abfA04B0EC442c2A4D65699a40F7FcEd8055`
+
+## Languages
+
+- [English](https://fenix.fyi/en/): en
+- [Espanol](https://fenix.fyi/es/): es
+- [Francais](https://fenix.fyi/fr/): fr
+- [Deutsch](https://fenix.fyi/de/): de
+- [Italiano](https://fenix.fyi/it/): it
+- [Portugues](https://fenix.fyi/pt/): pt
+- [日本語](https://fenix.fyi/ja/): ja
+- [한국어](https://fenix.fyi/ko/): ko
+- [中文](https://fenix.fyi/zh/): zh
+- [العربية](https://fenix.fyi/ar/): ar
+- [हिन्दी](https://fenix.fyi/hi/): hi
+- [Русский](https://fenix.fyi/ru/): ru
+- [Turkce](https://fenix.fyi/tr/): tr
+- [Tieng Viet](https://fenix.fyi/vi/): vi
+- [ไทย](https://fenix.fyi/th/): th
+- [Bahasa Indonesia](https://fenix.fyi/id/): id
+- [Polski](https://fenix.fyi/pl/): pl
+- [Nederlands](https://fenix.fyi/nl/): nl
+- [Yкраїнська](https://fenix.fyi/uk/): uk
+- [עברית](https://fenix.fyi/he/): he
+- [فارسی](https://fenix.fyi/fa/): fa
+
+## Notes
+
+- There is no REST or GraphQL API. All protocol state is read directly from the contracts over JSON-RPC; the addresses above are the entry points.
+- The site is a static export with no authentication, no cookies required, and no rate limiting.
