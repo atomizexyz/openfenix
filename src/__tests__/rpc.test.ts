@@ -1,58 +1,54 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi, afterEach } from "vitest";
 import {
-  CHAIN_RPC_ENDPOINTS,
+  BLINK_HOSTS,
+  WRITE_METHODS,
   createChainTransport,
   chainTransports,
+  hasMevProtection,
 } from "@/config/rpc";
+import { GENERATED_RPC_ENDPOINTS } from "@/config/rpc-endpoints.generated";
 
 const EXPECTED_CHAIN_IDS = [
   1, 137, 56, 43114, 1284, 9001, 250, 2000, 66, 10001, 8453, 369,
 ];
 
-const WSS_ONLY_CHAINS = [2000, 66, 10001]; // Dogechain, OKC, EthereumPoW
+/** Chains BlinkLabs covers that also have a FENIX deployment. */
+const MEV_CHAIN_IDS = [1, 56, 8453];
 
-describe("CHAIN_RPC_ENDPOINTS", () => {
-  it("has config for all 12 chains", () => {
+/** Reads a fallback transport's child transports without making a request. */
+function childConfigs(transport: ReturnType<typeof createChainTransport>) {
+  const { value } = transport({}) as {
+    value?: { transports?: { config: { methods?: { include?: string[]; exclude?: string[] } } }[] };
+  };
+  return (value?.transports ?? []).map((t) => t.config);
+}
+
+afterEach(() => {
+  vi.unstubAllEnvs();
+  vi.resetModules();
+});
+
+describe("GENERATED_RPC_ENDPOINTS", () => {
+  it("has an entry for all 12 chains", () => {
     for (const id of EXPECTED_CHAIN_IDS) {
-      expect(CHAIN_RPC_ENDPOINTS[id]).toBeDefined();
+      expect(GENERATED_RPC_ENDPOINTS[id]).toBeDefined();
     }
-    expect(Object.keys(CHAIN_RPC_ENDPOINTS)).toHaveLength(12);
+    expect(Object.keys(GENERATED_RPC_ENDPOINTS)).toHaveLength(12);
   });
 
-  it("all HTTP URLs use https://", () => {
-    for (const [, config] of Object.entries(CHAIN_RPC_ENDPOINTS)) {
+  it("only lists https endpoints", () => {
+    for (const config of Object.values(GENERATED_RPC_ENDPOINTS)) {
       for (const url of config.http) {
         expect(url).toMatch(/^https:\/\//);
       }
     }
   });
 
-  it("all WSS URLs use wss://", () => {
-    for (const [, config] of Object.entries(CHAIN_RPC_ENDPOINTS)) {
-      for (const url of config.wss) {
-        expect(url).toMatch(/^wss:\/\//);
+  it("never lists an endpoint needing a credential placeholder", () => {
+    for (const config of Object.values(GENERATED_RPC_ENDPOINTS)) {
+      for (const url of config.http) {
+        expect(url).not.toContain("${");
       }
-    }
-  });
-
-  it("chains without WSS have empty wss arrays", () => {
-    for (const id of WSS_ONLY_CHAINS) {
-      expect(CHAIN_RPC_ENDPOINTS[id].wss).toHaveLength(0);
-    }
-  });
-
-  it("chains with WSS have at least one wss URL", () => {
-    const wssChains = EXPECTED_CHAIN_IDS.filter(
-      (id) => !WSS_ONLY_CHAINS.includes(id)
-    );
-    for (const id of wssChains) {
-      expect(CHAIN_RPC_ENDPOINTS[id].wss.length).toBeGreaterThan(0);
-    }
-  });
-
-  it("every chain has at least one HTTP endpoint", () => {
-    for (const [, config] of Object.entries(CHAIN_RPC_ENDPOINTS)) {
-      expect(config.http.length).toBeGreaterThan(0);
     }
   });
 });
@@ -60,28 +56,70 @@ describe("CHAIN_RPC_ENDPOINTS", () => {
 describe("createChainTransport", () => {
   it("returns a transport for all 12 chains", () => {
     for (const id of EXPECTED_CHAIN_IDS) {
-      const transport = createChainTransport(id);
-      expect(transport).toBeDefined();
-      expect(typeof transport).toBe("function");
+      expect(typeof createChainTransport(id)).toBe("function");
     }
   });
 
-  it("throws for unknown chain ID", () => {
+  it("throws for a chain FENIX is not deployed on", () => {
     expect(() => createChainTransport(999999)).toThrow(
-      "No RPC config for chain 999999"
+      "No RPC config for chain 999999",
     );
+  });
+
+  it("always produces at least one endpoint, even where the scan found none", () => {
+    // Evmos and Dogechain have no reachable public RPCs; they must still fall
+    // back to viem's defaults rather than yielding an empty fallback list.
+    for (const id of EXPECTED_CHAIN_IDS) {
+      expect(childConfigs(createChainTransport(id)).length).toBeGreaterThan(0);
+    }
+  });
+});
+
+describe("MEV-protected writes", () => {
+  it("covers exactly the FENIX chains BlinkLabs supports", () => {
+    expect(Object.keys(BLINK_HOSTS).map(Number).sort((a, b) => a - b)).toEqual(
+      MEV_CHAIN_IDS,
+    );
+  });
+
+  it("is inert without an API key", () => {
+    for (const id of MEV_CHAIN_IDS) {
+      expect(hasMevProtection(id)).toBe(false);
+    }
+  });
+
+  it("routes only write methods to Blink and excludes them elsewhere", async () => {
+    vi.stubEnv("NEXT_PUBLIC_BLINK_API_KEY", "test-key");
+    vi.resetModules();
+    const rpc = await import("@/config/rpc");
+
+    const configs = childConfigs(rpc.createChainTransport(1));
+    const [mev, ...reads] = configs;
+
+    expect(mev.methods).toEqual({ include: [...WRITE_METHODS] });
+    expect(reads.length).toBeGreaterThan(0);
+    for (const read of reads) {
+      expect(read.methods).toEqual({ exclude: [...WRITE_METHODS] });
+    }
+  });
+
+  it("leaves unprotected chains able to broadcast on public RPCs", async () => {
+    vi.stubEnv("NEXT_PUBLIC_BLINK_API_KEY", "test-key");
+    vi.resetModules();
+    const rpc = await import("@/config/rpc");
+
+    // Polygon has no Blink endpoint, so nothing may filter out writes.
+    for (const config of childConfigs(rpc.createChainTransport(137))) {
+      expect(config.methods).toBeUndefined();
+    }
   });
 });
 
 describe("chainTransports", () => {
   it("has a transport for all 12 chains", () => {
     for (const id of EXPECTED_CHAIN_IDS) {
-      expect(chainTransports[id]).toBeDefined();
       expect(typeof chainTransports[id]).toBe("function");
     }
-  });
-
-  it("has exactly 12 entries", () => {
     expect(Object.keys(chainTransports)).toHaveLength(12);
   });
 });

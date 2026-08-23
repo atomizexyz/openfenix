@@ -25,6 +25,11 @@ export const ethereumPow = defineChain({
   blockExplorers: {
     default: { name: "ETHW Explorer", url: "https://www.oklink.com/ethw" },
   },
+  // Canonical Multicall3, verified deployed on ETHW. viem needs this to batch
+  // reads into a single call the way it does on the other chains.
+  contracts: {
+    multicall3: { address: "0xcA11bde05977b3631167028862bE2a173976CA11" },
+  },
 });
 
 export interface FenixChainConfig {

@@ -23,6 +23,12 @@ export const config = createConfig({
     appDescription: "Burn XEN, Stake FENIX, Earn Trustless Yield",
     appUrl: "https://fenix.fyi",
     appIcon: "https://fenix.fyi/images/fenix-logo.svg",
+    // Coalesce concurrent reads into one Multicall3 call per chain. The
+    // dashboard fans out across all 12 chains at once, so this collapses
+    // dozens of round-trips into one per chain. Passed through getDefaultConfig
+    // rather than alongside it so it lands on the same config branch as
+    // `transports`.
+    batch: { multicall: { wait: 16 } },
   }),
   // The build prerenders every page, so wagmi must restore persisted state
   // after mount rather than during render. Storage stays on wagmi's default

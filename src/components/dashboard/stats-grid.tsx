@@ -1,7 +1,5 @@
 "use client";
 
-import { useAccount } from "wagmi";
-import { mainnet } from "wagmi/chains";
 import { useTranslations } from "next-intl";
 import NumberFlow from "@number-flow/react";
 import {
@@ -16,7 +14,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useFenixStats } from "@/hooks/use-fenix-contract";
 import { useChainPrice } from "@/hooks/use-dexscreener-prices";
-import { getChainConfig } from "@/config/chains";
 import { formatEther, formatUsd } from "@/lib/utils";
 
 interface StatCardProps {
@@ -86,11 +83,8 @@ function StatCard({ icon, label, value, suffix, isLoading, usdValue, usdIsLoadin
   );
 }
 
-export function StatsGrid() {
+export function StatsGrid({ chainId }: { chainId: number }) {
   const t = useTranslations("stats");
-  const { chain } = useAccount();
-  // Default to Ethereum mainnet when no wallet is connected
-  const chainId = chain?.id ?? mainnet.id;
   const {
     totalSupply,
     equityPoolSupply,
@@ -100,8 +94,6 @@ export function StatsGrid() {
     isLoading,
   } = useFenixStats(chainId);
   const { data: priceData, isLoading: priceIsLoading } = useChainPrice(chainId);
-  const chainConfig = getChainConfig(chainId);
-  const chainName = chainConfig?.chain.name ?? "Ethereum";
 
   const totalSupplyNum =
     totalSupply !== undefined
@@ -179,15 +171,10 @@ export function StatsGrid() {
   ];
 
   return (
-    <div className="space-y-4">
-      <p className="text-sm font-medium text-ash-500 dark:text-ash-400">
-        {chainName}
-      </p>
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {stats.map((stat) => (
-          <StatCard key={stat.label} {...stat} />
-        ))}
-      </div>
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {stats.map((stat) => (
+        <StatCard key={stat.label} {...stat} />
+      ))}
     </div>
   );
 }

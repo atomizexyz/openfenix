@@ -1,8 +1,5 @@
 import { setRequestLocale, getTranslations } from "next-intl/server";
-import { StatsGrid } from "@/components/dashboard/stats-grid";
-import { YieldChart } from "@/components/charts/yield-chart";
-import { SupplyChart } from "@/components/charts/equity-pool-chart";
-import { LiquidityPairsSection } from "@/components/dashboard/liquidity-pairs";
+import { DashboardOverview } from "@/components/dashboard/dashboard-overview";
 
 export default async function DashboardPage({
   params,
@@ -22,14 +19,7 @@ export default async function DashboardPage({
         </p>
       </div>
 
-      <StatsGrid />
-
-      <div className="grid gap-6 lg:grid-cols-2">
-        <YieldChart amount={1000} term={365} />
-        <SupplyChart />
-      </div>
-
-      <LiquidityPairsSection filterByChain />
+      <DashboardOverview />
     </div>
   );
 }

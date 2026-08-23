@@ -1,146 +1,99 @@
-import { http, webSocket, fallback } from "viem";
+import { http, fallback } from "viem";
 import type { Transport } from "viem";
+import { GENERATED_RPC_ENDPOINTS } from "./rpc-endpoints.generated";
+import { FENIX_CHAINS } from "./chains";
 
-interface ChainRpcConfig {
-  http: string[];
-  wss: string[];
-}
+/**
+ * JSON-RPC methods that broadcast a signed transaction. These are the only ones
+ * that can be sandwiched, so they are the only ones routed through MEV
+ * protection; everything else reads from the fastest public endpoint.
+ */
+export const WRITE_METHODS = [
+  "eth_sendRawTransaction",
+  "eth_sendPrivateTransaction",
+] as const;
 
-export const CHAIN_RPC_ENDPOINTS: Record<number, ChainRpcConfig> = {
-  // Ethereum
-  1: {
-    http: [
-      "https://eth.llamarpc.com",
-      "https://ethereum-rpc.publicnode.com",
-      "https://1rpc.io/eth",
-      "https://rpc.mevblocker.io",
-      "https://eth.drpc.org",
-    ],
-    wss: ["wss://ethereum-rpc.publicnode.com"],
-  },
-  // Polygon
-  137: {
-    http: [
-      "https://polygon-rpc.com",
-      "https://polygon-bor-rpc.publicnode.com",
-      "https://1rpc.io/matic",
-      "https://polygon.drpc.org",
-    ],
-    wss: ["wss://polygon-bor-rpc.publicnode.com"],
-  },
-  // BSC
-  56: {
-    http: [
-      "https://bsc-dataseed.bnbchain.org",
-      "https://bsc-dataseed1.bnbchain.org",
-      "https://bsc-rpc.publicnode.com",
-      "https://1rpc.io/bnb",
-      "https://bsc.drpc.org",
-    ],
-    wss: ["wss://bsc-rpc.publicnode.com"],
-  },
-  // Avalanche
-  43114: {
-    http: [
-      "https://api.avax.network/ext/bc/C/rpc",
-      "https://avalanche-c-chain-rpc.publicnode.com",
-      "https://1rpc.io/avax/c",
-      "https://avax.meowrpc.com",
-    ],
-    wss: ["wss://avalanche-c-chain-rpc.publicnode.com"],
-  },
-  // Moonbeam
-  1284: {
-    http: [
-      "https://rpc.api.moonbeam.network",
-      "https://moonbeam-rpc.publicnode.com",
-      "https://1rpc.io/glmr",
-      "https://moonbeam.drpc.org",
-    ],
-    wss: ["wss://wss.api.moonbeam.network"],
-  },
-  // Evmos
-  9001: {
-    http: [
-      "https://evmos.lava.build",
-      "https://evmos-evm-rpc.publicnode.com",
-      "https://evmos.drpc.org",
-    ],
-    wss: ["wss://evmos-evm-rpc.publicnode.com"],
-  },
-  // Fantom
-  250: {
-    http: [
-      "https://rpcapi.fantom.network",
-      "https://rpc.ftm.tools",
-      "https://fantom-rpc.publicnode.com",
-      "https://1rpc.io/ftm",
-    ],
-    wss: ["wss://fantom-rpc.publicnode.com"],
-  },
-  // Dogechain
-  2000: {
-    http: [
-      "https://rpc.dogechain.dog",
-      "https://rpc-us.dogechain.dog",
-      "https://rpc-sg.dogechain.dog",
-      "https://rpc.ankr.com/dogechain",
-    ],
-    wss: [],
-  },
-  // OKC
-  66: {
-    http: [
-      "https://exchainrpc.okex.org",
-      "https://oktc-mainnet.public.blastapi.io",
-      "https://1rpc.io/oktc",
-    ],
-    wss: [],
-  },
-  // EthereumPoW
-  10001: {
-    http: ["https://mainnet.ethereumpow.org"],
-    wss: [],
-  },
-  // Base
-  8453: {
-    http: [
-      "https://mainnet.base.org",
-      "https://base.llamarpc.com",
-      "https://1rpc.io/base",
-      "https://base-rpc.publicnode.com",
-      "https://base.drpc.org",
-    ],
-    wss: ["wss://base-rpc.publicnode.com"],
-  },
-  // PulseChain
-  369: {
-    http: [
-      "https://rpc.pulsechain.com",
-      "https://pulsechain-rpc.publicnode.com",
-      "https://rpc-pulsechain.g4mm4.io",
-    ],
-    wss: ["wss://pulsechain-rpc.publicnode.com"],
-  },
+/**
+ * BlinkLabs MEV-protected endpoints, by chain id. Blink bundles a transaction
+ * with searcher backruns so it cannot be frontrun or unbundled, and refunds
+ * recovered value to the sender.
+ *
+ * To cover another chain, add its subdomain here -- nothing else needs to
+ * change. Blink also serves Arbitrum (42161) and Solana, neither of which has a
+ * FENIX deployment today.
+ *
+ * @see https://docs.blinklabs.xyz/blink/get-started/mev
+ */
+export const BLINK_HOSTS: Record<number, string> = {
+  1: "eth",
+  56: "bsc",
+  8453: "base",
 };
 
+/**
+ * Public by necessity: the browser makes these calls directly, so the key ships
+ * in the client bundle and is visible to anyone using the site. Scope it to the
+ * site's origin in the Blink portal and treat it as a rate-limit token, not a
+ * secret.
+ */
+const BLINK_API_KEY = process.env.NEXT_PUBLIC_BLINK_API_KEY;
+
+function blinkUrl(chainId: number): string | undefined {
+  const host = BLINK_HOSTS[chainId];
+  if (!host || !BLINK_API_KEY) return undefined;
+  return `https://${host}.blinklabs.xyz/v1/${BLINK_API_KEY}`;
+}
+
+/** Whether writes on this chain are MEV-protected in the current build. */
+export function hasMevProtection(chainId: number): boolean {
+  return blinkUrl(chainId) !== undefined;
+}
+
+/**
+ * Read endpoints for a chain, fastest first.
+ *
+ * Falls back to whatever viem ships when the scan found nothing usable, so a
+ * chain whose public RPCs have gone dark still produces a valid transport
+ * instead of throwing on an empty fallback list.
+ */
+function readUrls(chainId: number): string[] {
+  const chain = FENIX_CHAINS.find((c) => c.chain.id === chainId)?.chain;
+  if (!chain) throw new Error(`No RPC config for chain ${chainId}`);
+  const generated = GENERATED_RPC_ENDPOINTS[chainId]?.http ?? [];
+  if (generated.length > 0) return generated;
+  return [...chain.rpcUrls.default.http];
+}
+
 export function createChainTransport(chainId: number): Transport {
-  const config = CHAIN_RPC_ENDPOINTS[chainId];
-  if (!config) {
-    throw new Error(`No RPC config for chain ${chainId}`);
-  }
+  const readTransportUrls = readUrls(chainId);
+  const mevUrl = blinkUrl(chainId);
+  const config = GENERATED_RPC_ENDPOINTS[chainId];
 
-  const transports = [
-    ...config.http.map((url) => http(url)),
-    ...config.wss.map((url) => webSocket(url)),
-  ];
+  // Only batch where every kept endpoint accepted a JSON-RPC batch during the
+  // scan; a fallback list is only as batchable as its least capable member.
+  const batch = config?.batch ? ({ wait: 16 } as const) : false;
 
-  return fallback(transports);
+  const readTransports = readTransportUrls.map((url) =>
+    http(url, {
+      batch,
+      // With protection available, public endpoints must never see a raw
+      // transaction -- otherwise a Blink outage would silently downgrade the
+      // user to an unprotected broadcast.
+      methods: mevUrl ? { exclude: [...WRITE_METHODS] } : undefined,
+    }),
+  );
+
+  if (!mevUrl) return fallback(readTransports);
+
+  return fallback([
+    http(mevUrl, { methods: { include: [...WRITE_METHODS] } }),
+    ...readTransports,
+  ]);
 }
 
 export const chainTransports: Record<number, Transport> = Object.fromEntries(
-  Object.keys(CHAIN_RPC_ENDPOINTS).map((id) => {
-    const chainId = Number(id);
-    return [chainId, createChainTransport(chainId)];
-  })
+  FENIX_CHAINS.filter((c) => c.enabled).map(({ chain }) => [
+    chain.id,
+    createChainTransport(chain.id),
+  ]),
 );

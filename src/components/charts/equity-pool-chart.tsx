@@ -1,7 +1,6 @@
 "use client";
 
 import { useMemo } from "react";
-import { useAccount } from "wagmi";
 import { useTranslations } from "next-intl";
 import {
   PieChart,
@@ -19,7 +18,6 @@ import {
 } from "@/hooks/use-all-chains-stats";
 import { formatEther, formatCompact } from "@/lib/utils";
 import { BRAND_COLORS } from "@/config/constants";
-import { mainnet } from "wagmi/chains";
 
 const POOL_COLORS = [
   "#F97316", // fenix-500  — equity
@@ -150,13 +148,12 @@ function buildChartData(
 /* ── Full-size chart (dashboard page) ──────────────────────────── */
 
 interface SupplyChartProps {
+  chainId: number;
   className?: string;
 }
 
-export function SupplyChart({ className }: SupplyChartProps) {
+export function SupplyChart({ chainId, className }: SupplyChartProps) {
   const t = useTranslations("stats");
-  const { chain } = useAccount();
-  const chainId = chain?.id ?? mainnet.id;
   const { equityPoolSupply, rewardPoolSupply, totalSupply, isLoading } =
     useFenixStats(chainId);
 
