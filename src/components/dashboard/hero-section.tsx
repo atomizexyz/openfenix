@@ -20,14 +20,14 @@ const ORB_CONFIG = [
   { size: 200, x: "25%", y: "75%", delay: 3, duration: 24, color: "rgba(220, 38, 38, 0.10)" },
 ];
 
-const PARTICLE_COUNT = 20;
+const PARTICLE_COUNT = 48;
 
 const EMBER_COLORS = [
-  "bg-fenix-400/60",
-  "bg-fenix-500/70",
-  "bg-ember-400/60",
-  "bg-amber-400/50",
-  "bg-orange-300/60",
+  "bg-fenix-400/80",
+  "bg-fenix-500/90",
+  "bg-ember-400/80",
+  "bg-amber-400/70",
+  "bg-orange-300/80",
 ];
 
 function FloatingOrbs() {
@@ -65,12 +65,12 @@ function FloatingParticles() {
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden">
       {Array.from({ length: PARTICLE_COUNT }).map((_, i) => {
-        const size = 2 + Math.random() * 5;
+        const size = 3 + Math.random() * 7;
         const startX = Math.random() * 100;
-        const duration = 5 + Math.random() * 8;
-        const delay = Math.random() * 4;
+        const duration = 4 + Math.random() * 7;
+        const delay = Math.random() * 3;
         const color = EMBER_COLORS[i % EMBER_COLORS.length];
-        const drift = (Math.random() - 0.5) * 120;
+        const drift = (Math.random() - 0.5) * 160;
         const flickerMid = 0.6 + Math.random() * 0.4;
 
         return (
@@ -82,7 +82,7 @@ function FloatingParticles() {
               height: size,
               left: `${startX}%`,
               bottom: -10,
-              boxShadow: `0 0 ${size * 2}px ${size}px rgba(249, 115, 22, 0.3)`,
+              boxShadow: `0 0 ${size * 2.5}px ${size * 1.2}px rgba(249, 115, 22, 0.5)`,
             }}
             animate={{
               y: [0, -900],
