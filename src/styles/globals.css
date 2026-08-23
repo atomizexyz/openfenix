@@ -253,27 +253,6 @@ body {
     );
 }
 
-.hero-sunset::before {
-  position: absolute;
-  top: 65%;
-  left: 50%;
-  width: clamp(8rem, 16vw, 14rem);
-  aspect-ratio: 1;
-  content: "";
-  transform: translate(-50%, -50%);
-  border-radius: 9999px;
-  background: radial-gradient(
-    circle,
-    rgba(255, 255, 255, 0.98) 0 32%,
-    rgba(254, 243, 199, 0.92) 48%,
-    rgba(251, 146, 60, 0.42) 70%,
-    transparent 72%
-  );
-  box-shadow:
-    0 0 5rem rgba(251, 146, 60, 0.55),
-    0 0 11rem rgba(244, 63, 94, 0.2);
-}
-
 .hero-sunset::after {
   position: absolute;
   inset: auto -10% 0;
