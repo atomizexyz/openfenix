@@ -13,8 +13,12 @@ const ALL_CHAIN_IDS = [
   1, 137, 56, 43114, 1284, 9001, 250, 2000, 66, 10001, 8453, 369,
 ];
 
-/** Chains with no reachable public RPC, switched off in FENIX_CHAINS. */
-const DISABLED_CHAIN_IDS = [9001, 2000];
+/**
+ * Chains switched off in FENIX_CHAINS. Currently none: Evmos and Dogechain
+ * have no reachable public RPC but are deliberately left on. Adding an id here
+ * keeps the assertions below honest without touching them.
+ */
+const DISABLED_CHAIN_IDS: number[] = [];
 
 /** Chains the app actually talks to. */
 const EXPECTED_CHAIN_IDS = ALL_CHAIN_IDS.filter(

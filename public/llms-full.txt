@@ -30,7 +30,7 @@ Adoption and equity reward pools accumulate and are flushed on a recurring sched
 - Annual inflation rate: 1.618034%
 - Minimum stake term: 1 day
 - Maximum stake term: 7,777 days
-- Supported chains: 10
+- Supported chains: 12
 - Supported languages: 21
 
 ## Contract addresses
@@ -42,7 +42,9 @@ Adoption and equity reward pools accumulate and are flushed on a recurring sched
 | BNB Smart Chain | 56 | `0xC3e8abfA04B0EC442c2A4D65699a40F7FcEd8055` | `0x2AB0e9e4eE70FFf1fB9D67031E44F6410170d00e` |
 | Avalanche | 43114 | `0xC3e8abfA04B0EC442c2A4D65699a40F7FcEd8055` | `0xC0C5AA69Dbe4d6DDdfBc89c0957686ec60F24389` |
 | Moonbeam | 1284 | `0xC3e8abfA04B0EC442c2A4D65699a40F7FcEd8055` | `0xb564A5767A00Ee9075cAC561c427643286F8F4E1` |
+| Evmos | 9001 | `0x7c27d2D2044FE90Cb98f5ECdc235839FdE740124` | `0x2AB0e9e4eE70FFf1fB9D67031E44F6410170d00e` |
 | Fantom | 250 | `0xC3e8abfA04B0EC442c2A4D65699a40F7FcEd8055` | `0xeF4B763385838FfFc708000f884026B8c0434275` |
+| Dogechain | 2000 | `0xC3e8abfA04B0EC442c2A4D65699a40F7FcEd8055` | `0x948eed4490833D526688fD1E5Ba0b9B35CD2c32e` |
 | OKC | 66 | `0xC3e8abfA04B0EC442c2A4D65699a40F7FcEd8055` | `0x1cC4D981e897A3D2E7785093A648c0a75fAd0453` |
 | EthereumPoW | 10001 | `0xC3e8abfA04B0EC442c2A4D65699a40F7FcEd8055` | `0x2AB0e9e4eE70FFf1fB9D67031E44F6410170d00e` |
 | Base | 8453 | `0x07FdE3eD7727c1D84171A6e5815964d50827CF69` | `0xffcbF84650cE02DaFE96926B37a0ac5E34932fa5` |

@@ -98,9 +98,10 @@ export const FENIX_CHAINS: FenixChainConfig[] = [
       "0x2AB0e9e4eE70FFf1fB9D67031E44F6410170d00e" as `0x${string}`,
     fenixContract: FENIX_CONTRACT_EVMOS,
     iconSlug: "evmos",
-    // Disabled: every public Evmos RPC is dead (403/404/refused). Verified
-    // against all 32 endpoints chainlist.org lists -- see `bun run scan:rpcs`.
-    enabled: false,
+    // Note: no public Evmos RPC currently responds (403/404/refused across all
+    // 32 endpoints chainlist.org lists). Kept on deliberately; reads will fail
+    // until an endpoint returns. Re-check with `bun run scan:rpcs`.
+    enabled: true,
   },
   {
     chain: fantom,
@@ -116,9 +117,10 @@ export const FENIX_CHAINS: FenixChainConfig[] = [
       "0x948eed4490833D526688fD1E5Ba0b9B35CD2c32e" as `0x${string}`,
     fenixContract: FENIX_CONTRACT,
     iconSlug: "dogechain",
-    // Disabled: every public Dogechain RPC is dead. Verified against all 9
-    // endpoints chainlist.org lists -- see `bun run scan:rpcs`.
-    enabled: false,
+    // Note: no public Dogechain RPC currently responds, across all 9 endpoints
+    // chainlist.org lists. Kept on deliberately; reads will fail until an
+    // endpoint returns. Re-check with `bun run scan:rpcs`.
+    enabled: true,
   },
   {
     chain: okc,
