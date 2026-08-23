@@ -9,7 +9,10 @@
     "stake": "Stake",
     "rewards": "Ödüller",
     "connect": "Cüzdan Bağla",
-    "disconnect": "Bağlantıyı Kes"
+    "disconnect": "Bağlantıyı Kes",
+    "copied": "Kopyalandı!",
+    "copy_address": "Adresi Kopyala",
+    "wallet_details": "Cüzdan Detayları"
   },
   "hero": {
     "title": "Külllerinden Doğ",
@@ -29,7 +32,10 @@
     "circulating": "Dolaşımda",
     "supply_distribution": "Arz Dağılımı",
     "inflation_rate": "Enflasyon Oranı",
-    "active_stakes": "Aktif Stake'ler"
+    "active_stakes": "Aktif Stake'ler",
+    "projected_yield": "Öngörülen Getiri",
+    "yield_empty": "Öngörülen getiriyi görmek için bir tutar ve süre girin",
+    "no_pool_data": "Havuz verisi bulunamadı"
   },
   "dashboard": {
     "title": "Gösterge Paneli",
@@ -47,7 +53,12 @@
     "max": "Maks",
     "balance": "Bakiye",
     "success": "{xen} XEN başarıyla {fenix} FENIX için yakıldı",
-    "error": "XEN yakılırken hata oluştu"
+    "error": "XEN yakılırken hata oluştu",
+    "confirming": "Onaylanıyor...",
+    "approving": "İzin veriliyor...",
+    "burning": "Yakılıyor...",
+    "approval_confirmed": "Onay tamamlandı. Artık yakabilirsiniz.",
+    "unsupported_network": "Lütfen desteklenen bir ağa geçin"
   },
   "stake": {
     "title": "FENIX Stake Et",
@@ -68,7 +79,9 @@
     "balance": "Bakiye",
     "max": "Maks",
     "success": "{amount} FENIX başarıyla {term} gün için stake edildi",
-    "error": "Stake başlatılırken hata oluştu"
+    "error": "Stake başlatılırken hata oluştu",
+    "confirming": "Onaylanıyor...",
+    "staking": "Stake başlatılıyor..."
   },
   "stakes": {
     "title": "Stake'leriniz",
@@ -95,7 +108,9 @@
     "matured": "Vadesi Doldu",
     "previous": "Önceki",
     "next": "Sonraki",
-    "page_of": "Sayfa {page} / {total}"
+    "page_of": "Sayfa {page} / {total}",
+    "error_ending": "Stake sonlandırılırken hata oluştu",
+    "error_deferring": "Stake ertelenirken hata oluştu"
   },
   "rewards": {
     "title": "Ödüller",
@@ -109,7 +124,11 @@
     "estimated_reward": "Tahmini Ödül",
     "weeks": "{weeks} hafta",
     "days": "{days} gün",
-    "ready": "Hazır"
+    "ready": "Hazır",
+    "confirming": "Onaylanıyor...",
+    "flushing": "Dağıtılıyor...",
+    "flush_success": "Ödüller başarıyla dağıtıldı",
+    "flush_error": "Ödüller dağıtılırken hata oluştu"
   },
   "chain_table": {
     "title": "Coklu Zincir Genel Bakis",
@@ -154,6 +173,8 @@
     "retry": "Tekrar dene",
     "copy": "Kopyala",
     "copied": "Kopyalandı!",
+    "wallet_address": "Cüzdan Adresi",
+    "scan_to_send": "Bu adrese token göndermek için tarayın",
     "share": "Paylaş",
     "close": "Kapat",
     "confirm": "Onayla",

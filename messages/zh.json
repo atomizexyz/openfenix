@@ -9,7 +9,10 @@
     "stake": "质押",
     "rewards": "奖励",
     "connect": "连接钱包",
-    "disconnect": "断开连接"
+    "disconnect": "断开连接",
+    "copied": "已复制！",
+    "copy_address": "复制地址",
+    "wallet_details": "钱包详情"
   },
   "hero": {
     "title": "浴火重生",
@@ -29,7 +32,10 @@
     "circulating": "流通量",
     "supply_distribution": "供应分布",
     "inflation_rate": "通胀率",
-    "active_stakes": "活跃质押"
+    "active_stakes": "活跃质押",
+    "projected_yield": "预计收益",
+    "yield_empty": "输入金额和期限以查看预计收益",
+    "no_pool_data": "暂无池数据"
   },
   "dashboard": {
     "title": "仪表盘",
@@ -47,7 +53,12 @@
     "max": "最大",
     "balance": "余额",
     "success": "成功将{xen} XEN燃烧为{fenix} FENIX",
-    "error": "燃烧XEN时出错"
+    "error": "燃烧XEN时出错",
+    "confirming": "确认中...",
+    "approving": "授权中...",
+    "burning": "燃烧中...",
+    "approval_confirmed": "授权已确认，现在可以燃烧。",
+    "unsupported_network": "请切换到受支持的网络"
   },
   "stake": {
     "title": "质押FENIX",
@@ -68,7 +79,9 @@
     "balance": "余额",
     "max": "最大",
     "success": "成功质押{amount} FENIX，期限{term}天",
-    "error": "开始质押时出错"
+    "error": "开始质押时出错",
+    "confirming": "确认中...",
+    "staking": "质押启动中..."
   },
   "stakes": {
     "title": "您的质押",
@@ -95,7 +108,9 @@
     "matured": "已到期",
     "previous": "上一页",
     "next": "下一页",
-    "page_of": "第 {page} 页，共 {total} 页"
+    "page_of": "第 {page} 页，共 {total} 页",
+    "error_ending": "结束质押时出错",
+    "error_deferring": "延期质押时出错"
   },
   "rewards": {
     "title": "奖励",
@@ -109,7 +124,11 @@
     "estimated_reward": "预估奖励",
     "weeks": "{weeks}周",
     "days": "{days}天",
-    "ready": "就绪"
+    "ready": "就绪",
+    "confirming": "确认中...",
+    "flushing": "分配中...",
+    "flush_success": "奖励分配成功",
+    "flush_error": "分配奖励时出错"
   },
   "chain_table": {
     "title": "跨链概览",
@@ -154,6 +173,8 @@
     "retry": "重试",
     "copy": "复制",
     "copied": "已复制！",
+    "wallet_address": "钱包地址",
+    "scan_to_send": "扫描以向此地址发送代币",
     "share": "分享",
     "close": "关闭",
     "confirm": "确认",

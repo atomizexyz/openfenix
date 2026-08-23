@@ -9,7 +9,10 @@
     "stake": "Stake",
     "rewards": "Phần Thưởng",
     "connect": "Kết Nối Ví",
-    "disconnect": "Ngắt Kết Nối"
+    "disconnect": "Ngắt Kết Nối",
+    "copied": "Đã sao chép!",
+    "copy_address": "Sao Chép Địa Chỉ",
+    "wallet_details": "Chi Tiết Ví"
   },
   "hero": {
     "title": "Hồi Sinh Từ Tro Tàn",
@@ -29,7 +32,10 @@
     "circulating": "Lưu hành",
     "supply_distribution": "Phân phối cung",
     "inflation_rate": "Tỷ Lệ Lạm Phát",
-    "active_stakes": "Stake Đang Hoạt Động"
+    "active_stakes": "Stake Đang Hoạt Động",
+    "projected_yield": "Lợi Nhuận Dự Kiến",
+    "yield_empty": "Nhập số lượng và kỳ hạn để xem lợi nhuận dự kiến",
+    "no_pool_data": "Không có dữ liệu quỹ"
   },
   "dashboard": {
     "title": "Bảng điều khiển",
@@ -47,7 +53,12 @@
     "max": "Tối Đa",
     "balance": "Số Dư",
     "success": "Đã đốt thành công {xen} XEN lấy {fenix} FENIX",
-    "error": "Lỗi khi đốt XEN"
+    "error": "Lỗi khi đốt XEN",
+    "confirming": "Đang xác nhận...",
+    "approving": "Đang phê duyệt...",
+    "burning": "Đang đốt...",
+    "approval_confirmed": "Đã phê duyệt. Bây giờ bạn có thể đốt.",
+    "unsupported_network": "Vui lòng chuyển sang mạng được hỗ trợ"
   },
   "stake": {
     "title": "Stake FENIX",
@@ -68,7 +79,9 @@
     "balance": "Số Dư",
     "max": "Tối Đa",
     "success": "Đã stake thành công {amount} FENIX trong {term} ngày",
-    "error": "Lỗi khi bắt đầu stake"
+    "error": "Lỗi khi bắt đầu stake",
+    "confirming": "Đang xác nhận...",
+    "staking": "Đang bắt đầu stake..."
   },
   "stakes": {
     "title": "Stake Của Bạn",
@@ -95,7 +108,9 @@
     "matured": "Đã Đáo Hạn",
     "previous": "Trước",
     "next": "Tiếp",
-    "page_of": "Trang {page} / {total}"
+    "page_of": "Trang {page} / {total}",
+    "error_ending": "Lỗi khi kết thúc stake",
+    "error_deferring": "Lỗi khi hoãn stake"
   },
   "rewards": {
     "title": "Phần Thưởng",
@@ -109,7 +124,11 @@
     "estimated_reward": "Phần Thưởng Ước Tính",
     "weeks": "{weeks} tuần",
     "days": "{days} ngày",
-    "ready": "San sang"
+    "ready": "San sang",
+    "confirming": "Đang xác nhận...",
+    "flushing": "Đang phân phối...",
+    "flush_success": "Phân phối phần thưởng thành công",
+    "flush_error": "Lỗi khi phân phối phần thưởng"
   },
   "chain_table": {
     "title": "Tong quan da chuoi",
@@ -154,6 +173,8 @@
     "retry": "Thử lại",
     "copy": "Sao chép",
     "copied": "Đã sao chép!",
+    "wallet_address": "Địa Chỉ Ví",
+    "scan_to_send": "Quét để gửi token đến địa chỉ này",
     "share": "Chia sẻ",
     "close": "Đóng",
     "confirm": "Xác nhận",

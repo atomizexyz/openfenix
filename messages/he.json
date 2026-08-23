@@ -9,7 +9,10 @@
     "stake": "הפקדה",
     "rewards": "תגמולים",
     "connect": "חבר ארנק",
-    "disconnect": "נתק"
+    "disconnect": "נתק",
+    "copied": "הועתק!",
+    "copy_address": "העתק כתובת",
+    "wallet_details": "פרטי ארנק"
   },
   "hero": {
     "title": "קום מן האפר",
@@ -29,7 +32,10 @@
     "circulating": "במחזור",
     "supply_distribution": "התפלגות היצע",
     "inflation_rate": "שיעור אינפלציה",
-    "active_stakes": "הפקדות פעילות"
+    "active_stakes": "הפקדות פעילות",
+    "projected_yield": "תשואה צפויה",
+    "yield_empty": "הזן סכום ותקופה כדי לראות את התשואה הצפויה",
+    "no_pool_data": "אין נתוני מאגר זמינים"
   },
   "dashboard": {
     "title": "לוח בקרה",
@@ -47,7 +53,12 @@
     "max": "מקסימום",
     "balance": "יתרה",
     "success": "נשרפו בהצלחה {xen} XEN תמורת {fenix} FENIX",
-    "error": "שגיאה בשריפת XEN"
+    "error": "שגיאה בשריפת XEN",
+    "confirming": "מאשר...",
+    "approving": "מאשר הרשאה...",
+    "burning": "שורף...",
+    "approval_confirmed": "ההרשאה אושרה. כעת ניתן לשרוף.",
+    "unsupported_network": "אנא עבור לרשת נתמכת"
   },
   "stake": {
     "title": "הפקדת FENIX",
@@ -68,7 +79,9 @@
     "balance": "יתרה",
     "max": "מקסימום",
     "success": "הופקדו בהצלחה {amount} FENIX למשך {term} ימים",
-    "error": "שגיאה בהתחלת הפקדה"
+    "error": "שגיאה בהתחלת הפקדה",
+    "confirming": "מאשר...",
+    "staking": "מתחיל הפקדה..."
   },
   "stakes": {
     "title": "ההפקדות שלך",
@@ -95,7 +108,9 @@
     "matured": "הגיע לפירעון",
     "previous": "הקודם",
     "next": "הבא",
-    "page_of": "עמוד {page} מתוך {total}"
+    "page_of": "עמוד {page} מתוך {total}",
+    "error_ending": "שגיאה בסיום ההפקדה",
+    "error_deferring": "שגיאה בדחיית ההפקדה"
   },
   "rewards": {
     "title": "תגמולים",
@@ -109,7 +124,11 @@
     "estimated_reward": "תגמול משוער",
     "weeks": "{weeks} שבועות",
     "days": "{days} ימים",
-    "ready": "מוכן"
+    "ready": "מוכן",
+    "confirming": "מאשר...",
+    "flushing": "מחלק...",
+    "flush_success": "התגמולים חולקו בהצלחה",
+    "flush_error": "שגיאה בחלוקת התגמולים"
   },
   "chain_table": {
     "title": "סקירת רשתות",
@@ -154,6 +173,8 @@
     "retry": "נסה שוב",
     "copy": "העתק",
     "copied": "הועתק!",
+    "wallet_address": "כתובת ארנק",
+    "scan_to_send": "סרוק כדי לשלוח טוקנים לכתובת זו",
     "share": "שתף",
     "close": "סגור",
     "confirm": "אשר",

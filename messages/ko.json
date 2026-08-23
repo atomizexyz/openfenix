@@ -9,7 +9,10 @@
     "stake": "스테이킹",
     "rewards": "보상",
     "connect": "지갑 연결",
-    "disconnect": "연결 해제"
+    "disconnect": "연결 해제",
+    "copied": "복사됨!",
+    "copy_address": "주소 복사",
+    "wallet_details": "지갑 상세정보"
   },
   "hero": {
     "title": "잿더미에서 부활하다",
@@ -29,7 +32,10 @@
     "circulating": "유통량",
     "supply_distribution": "공급 분포",
     "inflation_rate": "인플레이션율",
-    "active_stakes": "활성 스테이크"
+    "active_stakes": "활성 스테이크",
+    "projected_yield": "예상 수익",
+    "yield_empty": "금액과 기간을 입력하면 예상 수익이 표시됩니다",
+    "no_pool_data": "풀 데이터가 없습니다"
   },
   "dashboard": {
     "title": "대시보드",
@@ -47,7 +53,12 @@
     "max": "최대",
     "balance": "잔액",
     "success": "{xen} XEN을 {fenix} FENIX로 성공적으로 소각했습니다",
-    "error": "XEN 소각 중 오류 발생"
+    "error": "XEN 소각 중 오류 발생",
+    "confirming": "확인 중...",
+    "approving": "승인 중...",
+    "burning": "소각 중...",
+    "approval_confirmed": "승인이 완료되었습니다. 이제 소각할 수 있습니다.",
+    "unsupported_network": "지원되는 네트워크로 전환해 주세요"
   },
   "stake": {
     "title": "FENIX 스테이킹",
@@ -68,7 +79,9 @@
     "balance": "잔액",
     "max": "최대",
     "success": "{amount} FENIX를 {term}일 동안 성공적으로 스테이킹했습니다",
-    "error": "스테이크 시작 중 오류 발생"
+    "error": "스테이크 시작 중 오류 발생",
+    "confirming": "확인 중...",
+    "staking": "스테이크 시작 중..."
   },
   "stakes": {
     "title": "나의 스테이크",
@@ -95,7 +108,9 @@
     "matured": "만기 도래",
     "previous": "이전",
     "next": "다음",
-    "page_of": "{total}페이지 중 {page}페이지"
+    "page_of": "{total}페이지 중 {page}페이지",
+    "error_ending": "스테이크 종료 중 오류가 발생했습니다",
+    "error_deferring": "스테이크 연기 중 오류가 발생했습니다"
   },
   "rewards": {
     "title": "보상",
@@ -109,7 +124,11 @@
     "estimated_reward": "예상 보상",
     "weeks": "{weeks}주",
     "days": "{days}일",
-    "ready": "준비됨"
+    "ready": "준비됨",
+    "confirming": "확인 중...",
+    "flushing": "플러시 중...",
+    "flush_success": "보상이 성공적으로 플러시되었습니다",
+    "flush_error": "보상 플러시 중 오류가 발생했습니다"
   },
   "chain_table": {
     "title": "크로스체인 개요",
@@ -154,6 +173,8 @@
     "retry": "다시 시도",
     "copy": "복사",
     "copied": "복사됨!",
+    "wallet_address": "지갑 주소",
+    "scan_to_send": "이 주소로 토큰을 보내려면 스캔하세요",
     "share": "공유",
     "close": "닫기",
     "confirm": "확인",

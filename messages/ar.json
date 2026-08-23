@@ -9,7 +9,10 @@
     "stake": "رهن",
     "rewards": "المكافآت",
     "connect": "ربط المحفظة",
-    "disconnect": "قطع الاتصال"
+    "disconnect": "قطع الاتصال",
+    "copied": "تم النسخ!",
+    "copy_address": "نسخ العنوان",
+    "wallet_details": "تفاصيل المحفظة"
   },
   "hero": {
     "title": "انهض من الرماد",
@@ -29,7 +32,10 @@
     "circulating": "متداولة",
     "supply_distribution": "توزيع العرض",
     "inflation_rate": "معدل التضخم",
-    "active_stakes": "الرهونات النشطة"
+    "active_stakes": "الرهونات النشطة",
+    "projected_yield": "العائد المتوقع",
+    "yield_empty": "أدخل مبلغًا ومدة لرؤية العائد المتوقع",
+    "no_pool_data": "لا توجد بيانات متاحة عن المجمع"
   },
   "dashboard": {
     "title": "لوحة التحكم",
@@ -47,7 +53,12 @@
     "max": "الحد الأقصى",
     "balance": "الرصيد",
     "success": "تم حرق {xen} XEN مقابل {fenix} FENIX بنجاح",
-    "error": "خطأ في حرق XEN"
+    "error": "خطأ في حرق XEN",
+    "confirming": "جارٍ التأكيد...",
+    "approving": "جارٍ الموافقة...",
+    "burning": "جارٍ الحرق...",
+    "approval_confirmed": "تم تأكيد الموافقة. يمكنك الحرق الآن.",
+    "unsupported_network": "يرجى التبديل إلى شبكة مدعومة"
   },
   "stake": {
     "title": "رهن FENIX",
@@ -68,7 +79,9 @@
     "balance": "الرصيد",
     "max": "الحد الأقصى",
     "success": "تم رهن {amount} FENIX لمدة {term} يوم بنجاح",
-    "error": "خطأ في بدء الرهن"
+    "error": "خطأ في بدء الرهن",
+    "confirming": "جارٍ التأكيد...",
+    "staking": "جارٍ بدء الرهن..."
   },
   "stakes": {
     "title": "رهوناتك",
@@ -95,7 +108,9 @@
     "matured": "مستحق",
     "previous": "السابق",
     "next": "التالي",
-    "page_of": "صفحة {page} من {total}"
+    "page_of": "صفحة {page} من {total}",
+    "error_ending": "خطأ في إنهاء الرهن",
+    "error_deferring": "خطأ في تأجيل الرهن"
   },
   "rewards": {
     "title": "المكافآت",
@@ -109,7 +124,11 @@
     "estimated_reward": "المكافأة المقدرة",
     "weeks": "{weeks} أسابيع",
     "days": "{days} أيام",
-    "ready": "جاهز"
+    "ready": "جاهز",
+    "confirming": "جارٍ التأكيد...",
+    "flushing": "جارٍ التوزيع...",
+    "flush_success": "تم توزيع المكافآت بنجاح",
+    "flush_error": "خطأ في توزيع المكافآت"
   },
   "chain_table": {
     "title": "نظرة عامة عبر السلاسل",
@@ -154,6 +173,8 @@
     "retry": "حاول مرة أخرى",
     "copy": "نسخ",
     "copied": "تم النسخ!",
+    "wallet_address": "عنوان المحفظة",
+    "scan_to_send": "امسح الرمز لإرسال الرموز إلى هذا العنوان",
     "share": "مشاركة",
     "close": "إغلاق",
     "confirm": "تأكيد",

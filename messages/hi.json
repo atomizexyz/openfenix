@@ -9,7 +9,10 @@
     "stake": "स्टेक",
     "rewards": "पुरस्कार",
     "connect": "वॉलेट कनेक्ट करें",
-    "disconnect": "डिस्कनेक्ट"
+    "disconnect": "डिस्कनेक्ट",
+    "copied": "कॉपी हो गया!",
+    "copy_address": "पता कॉपी करें",
+    "wallet_details": "वॉलेट विवरण"
   },
   "hero": {
     "title": "राख से पुनर्जन्म",
@@ -29,7 +32,10 @@
     "circulating": "प्रचलित",
     "supply_distribution": "आपूर्ति वितरण",
     "inflation_rate": "मुद्रास्फीति दर",
-    "active_stakes": "सक्रिय स्टेक"
+    "active_stakes": "सक्रिय स्टेक",
+    "projected_yield": "अनुमानित प्रतिफल",
+    "yield_empty": "अनुमानित प्रतिफल देखने के लिए राशि और अवधि दर्ज करें",
+    "no_pool_data": "कोई पूल डेटा उपलब्ध नहीं"
   },
   "dashboard": {
     "title": "डैशबोर्ड",
@@ -47,7 +53,12 @@
     "max": "अधिकतम",
     "balance": "शेष",
     "success": "{xen} XEN को {fenix} FENIX में सफलतापूर्वक जलाया गया",
-    "error": "XEN जलाने में त्रुटि"
+    "error": "XEN जलाने में त्रुटि",
+    "confirming": "पुष्टि हो रही है...",
+    "approving": "अनुमोदन हो रहा है...",
+    "burning": "जलाया जा रहा है...",
+    "approval_confirmed": "अनुमोदन की पुष्टि हो गई। अब आप जला सकते हैं।",
+    "unsupported_network": "कृपया समर्थित नेटवर्क पर स्विच करें"
   },
   "stake": {
     "title": "FENIX स्टेक करें",
@@ -68,7 +79,9 @@
     "balance": "शेष",
     "max": "अधिकतम",
     "success": "{amount} FENIX को {term} दिनों के लिए सफलतापूर्वक स्टेक किया गया",
-    "error": "स्टेक शुरू करने में त्रुटि"
+    "error": "स्टेक शुरू करने में त्रुटि",
+    "confirming": "पुष्टि हो रही है...",
+    "staking": "स्टेक शुरू हो रहा है..."
   },
   "stakes": {
     "title": "आपके स्टेक",
@@ -95,7 +108,9 @@
     "matured": "परिपक्व",
     "previous": "पिछला",
     "next": "अगला",
-    "page_of": "पृष्ठ {page} / {total}"
+    "page_of": "पृष्ठ {page} / {total}",
+    "error_ending": "स्टेक समाप्त करने में त्रुटि",
+    "error_deferring": "स्टेक स्थगित करने में त्रुटि"
   },
   "rewards": {
     "title": "पुरस्कार",
@@ -109,7 +124,11 @@
     "estimated_reward": "अनुमानित पुरस्कार",
     "weeks": "{weeks} सप्ताह",
     "days": "{days} दिन",
-    "ready": "तैयार"
+    "ready": "तैयार",
+    "confirming": "पुष्टि हो रही है...",
+    "flushing": "वितरित किया जा रहा है...",
+    "flush_success": "पुरस्कार सफलतापूर्वक वितरित किए गए",
+    "flush_error": "पुरस्कार वितरित करने में त्रुटि"
   },
   "chain_table": {
     "title": "क्रॉस-चेन अवलोकन",
@@ -154,6 +173,8 @@
     "retry": "पुनः प्रयास करें",
     "copy": "कॉपी करें",
     "copied": "कॉपी हो गया!",
+    "wallet_address": "वॉलेट पता",
+    "scan_to_send": "इस पते पर टोकन भेजने के लिए स्कैन करें",
     "share": "साझा करें",
     "close": "बंद करें",
     "confirm": "पुष्टि करें",

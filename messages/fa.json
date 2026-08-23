@@ -9,7 +9,10 @@
     "stake": "استیک",
     "rewards": "پاداش‌ها",
     "connect": "اتصال کیف پول",
-    "disconnect": "قطع اتصال"
+    "disconnect": "قطع اتصال",
+    "copied": "کپی شد!",
+    "copy_address": "کپی آدرس",
+    "wallet_details": "جزئیات کیف پول"
   },
   "hero": {
     "title": "از خاکستر برخیز",
@@ -29,7 +32,10 @@
     "circulating": "در گردش",
     "supply_distribution": "توزیع عرضه",
     "inflation_rate": "نرخ تورم",
-    "active_stakes": "استیک‌های فعال"
+    "active_stakes": "استیک‌های فعال",
+    "projected_yield": "بازده پیش‌بینی‌شده",
+    "yield_empty": "مبلغ و مدت را وارد کنید تا بازده پیش‌بینی‌شده را ببینید",
+    "no_pool_data": "داده‌ای برای استخر موجود نیست"
   },
   "dashboard": {
     "title": "داشبورد",
@@ -47,7 +53,12 @@
     "max": "حداکثر",
     "balance": "موجودی",
     "success": "{xen} XEN با موفقیت برای {fenix} FENIX سوزانده شد",
-    "error": "خطا در سوزاندن XEN"
+    "error": "خطا در سوزاندن XEN",
+    "confirming": "در حال تأیید...",
+    "approving": "در حال تأیید مجوز...",
+    "burning": "در حال سوزاندن...",
+    "approval_confirmed": "مجوز تأیید شد. اکنون می‌توانید بسوزانید.",
+    "unsupported_network": "لطفاً به یک شبکه پشتیبانی‌شده تغییر دهید"
   },
   "stake": {
     "title": "استیک FENIX",
@@ -68,7 +79,9 @@
     "balance": "موجودی",
     "max": "حداکثر",
     "success": "{amount} FENIX با موفقیت برای {term} روز استیک شد",
-    "error": "خطا در شروع استیک"
+    "error": "خطا در شروع استیک",
+    "confirming": "در حال تأیید...",
+    "staking": "در حال شروع استیک..."
   },
   "stakes": {
     "title": "استیک‌های شما",
@@ -95,7 +108,9 @@
     "matured": "سررسید شده",
     "previous": "قبلی",
     "next": "بعدی",
-    "page_of": "صفحه {page} از {total}"
+    "page_of": "صفحه {page} از {total}",
+    "error_ending": "خطا در پایان استیک",
+    "error_deferring": "خطا در تعویق استیک"
   },
   "rewards": {
     "title": "پاداش‌ها",
@@ -109,7 +124,11 @@
     "estimated_reward": "پاداش تخمینی",
     "weeks": "{weeks} هفته",
     "days": "{days} روز",
-    "ready": "آماده"
+    "ready": "آماده",
+    "confirming": "در حال تأیید...",
+    "flushing": "در حال توزیع...",
+    "flush_success": "پاداش‌ها با موفقیت توزیع شد",
+    "flush_error": "خطا در توزیع پاداش‌ها"
   },
   "chain_table": {
     "title": "نمای کلی زنجیره‌ها",
@@ -154,6 +173,8 @@
     "retry": "تلاش مجدد",
     "copy": "کپی",
     "copied": "کپی شد!",
+    "wallet_address": "آدرس کیف پول",
+    "scan_to_send": "برای ارسال توکن به این آدرس اسکن کنید",
     "share": "اشتراک‌گذاری",
     "close": "بستن",
     "confirm": "تایید",

@@ -9,7 +9,10 @@
     "stake": "ステーク",
     "rewards": "報酬",
     "connect": "ウォレット接続",
-    "disconnect": "切断"
+    "disconnect": "切断",
+    "copied": "コピーしました！",
+    "copy_address": "アドレスをコピー",
+    "wallet_details": "ウォレット詳細"
   },
   "hero": {
     "title": "灰の中から蘇る",
@@ -29,7 +32,10 @@
     "circulating": "流通量",
     "supply_distribution": "供給分布",
     "inflation_rate": "インフレ率",
-    "active_stakes": "アクティブなステーク"
+    "active_stakes": "アクティブなステーク",
+    "projected_yield": "予想利回り",
+    "yield_empty": "金額と期間を入力すると予想利回りが表示されます",
+    "no_pool_data": "プールデータがありません"
   },
   "dashboard": {
     "title": "ダッシュボード",
@@ -47,7 +53,12 @@
     "max": "最大",
     "balance": "残高",
     "success": "{xen} XENを{fenix} FENIXに正常にバーンしました",
-    "error": "XENのバーン中にエラーが発生しました"
+    "error": "XENのバーン中にエラーが発生しました",
+    "confirming": "確認中...",
+    "approving": "承認中...",
+    "burning": "バーン中...",
+    "approval_confirmed": "承認が完了しました。バーンできます。",
+    "unsupported_network": "サポートされているネットワークに切り替えてください"
   },
   "stake": {
     "title": "FENIXをステーク",
@@ -68,7 +79,9 @@
     "balance": "残高",
     "max": "最大",
     "success": "{amount} FENIXを{term}日間正常にステークしました",
-    "error": "ステーク開始中にエラーが発生しました"
+    "error": "ステーク開始中にエラーが発生しました",
+    "confirming": "確認中...",
+    "staking": "ステーク開始中..."
   },
   "stakes": {
     "title": "あなたのステーク",
@@ -95,7 +108,9 @@
     "matured": "満期到来",
     "previous": "前へ",
     "next": "次へ",
-    "page_of": "{total}ページ中{page}ページ"
+    "page_of": "{total}ページ中{page}ページ",
+    "error_ending": "ステークの終了に失敗しました",
+    "error_deferring": "ステークの延期に失敗しました"
   },
   "rewards": {
     "title": "報酬",
@@ -109,7 +124,11 @@
     "estimated_reward": "推定報酬",
     "weeks": "{weeks}週間",
     "days": "{days}日",
-    "ready": "準備完了"
+    "ready": "準備完了",
+    "confirming": "確認中...",
+    "flushing": "フラッシュ中...",
+    "flush_success": "報酬のフラッシュが完了しました",
+    "flush_error": "報酬のフラッシュに失敗しました"
   },
   "chain_table": {
     "title": "クロスチェーン概要",
@@ -154,6 +173,8 @@
     "retry": "再試行",
     "copy": "コピー",
     "copied": "コピーしました！",
+    "wallet_address": "ウォレットアドレス",
+    "scan_to_send": "このアドレスにトークンを送るにはスキャンしてください",
     "share": "共有",
     "close": "閉じる",
     "confirm": "確認",

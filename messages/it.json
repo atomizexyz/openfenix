@@ -9,7 +9,10 @@
     "stake": "Staking",
     "rewards": "Ricompense",
     "connect": "Connetti Portafoglio",
-    "disconnect": "Disconnetti"
+    "disconnect": "Disconnetti",
+    "copied": "Copiato!",
+    "copy_address": "Copia Indirizzo",
+    "wallet_details": "Dettagli Portafoglio"
   },
   "hero": {
     "title": "Risorgi dalle Ceneri",
@@ -29,7 +32,10 @@
     "circulating": "In circolazione",
     "supply_distribution": "Distribuzione dell'offerta",
     "inflation_rate": "Tasso d'Inflazione",
-    "active_stakes": "Stake Attivi"
+    "active_stakes": "Stake Attivi",
+    "projected_yield": "Rendimento Previsto",
+    "yield_empty": "Inserisci un importo e una durata per vedere il rendimento previsto",
+    "no_pool_data": "Nessun dato del pool disponibile"
   },
   "dashboard": {
     "title": "Dashboard",
@@ -47,7 +53,12 @@
     "max": "Max",
     "balance": "Saldo",
     "success": "Bruciati con successo {xen} XEN per {fenix} FENIX",
-    "error": "Errore nella combustione di XEN"
+    "error": "Errore nella combustione di XEN",
+    "confirming": "Conferma in corso...",
+    "approving": "Approvazione in corso...",
+    "burning": "Bruciatura in corso...",
+    "approval_confirmed": "Approvazione confermata. Ora puoi bruciare.",
+    "unsupported_network": "Passa a una rete supportata"
   },
   "stake": {
     "title": "Staking di FENIX",
@@ -68,7 +79,9 @@
     "balance": "Saldo",
     "max": "Max",
     "success": "Messi in staking con successo {amount} FENIX per {term} giorni",
-    "error": "Errore nell'avvio dello stake"
+    "error": "Errore nell'avvio dello stake",
+    "confirming": "Conferma in corso...",
+    "staking": "Avvio dello stake..."
   },
   "stakes": {
     "title": "I Tuoi Stake",
@@ -95,7 +108,9 @@
     "matured": "Scaduto",
     "previous": "Precedente",
     "next": "Successivo",
-    "page_of": "Pagina {page} di {total}"
+    "page_of": "Pagina {page} di {total}",
+    "error_ending": "Errore durante la chiusura dello stake",
+    "error_deferring": "Errore durante il differimento dello stake"
   },
   "rewards": {
     "title": "Ricompense",
@@ -109,7 +124,11 @@
     "estimated_reward": "Ricompensa Stimata",
     "weeks": "{weeks} settimane",
     "days": "{days} giorni",
-    "ready": "Pronto"
+    "ready": "Pronto",
+    "confirming": "Conferma in corso...",
+    "flushing": "Distribuzione in corso...",
+    "flush_success": "Ricompense distribuite con successo",
+    "flush_error": "Errore durante la distribuzione delle ricompense"
   },
   "chain_table": {
     "title": "Panoramica Multi-Chain",
@@ -154,6 +173,8 @@
     "retry": "Riprova",
     "copy": "Copia",
     "copied": "Copiato!",
+    "wallet_address": "Indirizzo Portafoglio",
+    "scan_to_send": "Scansiona per inviare token a questo indirizzo",
     "share": "Condividi",
     "close": "Chiudi",
     "confirm": "Conferma",

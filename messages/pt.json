@@ -9,7 +9,10 @@
     "stake": "Staking",
     "rewards": "Recompensas",
     "connect": "Conectar Carteira",
-    "disconnect": "Desconectar"
+    "disconnect": "Desconectar",
+    "copied": "Copiado!",
+    "copy_address": "Copiar Endereço",
+    "wallet_details": "Detalhes da Carteira"
   },
   "hero": {
     "title": "Renasça das Cinzas",
@@ -29,7 +32,10 @@
     "circulating": "Circulante",
     "supply_distribution": "Distribuição de Oferta",
     "inflation_rate": "Taxa de Inflação",
-    "active_stakes": "Stakes Ativos"
+    "active_stakes": "Stakes Ativos",
+    "projected_yield": "Rendimento Projetado",
+    "yield_empty": "Insira um valor e um prazo para ver o rendimento projetado",
+    "no_pool_data": "Nenhum dado do pool disponível"
   },
   "dashboard": {
     "title": "Painel",
@@ -47,7 +53,12 @@
     "max": "Máx",
     "balance": "Saldo",
     "success": "Queimados com sucesso {xen} XEN por {fenix} FENIX",
-    "error": "Erro ao queimar XEN"
+    "error": "Erro ao queimar XEN",
+    "confirming": "Confirmando...",
+    "approving": "Aprovando...",
+    "burning": "Queimando...",
+    "approval_confirmed": "Aprovação confirmada. Agora você pode queimar.",
+    "unsupported_network": "Por favor, mude para uma rede suportada"
   },
   "stake": {
     "title": "Staking de FENIX",
@@ -68,7 +79,9 @@
     "balance": "Saldo",
     "max": "Máx",
     "success": "Staking realizado com sucesso de {amount} FENIX por {term} dias",
-    "error": "Erro ao iniciar o stake"
+    "error": "Erro ao iniciar o stake",
+    "confirming": "Confirmando...",
+    "staking": "Iniciando stake..."
   },
   "stakes": {
     "title": "Seus Stakes",
@@ -95,7 +108,9 @@
     "matured": "Vencido",
     "previous": "Anterior",
     "next": "Próximo",
-    "page_of": "Página {page} de {total}"
+    "page_of": "Página {page} de {total}",
+    "error_ending": "Erro ao encerrar o stake",
+    "error_deferring": "Erro ao adiar o stake"
   },
   "rewards": {
     "title": "Recompensas",
@@ -109,7 +124,11 @@
     "estimated_reward": "Recompensa Estimada",
     "weeks": "{weeks} semanas",
     "days": "{days} dias",
-    "ready": "Pronto"
+    "ready": "Pronto",
+    "confirming": "Confirmando...",
+    "flushing": "Distribuindo...",
+    "flush_success": "Recompensas distribuídas com sucesso",
+    "flush_error": "Erro ao distribuir as recompensas"
   },
   "chain_table": {
     "title": "Visao Multi-Cadeia",
@@ -154,6 +173,8 @@
     "retry": "Tentar novamente",
     "copy": "Copiar",
     "copied": "Copiado!",
+    "wallet_address": "Endereço da Carteira",
+    "scan_to_send": "Escaneie para enviar tokens para este endereço",
     "share": "Compartilhar",
     "close": "Fechar",
     "confirm": "Confirmar",
