@@ -11,6 +11,7 @@ import {
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { ChainIcon } from "@/components/chain-icon";
 import { useFenixStats } from "@/hooks/use-fenix-contract";
 import {
   useAllChainsStats,
@@ -254,7 +255,12 @@ function MiniSupplyChart({ stats }: { stats: ChainStats }) {
   return (
     <Card variant="glow" className="group">
       <CardContent className="p-4">
-        <h3 className="mb-3 text-center text-sm font-semibold text-ash-900 dark:text-ash-100">
+        <h3 className="mb-3 flex items-center justify-center gap-2 text-sm font-semibold text-ash-900 dark:text-ash-100">
+          <ChainIcon
+            slug={chainConfig.iconSlug}
+            name={chainConfig.chain.name}
+            size={18}
+          />
           {chainConfig.chain.name}
         </h3>
 

@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { ChainIcon } from "@/components/chain-icon";
 import {
   Table,
   TableBody,
@@ -103,6 +104,7 @@ function ChainRow({ stats }: { stats: ChainStats }) {
       {/* Chain */}
       <td className="whitespace-nowrap px-3 py-3 sm:px-4">
         <div className="flex items-center gap-2">
+          <ChainIcon slug={chainConfig.iconSlug} name={chain.name} size={20} />
           <span className="text-sm font-semibold text-ash-900 dark:text-ash-100">
             {chain.name}
           </span>
@@ -226,6 +228,7 @@ function ChainCard({ stats }: { stats: ChainStats }) {
       <CardContent className="p-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
+            <ChainIcon slug={chainConfig.iconSlug} name={chain.name} size={20} />
             <span className="font-semibold text-ash-900 dark:text-ash-100">
               {chain.name}
             </span>

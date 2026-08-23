@@ -4,6 +4,7 @@ import { useAccount, useSwitchChain } from "wagmi";
 import { FENIX_CHAINS } from "@/config/chains";
 import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { ChainIcon } from "@/components/chain-icon";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,7 +24,15 @@ export function ChainSelector() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <button className="flex items-center gap-1.5 rounded-lg border border-ash-200 px-2.5 py-1.5 text-sm font-medium text-ash-700 transition-colors hover:bg-ash-100 dark:border-ash-700 dark:text-ash-300 dark:hover:bg-ash-800">
-          <span className="h-4 w-4 rounded-full bg-gradient-to-br from-fenix-400 to-fenix-600" />
+          {currentChain ? (
+            <ChainIcon
+              slug={currentChain.iconSlug}
+              name={currentChain.chain.name}
+              size={16}
+            />
+          ) : (
+            <span className="h-4 w-4 rounded-full bg-gradient-to-br from-fenix-400 to-fenix-600" />
+          )}
           <span className="hidden sm:inline">
             {currentChain?.chain.name || "Unknown"}
           </span>
@@ -48,9 +57,11 @@ export function ChainSelector() {
                 : "text-ash-700 hover:bg-ash-100 focus:bg-ash-100 dark:text-ash-300 dark:hover:bg-ash-800 dark:focus:bg-ash-800"
             )}
           >
-            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-gradient-to-br from-ash-200 to-ash-300 text-xs font-bold dark:from-ash-700 dark:to-ash-600">
-              {config.chain.name.charAt(0)}
-            </span>
+            <ChainIcon
+              slug={config.iconSlug}
+              name={config.chain.name}
+              size={24}
+            />
             <span>{config.chain.name}</span>
           </DropdownMenuItem>
         ))}
