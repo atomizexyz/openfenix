@@ -272,14 +272,32 @@ body {
     );
 }
 
-.hero-ember {
-  mix-blend-mode: multiply;
-  filter: saturate(1.25) contrast(1.08);
+/* Hero ambient orbs: transform-only, so the drift stays on the compositor. */
+.hero-orb {
+  animation: hero-orb-drift 20s ease-in-out infinite;
+  will-change: transform;
 }
 
-.dark .hero-ember {
-  mix-blend-mode: normal;
-  filter: none;
+@keyframes hero-orb-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  25% {
+    transform: translate3d(30px, -25px, 0) scale(1.1);
+  }
+  50% {
+    transform: translate3d(-20px, 15px, 0) scale(0.95);
+  }
+  75% {
+    transform: translate3d(15px, -10px, 0) scale(1.05);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-orb {
+    animation: none;
+  }
 }
 
 /* Scrollbar styling */
