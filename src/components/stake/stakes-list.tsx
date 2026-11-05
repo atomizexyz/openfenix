@@ -188,7 +188,7 @@ function StakeCard({
                 format={{ maximumFractionDigits: 4 }}
                 transformTiming={{ duration: 400, easing: "ease-out" }}
               />{" "}
-              <span className="text-ash-400">FENIX</span>
+              <span className="text-muted-foreground">FENIX</span>
             </p>
           </div>
 
@@ -445,7 +445,7 @@ export function StakesList() {
         <Card variant="glow">
           <CardContent className="flex flex-col items-center justify-center py-12 text-center">
             <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-muted">
-              <BarChart3 className="h-6 w-6 text-ash-400" />
+              <BarChart3 className="h-6 w-6 text-muted-foreground" />
             </div>
             <p className="text-sm font-medium text-muted-foreground">
               {t("no_stakes")}

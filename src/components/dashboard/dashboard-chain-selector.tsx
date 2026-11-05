@@ -48,7 +48,7 @@ export function DashboardChainSelector({
             )}
             <span className="truncate">{currentChain?.name ?? t("chain")}</span>
           </span>
-          <ChevronDown className="h-4 w-4 shrink-0 text-ash-400 transition-transform group-data-[state=open]:rotate-180" />
+          <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground transition-transform group-data-[state=open]:rotate-180" />
         </button>
       </DropdownMenuTrigger>
 

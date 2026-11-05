@@ -104,7 +104,7 @@ function PairRow({ pair }: { pair: DexScreenerPair }) {
             href={url}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-ash-400 transition-colors hover:text-fenix-500"
+            className="text-muted-foreground transition-colors hover:text-fenix-500"
           >
             <ExternalLink className="h-4 w-4" />
           </a>
@@ -140,7 +140,7 @@ function PairCard({ pair }: { pair: DexScreenerPair }) {
               href={url}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-ash-400 transition-colors hover:text-fenix-500"
+              className="text-muted-foreground transition-colors hover:text-fenix-500"
             >
               <ExternalLink className="h-4 w-4" />
             </a>

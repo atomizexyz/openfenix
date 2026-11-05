@@ -31,7 +31,7 @@ function CopyButton({ text }: { text: string }) {
   return (
     <button
       onClick={() => copy(text)}
-      className="inline-flex items-center text-ash-400 transition-colors hover:text-fenix-500"
+      className="inline-flex items-center text-muted-foreground transition-colors hover:text-fenix-500"
       title="Copy address"
     >
       {copied ? (
@@ -111,7 +111,7 @@ function AddressCell({
           href={addressUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-ash-400 transition-colors hover:text-fenix-500"
+          className="text-muted-foreground transition-colors hover:text-fenix-500"
         >
           <ExternalLink className="h-3 w-3" />
         </a>
@@ -220,7 +220,7 @@ function ChainRow({ stats }: { stats: ChainStats }) {
             />
           </span>
         ) : (
-          <span className="text-ash-400">--</span>
+          <span className="text-muted-foreground">--</span>
         )}
       </td>
 
@@ -240,7 +240,7 @@ function ChainRow({ stats }: { stats: ChainStats }) {
             />
           </span>
         ) : (
-          <span className="text-ash-400">--</span>
+          <span className="text-muted-foreground">--</span>
         )}
       </td>
 
@@ -260,7 +260,7 @@ function ChainRow({ stats }: { stats: ChainStats }) {
             />
           </span>
         ) : (
-          <span className="text-ash-400">--</span>
+          <span className="text-muted-foreground">--</span>
         )}
       </td>
 
@@ -277,7 +277,7 @@ function ChainRow({ stats }: { stats: ChainStats }) {
             />
           </span>
         ) : (
-          <span className="text-ash-400">--</span>
+          <span className="text-muted-foreground">--</span>
         )}
       </td>
 
