@@ -1,12 +1,8 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
-import {
-  BLINK_HOSTS,
-  WRITE_METHODS,
-  createChainTransport,
-  chainTransports,
-  hasMevProtection,
-} from "@/config/rpc";
+import type { HyperevmTransportValue } from "@bloxwap/smart-hyperevm";
+import type { Transport } from "viem";
 import { GENERATED_RPC_ENDPOINTS } from "@/config/rpc-endpoints.generated";
+import { FENIX_CHAINS } from "@/config/chains";
 
 /** Every chain FENIX is deployed on, live or not. */
 const ALL_CHAIN_IDS = [
@@ -28,24 +24,61 @@ const EXPECTED_CHAIN_IDS = ALL_CHAIN_IDS.filter(
 /** Chains BlinkLabs covers that also have a FENIX deployment. */
 const MEV_CHAIN_IDS = [1, 56, 8453];
 
-/** Reads a fallback transport's child transports without making a request. */
-function childConfigs(transport: ReturnType<typeof createChainTransport>) {
-  const { value } = transport({}) as {
-    value?: {
-      transports?: {
-        config: {
-          methods?: { include?: string[]; exclude?: string[] };
-          retryCount: number;
-          timeout?: number;
-        };
-      }[];
-    };
-  };
-  return (value?.transports ?? []).map((t) => t.config);
+type TransportInstance = ReturnType<Transport>;
+type RpcBody = { id: number; method: string };
+
+const smartValues = new Set<HyperevmTransportValue>();
+
+function instantiate(transport: Transport): TransportInstance {
+  const instance = transport({});
+  const value = instance.value as Partial<HyperevmTransportValue>;
+  if (typeof value.close === "function") {
+    smartValues.add(value as HyperevmTransportValue);
+  }
+  return instance;
+}
+
+function smartValue(instance: TransportInstance): HyperevmTransportValue {
+  return instance.value as HyperevmTransportValue;
+}
+
+function expectedReadUrls(chainId: number): string[] {
+  const chain = FENIX_CHAINS.find((candidate) => candidate.chain.id === chainId)?.chain;
+  if (!chain) throw new Error(`No test chain config for ${chainId}`);
+  const generated = GENERATED_RPC_ENDPOINTS[chainId]?.http ?? [];
+  return generated.length > 0 ? generated : [...chain.rpcUrls.default.http];
+}
+
+function fetchedUrl(input: unknown): string {
+  if (typeof input === "string") return input;
+  if (input instanceof URL) return input.href;
+  if (input instanceof Request) return input.url;
+  throw new Error("Unexpected fetch input");
+}
+
+function rpcBody(init?: RequestInit): RpcBody {
+  if (typeof init?.body !== "string") throw new Error("Expected a JSON-RPC body");
+  return JSON.parse(init.body) as RpcBody;
+}
+
+function jsonRpcResponse(body: RpcBody, result: string): Response {
+  return new Response(JSON.stringify({ jsonrpc: "2.0", id: body.id, result }), {
+    status: 200,
+    headers: { "Content-Type": "application/json" },
+  });
+}
+
+async function importRpc(blinkApiKey = "") {
+  vi.stubEnv("NEXT_PUBLIC_BLINK_API_KEY", blinkApiKey);
+  vi.resetModules();
+  return import("@/config/rpc");
 }
 
 afterEach(() => {
+  for (const value of smartValues) value.close();
+  smartValues.clear();
   vi.unstubAllEnvs();
+  vi.unstubAllGlobals();
   vi.resetModules();
 });
 
@@ -54,7 +87,7 @@ describe("GENERATED_RPC_ENDPOINTS", () => {
     for (const id of ALL_CHAIN_IDS) {
       expect(GENERATED_RPC_ENDPOINTS[id]).toBeDefined();
     }
-    expect(Object.keys(GENERATED_RPC_ENDPOINTS)).toHaveLength(12);
+    expect(Object.keys(GENERATED_RPC_ENDPOINTS)).toHaveLength(ALL_CHAIN_IDS.length);
   });
 
   it("only lists https endpoints", () => {
@@ -75,116 +108,172 @@ describe("GENERATED_RPC_ENDPOINTS", () => {
 });
 
 describe("createChainTransport", () => {
-  it("returns a transport for every live chain", () => {
+  it("returns a working smart transport factory for every live chain", async () => {
+    const { createChainTransport } = await importRpc();
     for (const id of EXPECTED_CHAIN_IDS) {
-      expect(typeof createChainTransport(id)).toBe("function");
+      const transport = createChainTransport(id);
+      expect(typeof transport).toBe("function");
+      expect(instantiate(transport).config.type).toBe("smartHyperevm");
     }
   });
 
-  it("throws for a chain FENIX is not deployed on", () => {
+  it("exposes every configured endpoint and the smart lifecycle API without Blink", async () => {
+    const { createChainTransport } = await importRpc();
+    for (const id of EXPECTED_CHAIN_IDS) {
+      const instance = instantiate(createChainTransport(id));
+      const value = smartValue(instance);
+      const urls = expectedReadUrls(id);
+
+      expect(instance.config.type).toBe("smartHyperevm");
+      expect(value.endpoints).toHaveLength(urls.length);
+      for (const [index, endpoint] of value.endpoints.entries()) {
+        const configuredUrl = urls[index]!;
+        expect([configuredUrl, new URL(configuredUrl).origin]).toContain(endpoint.url);
+      }
+      expect(value.snapshot()).toHaveLength(urls.length);
+      expect(typeof value.cacheStats).toBe("function");
+      expect(value.cacheStats()).toMatchObject({
+        hits: 0,
+        misses: 0,
+        refreshes: 0,
+        entries: 0,
+      });
+      expect(typeof value.close).toBe("function");
+    }
+  });
+
+  it("always configures at least one endpoint, even where the scan found none", async () => {
+    const { createChainTransport } = await importRpc();
+    for (const id of EXPECTED_CHAIN_IDS) {
+      expect(smartValue(instantiate(createChainTransport(id))).endpoints.length).toBeGreaterThan(0);
+    }
+  });
+
+  it("throws for a chain FENIX is not deployed on", async () => {
+    const { createChainTransport } = await importRpc();
     expect(() => createChainTransport(999999)).toThrow(
       "No RPC config for chain 999999",
     );
   });
-
-  it("always produces at least one endpoint, even where the scan found none", () => {
-    // Evmos and Dogechain have no reachable public RPCs; they must still fall
-    // back to viem's defaults rather than yielding an empty fallback list.
-    for (const id of EXPECTED_CHAIN_IDS) {
-      expect(childConfigs(createChainTransport(id)).length).toBeGreaterThan(0);
-    }
-  });
-});
-
-describe("per-endpoint retry and timeout budget", () => {
-  // These lock the notes on createChainTransport. Both settings look like tail
-  // control and are the opposite: `fallback` already hands every child
-  // `retryCount: 0`, and `http` lets a config value override it, so a
-  // retryCount here doubles the attempts per endpoint instead of capping them
-  // -- including re-sending a signed transaction on the chains where the read
-  // transports carry every method.
-  it("gives every endpoint exactly one attempt per fallback pass", () => {
-    for (const id of EXPECTED_CHAIN_IDS) {
-      for (const config of childConfigs(createChainTransport(id))) {
-        expect(config.retryCount).toBe(0);
-      }
-    }
-  });
-
-  it("never tightens viem's per-endpoint budget", () => {
-    // viem's own default is 10s. Cutting below it turns a slow-but-healthy
-    // endpoint into a hard failure, and Ethereum PoW (1 endpoint) and OKC (2)
-    // have no fast sibling to fall through to.
-    for (const id of EXPECTED_CHAIN_IDS) {
-      for (const config of childConfigs(createChainTransport(id))) {
-        expect(config.timeout).toBeGreaterThanOrEqual(10_000);
-      }
-    }
-  });
-
-  it("keeps the write path on the same budget as everything else", async () => {
-    vi.stubEnv("NEXT_PUBLIC_BLINK_API_KEY", "test-key");
-    vi.resetModules();
-    const rpc = await import("@/config/rpc");
-
-    // Polygon has no Blink endpoint, so its read transports are also its write
-    // transports; nothing may abort or re-send a broadcast on them.
-    for (const config of childConfigs(rpc.createChainTransport(137))) {
-      expect(config.methods).toBeUndefined();
-      expect(config.retryCount).toBe(0);
-      expect(config.timeout).toBeGreaterThanOrEqual(10_000);
-    }
-  });
 });
 
 describe("MEV-protected writes", () => {
-  it("covers exactly the FENIX chains BlinkLabs supports", () => {
+  it("covers exactly the FENIX chains BlinkLabs supports", async () => {
+    const { BLINK_HOSTS } = await importRpc();
     expect(Object.keys(BLINK_HOSTS).map(Number).sort((a, b) => a - b)).toEqual(
       MEV_CHAIN_IDS,
     );
   });
 
-  it("is inert without an API key", () => {
+  it("is inert without an API key", async () => {
+    const { createChainTransport, hasMevProtection } = await importRpc();
     for (const id of MEV_CHAIN_IDS) {
       expect(hasMevProtection(id)).toBe(false);
+      expect(instantiate(createChainTransport(id)).config.type).toBe("smartHyperevm");
     }
   });
 
-  it("routes only write methods to Blink and excludes them elsewhere", async () => {
-    vi.stubEnv("NEXT_PUBLIC_BLINK_API_KEY", "test-key");
-    vi.resetModules();
-    const rpc = await import("@/config/rpc");
+  it("adds Blink to one top-level smart transport on every protected chain", async () => {
+    const { BLINK_HOSTS, createChainTransport, hasMevProtection } =
+      await importRpc("test-key");
 
-    const configs = childConfigs(rpc.createChainTransport(1));
-    const [mev, ...reads] = configs;
+    for (const id of MEV_CHAIN_IDS) {
+      expect(hasMevProtection(id)).toBe(true);
+      const instance = instantiate(createChainTransport(id));
+      const endpoints = smartValue(instance).endpoints;
+      const publicUrls = expectedReadUrls(id);
+      const blinkUrl = `https://${BLINK_HOSTS[id]}.blinklabs.xyz/v1/test-key`;
 
-    expect(mev.methods).toEqual({ include: [...WRITE_METHODS] });
-    expect(reads.length).toBeGreaterThan(0);
-    for (const read of reads) {
-      expect(read.methods).toEqual({ exclude: [...WRITE_METHODS] });
+      expect(instance.config.type).toBe("smartHyperevm");
+      expect(endpoints).toHaveLength(publicUrls.length + 1);
+      expect(endpoints[0]?.url).toBe(new URL(blinkUrl).origin);
+      for (const [index, configuredUrl] of publicUrls.entries()) {
+        expect([configuredUrl, new URL(configuredUrl).origin]).toContain(
+          endpoints[index + 1]?.url,
+        );
+      }
+    }
+  });
+
+  it("sends writes only to Blink and reads only to public RPCs", async () => {
+    const transactionHash = `0x${"ab".repeat(32)}`;
+    const fetchMock = vi.fn(async (_input: unknown, init?: RequestInit) => {
+      const body = rpcBody(init);
+      if (body.method === "eth_chainId") return jsonRpcResponse(body, "0x3e7");
+      if (body.method === "eth_sendRawTransaction") {
+        return jsonRpcResponse(body, transactionHash);
+      }
+      if (body.method === "eth_getBalance") return jsonRpcResponse(body, "0x1");
+      throw new Error(`Unexpected JSON-RPC method: ${body.method}`);
+    });
+    vi.stubGlobal("fetch", fetchMock);
+    const { createChainTransport } = await importRpc("test-key");
+    const ethereum = instantiate(createChainTransport(1));
+    const blinkUrl = "https://eth.blinklabs.xyz/v1/test-key";
+
+    await expect(
+      ethereum.request({ method: "eth_sendRawTransaction", params: ["0x1234"] }),
+    ).resolves.toBe(transactionHash);
+    expect(fetchMock.mock.calls.map(([input]) => fetchedUrl(input))).toEqual([
+      blinkUrl,
+    ]);
+
+    fetchMock.mockClear();
+    await expect(
+      ethereum.request({
+        method: "eth_getBalance",
+        params: ["0x0000000000000000000000000000000000000001", "latest"],
+      }),
+    ).resolves.toBe("0x1");
+
+    const readUrls = fetchMock.mock.calls.map(([input]) => fetchedUrl(input));
+    const readMethods = fetchMock.mock.calls.map(([, init]) => rpcBody(init).method);
+    expect(readUrls.length).toBeGreaterThan(0);
+    expect(readMethods).toContain("eth_getBalance");
+    expect(readMethods).not.toContain("eth_sendRawTransaction");
+    const normalizedPublicUrls = expectedReadUrls(1).map((url) => new URL(url).href);
+    for (const url of readUrls) {
+      expect(normalizedPublicUrls).toContain(new URL(url).href);
+      expect(url).not.toBe(blinkUrl);
     }
   });
 
   it("leaves unprotected chains able to broadcast on public RPCs", async () => {
-    vi.stubEnv("NEXT_PUBLIC_BLINK_API_KEY", "test-key");
-    vi.resetModules();
-    const rpc = await import("@/config/rpc");
+    const transactionHash = `0x${"ab".repeat(32)}`;
+    const fetchMock = vi.fn(async (_input: unknown, init?: RequestInit) => {
+      const body = rpcBody(init);
+      return jsonRpcResponse(
+        body,
+        body.method === "eth_chainId" ? "0x3e7" : transactionHash,
+      );
+    });
+    vi.stubGlobal("fetch", fetchMock);
+    const { createChainTransport } = await importRpc("test-key");
 
-    // Polygon has no Blink endpoint, so nothing may filter out writes.
-    for (const config of childConfigs(rpc.createChainTransport(137))) {
-      expect(config.methods).toBeUndefined();
+    const polygon = instantiate(createChainTransport(137));
+    await expect(
+      polygon.request({ method: "eth_sendRawTransaction", params: ["0x1234"] }),
+    ).resolves.toBe(transactionHash);
+    const urls = fetchMock.mock.calls.map(([input]) => fetchedUrl(input));
+    const normalizedPublicUrls = expectedReadUrls(137).map((url) => new URL(url).href);
+    expect(urls.length).toBeGreaterThan(0);
+    for (const url of urls) {
+      expect(normalizedPublicUrls).toContain(new URL(url).href);
     }
   });
 });
 
 describe("chainTransports", () => {
-  it("has a transport for every live chain and none for disabled ones", () => {
+  it("has a transport for every live chain and none for disabled ones", async () => {
+    const { chainTransports } = await importRpc();
     for (const id of EXPECTED_CHAIN_IDS) {
       expect(typeof chainTransports[id]).toBe("function");
     }
     for (const id of DISABLED_CHAIN_IDS) {
       expect(chainTransports[id]).toBeUndefined();
     }
-    expect(Object.keys(chainTransports)).toHaveLength(EXPECTED_CHAIN_IDS.length);
+    expect(Object.keys(chainTransports).map(Number).sort((a, b) => a - b)).toEqual(
+      [...EXPECTED_CHAIN_IDS].sort((a, b) => a - b),
+    );
   });
 });

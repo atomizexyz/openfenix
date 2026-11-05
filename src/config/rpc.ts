@@ -1,4 +1,5 @@
-import { http, fallback } from "viem";
+import { smartHyperevm } from "@bloxwap/smart-hyperevm/transport";
+import { http } from "viem";
 import type { Transport } from "viem";
 import { GENERATED_RPC_ENDPOINTS } from "./rpc-endpoints.generated";
 import { FENIX_CHAINS } from "./chains";
@@ -6,7 +7,7 @@ import { FENIX_CHAINS } from "./chains";
 /**
  * JSON-RPC methods that broadcast a signed transaction. These are the only ones
  * that can be sandwiched, so they are the only ones routed through MEV
- * protection; everything else reads from the fastest public endpoint.
+ * protection; everything else uses the public read transport.
  */
 export const WRITE_METHODS = [
   "eth_sendRawTransaction",
@@ -50,11 +51,8 @@ export function hasMevProtection(chainId: number): boolean {
 }
 
 /**
- * Read endpoints for a chain, fastest first.
- *
- * Falls back to whatever viem ships when the scan found nothing usable, so a
- * chain whose public RPCs have gone dark still produces a valid transport
- * instead of throwing on an empty fallback list.
+ * Falls back to viem's chain defaults when the scan found no usable endpoints,
+ * so a chain whose scanned RPCs are unavailable still gets a valid transport.
  */
 function readUrls(chainId: number): string[] {
   const chain = FENIX_CHAINS.find((c) => c.chain.id === chainId)?.chain;
@@ -65,61 +63,41 @@ function readUrls(chainId: number): string[] {
 }
 
 /**
- * Retry and timeout budget: viem's, untouched. Verified against the pinned
- * viem 2.55.19, because the obvious "tuning" here is all backwards.
- *
- * - `fallback` instantiates every child as `transports[i]({ ...rest, chain,
- *   retryCount: 0, timeout })`, so endpoints inside a fallback already get
- *   exactly one attempt each. `http` resolves `config.retryCount ??
- *   retryCount_`, i.e. a value passed to `http()` OVERRIDES that 0 -- adding
- *   `retryCount: 1` here does not bound anything, it doubles the attempts per
- *   endpoint (6s + 150ms backoff + 6s instead of one pass) and doubles the
- *   request count per refetch.
- * - `http` already defaults to `timeout: 10_000`, not "no timeout"
- *   (`timeout_ ?? config.timeout ?? 10_000`, and no client-level timeout is
- *   set). Anything tighter is a strict downgrade for a slow-but-healthy
- *   endpoint, and Ethereum PoW (1 endpoint) and OKC (2) have no fast sibling
- *   to fall through to -- the chain just goes red where it used to render.
- * - Both settings apply to `eth_sendRawTransaction` on the nine chains with no
- *   Blink endpoint, where `methods` is undefined and the read transports carry
- *   every method. A timeout there aborts a broadcast, and a retry re-sends a
- *   signed transaction -- exactly the "user thinks it failed but it landed"
- *   case the MEV carve-out was supposed to prevent.
- *
- * The remaining tail cost is the outer `fallback`'s own default `retryCount: 3`
- * (createTransport's default), which re-walks the whole endpoint list four
- * times. Deliberately left alone: it is the only thing that retries a rate
- * limit or a network blip, and on the one- and two-endpoint chains there is no
- * breadth to substitute for it. Bounding it is a behaviour change that needs
- * its own measurement, not a rider on a rendering change.
+ * Adaptive RPC routing with the default 10s attempt budget. Caching and
+ * latest-block pinning stay off to preserve vanilla reads on reorg-capable
+ * chains; 30s head probes retain lag scoring with less browser traffic.
  */
 export function createChainTransport(chainId: number): Transport {
   const readTransportUrls = readUrls(chainId);
   const mevUrl = blinkUrl(chainId);
   const config = GENERATED_RPC_ENDPOINTS[chainId];
 
-  // Only batch where every kept endpoint accepted a JSON-RPC batch during the
-  // scan; a fallback list is only as batchable as its least capable member.
+  // Batch only when the scan confirmed support at every kept endpoint.
   const batch = config?.batch ? ({ wait: 16 } as const) : false;
 
-  // Do not add `retryCount` or `timeout` here -- see the note above. Locked by
-  // "never tightens viem's per-endpoint budget" in src/__tests__/rpc.test.ts.
-  const readTransports = readTransportUrls.map((url) =>
-    http(url, {
-      batch,
-      // With protection available, public endpoints must never see a raw
-      // transaction -- otherwise a Blink outage would silently downgrade the
-      // user to an unprotected broadcast.
-      methods: mevUrl ? { exclude: [...WRITE_METHODS] } : undefined,
-    }),
-  );
+  const endpoints = mevUrl
+    ? [
+        http(mevUrl, { methods: { include: [...WRITE_METHODS] } }),
+        ...readTransportUrls.map((url) =>
+          http(url, {
+            batch,
+            // Method routing prevents public fallback for protected writes.
+            methods: { exclude: [...WRITE_METHODS] },
+          }),
+        ),
+      ]
+    : readTransportUrls;
 
-  if (!mevUrl) return fallback(readTransports);
-
-  return fallback([
-    http(mevUrl, { methods: { include: [...WRITE_METHODS] } }),
-    ...readTransports,
-  ]);
+  return smartHyperevm({
+    endpoints,
+    batch: mevUrl ? undefined : batch,
+    cache: false,
+    pinLatest: false,
+    headLag: { probeInterval: 30_000 },
+    // Private writes never use read retry/racing; raw writes may rebroadcast.
+    nonIdempotentMethods: WRITE_METHODS,
+    rebroadcastRawTransactions: true,
+  });
 }
 
 export const chainTransports: Record<number, Transport> = Object.fromEntries(
