@@ -56,67 +56,42 @@ function CustomTooltip({
   );
 }
 
-function renderCustomLabel({
-  cx,
-  cy,
-  midAngle,
-  innerRadius,
-  outerRadius,
-  percent,
-}: PieLabelRenderProps) {
-  if (midAngle === undefined || percent === undefined || percent < 0.05) {
-    return null;
-  }
+/** Percentage labels drawn inside each slice; tiny slices get none. */
+function makeSliceLabel(minPercent: number, className: string) {
+  return function SliceLabel({
+    cx,
+    cy,
+    midAngle,
+    innerRadius,
+    outerRadius,
+    percent,
+  }: PieLabelRenderProps) {
+    if (midAngle === undefined || percent === undefined || percent < minPercent) {
+      return null;
+    }
 
-  const RADIAN = Math.PI / 180;
-  const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-  const x = cx + radius * Math.cos(-midAngle * RADIAN);
-  const y = cy + radius * Math.sin(-midAngle * RADIAN);
+    const RADIAN = Math.PI / 180;
+    const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+    const x = cx + radius * Math.cos(-midAngle * RADIAN);
+    const y = cy + radius * Math.sin(-midAngle * RADIAN);
 
-  return (
-    <text
-      x={x}
-      y={y}
-      fill="white"
-      textAnchor="middle"
-      dominantBaseline="central"
-      className="text-xs font-semibold"
-    >
-      {`${(percent * 100).toFixed(0)}%`}
-    </text>
-  );
+    return (
+      <text
+        x={x}
+        y={y}
+        fill="white"
+        textAnchor="middle"
+        dominantBaseline="central"
+        className={className}
+      >
+        {`${(percent * 100).toFixed(0)}%`}
+      </text>
+    );
+  };
 }
 
-function renderMiniLabel({
-  cx,
-  cy,
-  midAngle,
-  innerRadius,
-  outerRadius,
-  percent,
-}: PieLabelRenderProps) {
-  if (midAngle === undefined || percent === undefined || percent < 0.08) {
-    return null;
-  }
-
-  const RADIAN = Math.PI / 180;
-  const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-  const x = cx + radius * Math.cos(-midAngle * RADIAN);
-  const y = cy + radius * Math.sin(-midAngle * RADIAN);
-
-  return (
-    <text
-      x={x}
-      y={y}
-      fill="white"
-      textAnchor="middle"
-      dominantBaseline="central"
-      className="text-[10px] font-semibold"
-    >
-      {`${(percent * 100).toFixed(0)}%`}
-    </text>
-  );
-}
+const renderCustomLabel = makeSliceLabel(0.05, "text-xs font-semibold");
+const renderMiniLabel = makeSliceLabel(0.08, "text-[10px] font-semibold");
 
 function buildChartData(
   t: ReturnType<typeof useTranslations>,
@@ -249,17 +224,19 @@ export function SupplyChart({ chainId, className }: SupplyChartProps) {
  */
 const UNAVAILABLE_RING = [{ name: "unavailable", value: 1 }];
 
+/** Mini donuts never resize: outer radius 58 plus a little room. */
+const MINI_CHART_SIZE = 136;
+
 function UnavailableSupplyChart() {
   const t = useTranslations("chain_table");
 
   return (
     <div className="flex flex-col items-center">
       <div
-        className="w-full text-ash-200 dark:text-ash-700"
+        className="flex h-[140px] w-full items-center justify-center text-ash-200 dark:text-ash-700"
         aria-hidden="true"
       >
-        <ResponsiveContainer width="100%" height={140}>
-          <PieChart>
+        <PieChart width={MINI_CHART_SIZE} height={MINI_CHART_SIZE}>
             <Pie
               data={UNAVAILABLE_RING}
               cx="50%"
@@ -271,8 +248,7 @@ function UnavailableSupplyChart() {
               fill="currentColor"
               isAnimationActive={false}
             />
-          </PieChart>
-        </ResponsiveContainer>
+        </PieChart>
       </div>
       {/* Reuses the string the chain table already ships in all 21 locales. */}
       <p className="text-xs text-muted-foreground">{t("unavailable")}</p>
@@ -288,8 +264,6 @@ function MiniSupplyChart({ stats }: { stats: ChainStats }) {
     () => buildChartData(t, totalSupply, equityPoolSupply, rewardPoolSupply),
     [totalSupply, equityPoolSupply, rewardPoolSupply, t],
   );
-
-  const filterId = `miniGlow-${chainConfig.chain.id}`;
 
   return (
     <Card variant="glow" className="group">
@@ -315,19 +289,8 @@ function MiniSupplyChart({ stats }: { stats: ChainStats }) {
           </div>
         ) : (
           <div className="flex flex-col items-center">
-            <ResponsiveContainer width="100%" height={140}>
-              <PieChart>
-                <defs>
-                  <filter id={filterId}>
-                    <feDropShadow
-                      dx="0"
-                      dy="0"
-                      stdDeviation="3"
-                      floodColor={BRAND_COLORS.primary}
-                      floodOpacity="0.25"
-                    />
-                  </filter>
-                </defs>
+            <div className="flex h-[140px] w-full items-center justify-center">
+              <PieChart width={MINI_CHART_SIZE} height={MINI_CHART_SIZE}>
                 <Pie
                   data={data}
                   cx="50%"
@@ -339,7 +302,6 @@ function MiniSupplyChart({ stats }: { stats: ChainStats }) {
                   stroke="none"
                   label={renderMiniLabel}
                   labelLine={false}
-                  filter={`url(#${filterId})`}
                 >
                   {data.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={entry.fill} />
@@ -347,7 +309,7 @@ function MiniSupplyChart({ stats }: { stats: ChainStats }) {
                 </Pie>
                 <Tooltip content={<CustomTooltip />} />
               </PieChart>
-            </ResponsiveContainer>
+            </div>
 
             <div className="mt-1 flex flex-wrap justify-center gap-x-3 gap-y-1">
               {data.map((entry) => (
@@ -377,7 +339,7 @@ export function ChainSupplyGrid() {
 
   return (
     <section className="space-y-6">
-      <div className="text-center">
+      <div>
         <h2 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
           {t("supply_distribution")}
         </h2>

@@ -63,6 +63,7 @@
     "error_exceeds_balance": "Miktar XEN bakiyenizi aşıyor"
   },
   "stake": {
+    "unsupported_network": "Lütfen desteklenen bir ağa geçin",
     "title": "FENIX Stake Et",
     "description": "Özkaynak tabanlı dağıtım yoluyla getiri kazanmak için FENIX tokenlarınızı kilitleyin",
     "amount_label": "FENIX Miktarı",

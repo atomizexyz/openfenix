@@ -14,19 +14,21 @@ import {
   CheckCircle,
   AlertCircle,
 } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { FlushCountdown } from "@/components/ui/flush-countdown";
-import { useNowSeconds } from "@/hooks/use-countdown";
+import { useHasPassed } from "@/hooks/use-countdown";
 import {
   useFlushRewards,
   useFenixStats,
   useUserStakes,
   useCooldownUnlockTs,
+  ALL_STAKES,
 } from "@/hooks/use-fenix-contract";
 import { formatEther } from "@/lib/utils";
+import { StakeStatus, type StakeInfo } from "@/types/contracts";
 
 interface StatRowProps {
   icon: React.ReactNode;
@@ -64,8 +66,12 @@ export function RewardsPanel() {
     isLoading: isStatsLoading,
   } = useFenixStats(chain?.id);
 
+  // Every stake, not the first page: "your share" sums all of them, so a
+  // wallet with more than one page of stakes would otherwise be understated.
   const { data: userStakes, isLoading: isStakesLoading } = useUserStakes(
-    chain?.id
+    chain?.id,
+    0,
+    ALL_STAKES
   );
 
   const { data: cooldownUnlockTs, isLoading: isCooldownLoading } =
@@ -84,8 +90,6 @@ export function RewardsPanel() {
     return Number(cooldownUnlockTs);
   }, [cooldownUnlockTs]);
 
-  // countdown is now rendered as a component, not a string
-
   const equityPoolNum = useMemo(() => {
     if (equityPoolSupply === undefined) return 0;
     return parseFloat(formatEther(equityPoolSupply));
@@ -102,19 +106,17 @@ export function RewardsPanel() {
       return { sharePercent: 0, estimatedReward: 0 };
     }
 
-    const rawStakes = userStakes as unknown;
-    if (!Array.isArray(rawStakes) || rawStakes.length === 0) {
+    if (userStakes.length === 0) {
       return { sharePercent: 0, estimatedReward: 0 };
     }
 
-    const totalUserShares = rawStakes.reduce(
-      (acc: bigint, s: { shares: bigint; status: number }) => {
-        // Only count active and deferred stakes (status 0 or 1)
-        if (s.status <= 1) return acc + s.shares;
-        return acc;
-      },
-      0n
-    );
+    // Only stakes still in the pool earn: active and deferred ones.
+    const totalUserShares = userStakes.reduce((acc: bigint, stake) => {
+      const { status, shares } = stake as Pick<StakeInfo, "status" | "shares">;
+      return status === StakeStatus.Active || status === StakeStatus.Deferred
+        ? acc + shares
+        : acc;
+    }, 0n);
 
     const totalPoolShares = equityPoolTotalShares;
     if (!totalPoolShares || totalPoolShares === 0n) {
@@ -136,8 +138,10 @@ export function RewardsPanel() {
 
   const isProcessing = isPending || isConfirming;
   const isLoading = isStatsLoading || isStakesLoading;
-  const now = useNowSeconds();
-  const isCooldownActive = nextFlushTs > 0 && nextFlushTs > now;
+  // Flips once when the cooldown ends, instead of re-rendering every second;
+  // the visible countdown ticks inside <FlushCountdown> on its own.
+  const cooldownOver = useHasPassed(nextFlushTs);
+  const isCooldownActive = nextFlushTs > 0 && !cooldownOver;
 
   return (
     <Card variant="glow" className="w-full max-w-lg">
@@ -146,7 +150,6 @@ export function RewardsPanel() {
           <Trophy className="h-5 w-5 text-fenix-500" />
           {t("title")}
         </CardTitle>
-        <CardDescription>{t("description")}</CardDescription>
       </CardHeader>
 
       <CardContent className="space-y-1">

@@ -63,6 +63,7 @@
     "error_exceeds_balance": "数量超过您的 XEN 余额"
   },
   "stake": {
+    "unsupported_network": "请切换到受支持的网络",
     "title": "质押FENIX",
     "description": "锁定您的FENIX代币，通过基于权益的分配赚取收益",
     "amount_label": "FENIX数量",

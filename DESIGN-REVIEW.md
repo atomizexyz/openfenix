@@ -1,162 +1,161 @@
-# Design Review — Fenix Protocol
+# Design Review — Fenix Protocol (second pass)
 
-Reviewed against the 30-check [zandesign catalog](https://x.com/zander_supafast).
-Stack: Next.js 15 (static export) · Tailwind v4 · shadcn/ui + Radix · next-themes ·
-framer-motion. Surfaces: `/` (SEO root), dashboard home, burn, stake, rewards, dashboard.
+Reviewed against the zandesign check catalog (45 checks). Stack: Next.js 16 static
+export · Tailwind v4 · shadcn/ui + Radix · next-themes · framer-motion · three.js (hero).
+Surfaces: home, burn, stake, rewards, dashboard.
 
-**Method note:** Phase 1 (static) and Phase 3 (flow) ran in full. Phase 2 (visual) is
-**partial** — the Chrome screenshot bridge failed repeatedly mid-review, so visual
-findings draw on captures taken earlier in the same session (burn, dashboard, home,
-footer, light + dark, desktop + the `ja` locale) rather than a fresh systematic sweep at
-390px/desktop × light/dark. Findings below that depend on unverified pixels are marked
-**[visual unconfirmed]**.
+**Method.** Phase 1 (static) ran across all of `src/`. Phase 2 (visual) ran in Chrome
+on every route at desktop (1200px) and 390px, in light and dark mode. Phase 3 (flow) was
+partial: no wallet was connected, so the burn/stake/flush transactions themselves were
+not driven. Their success, refresh and network-guard paths were fixed from code and are
+covered by the existing flow tests (198/198 pass). A separate read-only agent ran a
+performance and code-health audit; its findings are under *Outside catalog*.
 
 ## Verdict
 
-The component layer is genuinely good — a properly tiered six-variant `Button` with
-hover/active states, skeletons instead of spinners everywhere, real on-chain data, one
-icon library. The biggest lever is not any single screen: it is that **the design system
-is defined but not used**. `globals.css` ships a complete shadcn semantic token layer
-(`--background`, `--muted-foreground`, `--destructive`), and components ignore it, hand-
-writing `text-ash-500 dark:text-ash-400` pairs 261 times. Dark mode is therefore
-maintained by hand in every file rather than aliased once. Fixing that collapses three
-separate check failures at once and is the highest-leverage change available.
+The first pass fixed the structure. This pass found that what was left was mostly
+**invisible cost and quiet duplication**, not missing design. Examples: a hero animating
+56 DOM nodes with blurred box-shadows; a skeleton shimmer that runs but never shows;
+twenty status dots pinging forever; every page saying its title twice. The biggest lever
+now is the semantic-token sweep: 90 raw `ash-*` primitives and 66 `dark:` overrides are
+still maintained by hand in component files.
 
 ## Findings
 
-| ID | Check | Where | Finding | Fix |
+| Sev | Check | Where | Finding | Status |
 |---|---|---|---|---|
-| P0 | FORM-1 | `burn-form.tsx:132`, `stake-form.tsx:187` | `Label` has no `htmlFor`; `Input` has no `id` — no programmatic association | Add `id`/`htmlFor` pair |
-| P1 | COL-1/COL-2 | 39 component files | Semantic tokens bypassed: 261 `dark:` overrides vs 13 token uses; 524 raw `ash-*` refs | Sweep to semantic tokens |
-| P1 | TYPE-1 | `burn`, `stake`, `rewards` `/page.tsx`, `hero-section.tsx:202` | Multi-line centered copy stacks | Left-align headers |
-| P1 | COL-4 | `ui/button.tsx` destructive variant | Danger colour **is** the brand colour (`ember-500`) | Neutral danger, or shift brand |
-| P1 | LAY-2 | 15 `border border-ash-*` containers | Borders used to build hierarchy | Spacing/surface shift instead |
-| P1 | BTN-1 | header + every page CTA | Two brand-gradient-filled buttons co-visible | Demote header CTA |
-| P2 | COL-3 | `globals.css:13,36` | `--primary: #f97316` identical in both themes | Warm ≈70% in dark |
-| P2 | TYPE-2 | `liquidity-pairs.tsx:252-270`, `dashboard-chain-selector.tsx:59` | `uppercase` at 12px | Sentence case or drop to 11px |
-| P2 | MOT-1 | App Router, no transitions | Route changes are hard cuts | Drill transitions |
-| P2 | MOT-6 | `stakes-list.tsx:430` | Empty state has icon + text but no action | Add a CTA |
-| P2 | BTN-3 | `ui/button.tsx` sizes | No `min-width` token | Add `min-w-[96px]` |
+| P0 | TYPE-3 | 14 files, 26 sites | `text-ash-400` (and `ash-400`/`ash-500` pairs) for stat labels, units, captions, footer: **2.5:1 on white**, 3.9:1 on the dark card | **Fixed** → `text-muted-foreground` (4.74:1 / 7.9:1) |
+| P1 | HIER-2 | burn, stake, rewards | The card repeats the page's `h1` and description verbatim, directly under it | **Fixed** (burn, stake); rewards keeps its card title, see below |
+| P1 | TYPE-1 | `chain-table`, `liquidity-pairs`, `equity-pool-chart` | Home section headers centre a heading + subtitle over left-aligned tables; the utility pages were already left-aligned | **Fixed**: left-aligned; the hero stays centred (sanctioned exception) |
+| P1 | MOT-5 | `ui/skeleton.tsx` | The shimmer animated `background-position` on a gradient the size of its box: 150 infinite animations, nothing visible | **Fixed**: `translateX` sweep, `motion-reduce` aware |
+| P2 | MOT-3 | `chain-table.tsx` StatusDot | Every healthy chain pinged forever, so ten equal motions competed with the one that matters (loading) | **Fixed**: healthy = steady dot; only loading pings |
+| P2 | COL-1 | 90 `ash-*` refs, 66 `dark:` overrides | Pairs with no exact semantic token (`text-ash-700 dark:text-ash-300`, `border-ash-100 dark:border-ash-800`, …) | Open: see systemic recommendations |
+| P2 | HIER-2 | `rewards-panel.tsx` | Card title "Rewards" still echoes the `h1`; it stays for balance beside "Projected Yield" | Open: needs a new string in 21 locales |
 
-## P0 / P1 detail
+### P0 — TYPE-3: grey text below AA
 
-### FORM-1 — labels are visible but not associated (P0)
-
-Both money inputs render a real `<Label>` above the field, so the *usability* half of
-FORM-1 passes — this is not placeholder-as-label. The failure is programmatic:
-
-```tsx
-<Label className="...">{t("amount_label")}</Label>   // no htmlFor
-<Input type="text" inputMode="decimal" ... />         // no id
-```
-
-Screen readers announce the field unlabelled, and clicking the label does not focus the
-input. On a form that moves money, that is the highest-cost defect on the list.
+`ash-400` (#a3a3a3) on white is 2.5:1, under the 4.5:1 floor for body text. It was used
+for the labels that carry meaning: stat-card captions, chart descriptions, `d/h/m/s` units,
+the FENIX unit suffix, the footer copyright, and link icons. The dark-mode half of the
+`ash-400 dark:ash-500` pair failed as well (3.9:1 on `#171717`).
 
 ```diff
--<Label className="...">{t("amount_label")}</Label>
--<Input type="text" inputMode="decimal" ... />
-+<Label htmlFor="burn-amount" className="...">{t("amount_label")}</Label>
-+<Input id="burn-amount" type="text" inputMode="decimal" ... />
+-<p className="mt-1 text-sm text-ash-400 dark:text-ash-500">
++<p className="mt-1 text-sm text-muted-foreground">
 ```
 
-Source: [1874759761180365226](https://x.com/zander_supafast/status/1874759761180365226)
+The token is `ash-500`/`ash-400` (4.74:1 light, 7.9:1 dark), so the same change fixes
+both themes. Source: [1968252670604685678](https://x.com/zander_supafast/status/1968252670604685678)
 
-### COL-1 + COL-2 — the token layer exists and is unused (P1, systemic)
+> Note: this change reached `main` before the rest of this pass, as `1e6cbbf`. Its commit
+> message ("normalize utility class ordering") does not describe it.
 
-`globals.css` defines a full semantic layer for light and dark. Components reference it
-13 times. They reference the raw `ash-*` primitive scale 524 times, and hand-write 261
-`dark:` overrides to compensate.
+### P1 — HIER-2: every utility page said its title twice
 
-The consequence is not cosmetic: every new component must re-derive dark mode by hand,
-which is why dark-mode coverage is 30/39 files rather than automatic. COL-2's exact
-failure mode is "overrides sprinkled per-component" instead of token aliasing.
-
-```diff
--<p className="text-sm text-ash-500 dark:text-ash-400">
-+<p className="text-sm text-muted-foreground">
+```
+Burn XEN for FENIX                      ← page h1
+Transfer XEN value to the FENIX …       ← page description
+┌───────────────────────────────────┐
+│ 🔥 Burn XEN for FENIX              │   ← card title (same string)
+│ Transfer XEN value to the FENIX …  │   ← card description (same string)
 ```
 
-This one sweep also resolves COL-3 (dark tuning becomes a token edit) and most of COL-2.
-Do it before the per-screen fixes below — it is the difference between eleven point
-patches and two systemic ones.
+The card now starts at the form, so the first thing under the heading is the field the
+user came to fill in. Source: [2053925539019165904](https://x.com/zander_supafast/status/2053925539019165904)
 
-Source: [1875103802082382115](https://x.com/zander_supafast/status/1875103802082382115)
+### P1 — TYPE-1: centred section stacks on home
 
-### TYPE-1 — centered multi-line copy (P1)
+The three section headers centred a 30px heading plus a wrapping subtitle above tables
+and grids whose content is left-aligned. The eye has to find a new left edge for every
+section. Source: [2090368430914310313](https://x.com/zander_supafast/status/2090368430914310313)
 
-`burn`, `stake` and `rewards` each wrap an `h1` plus a wrapping description in
-`<div className="text-center">`, and the hero centres title + subtitle + two CTAs. A
-centred single line is fine; a centred stack gives the reader a new alignment anchor per
-line. Confirmed visually on the burn page earlier in this session — the description wraps
-to two ragged lines under a centred heading.
+## Hero — photoreal rising ash (three.js)
 
-```diff
--<div className="text-center">
-+<div>
-```
+The 56 framer-motion `div`s, each animating `box-shadow` blur, are replaced by
+`components/effects/rising-ash*.ts(x)`. The scene is modelled on a long-exposure photo
+of a fire:
 
-Keep the hero centred if the brand wants it (heroes are the sanctioned exception), but
-the three utility pages should be left-aligned.
+- **Embers as light trails.** Each ember is a ribbon sampled along its actual trajectory
+  over a shutter interval. Trails curve with the turbulence and corkscrew that carry
+  them, and are *beaded*, because the ember flickers while the shutter is open.
+- **Physical colour.** Embers cool along a blackbody ramp (1300–1800K down to 620K) as
+  they rise. Cores are HDR and pass through a hue-preserving film curve, so only the
+  hottest bleach to white. A pixel-space glow stands in for lens bloom.
+- **Optics.** A thin-lens circle of confusion per ember gives bokeh off the focal plane.
+  Exposure spreads along fast trails, so they dim per pixel the way a camera records them.
+- **Ash and smoke.** Tumbling paper-ash flakes with patchy burning rims, lit from below.
+  Domain-warped smoke rises through the frame, rendered at quarter resolution.
+- **Both themes.** On the light sunset, defocused glow is suppressed, flakes become soft
+  grey paper, and cooled embers leave grey specks.
 
-Source: [2090368430914310313](https://x.com/zander_supafast/status/2090368430914310313)
-
-### COL-4 — the danger colour is the brand colour (P1)
-
-```ts
-default:     "bg-gradient-to-r from-fenix-500 to-ember-500 ..."  // brand
-destructive: "bg-ember-500 ..."                                   // danger
-```
-
-`ember-500` is half the brand gradient. A destructive button is therefore nearly
-indistinguishable from the primary CTA — precisely the case COL-4 calls out ("especially
-when the brand color is red"). On a protocol where the primary action *burns tokens
-irreversibly*, "destructive" and "proceed" must not look alike.
-
-Source: [1988234478452359457](https://x.com/zander_supafast/status/1988234478452359457)
-
-### LAY-2 — borders doing hierarchy's job (P1)
-
-15 containers carry `border border-ash-200/300` on top of card backgrounds, plus 12
-`border-b`/`border-t` rules. Combined with `<Card>` used 33 times across seven
-components, the dashboard reads as boxes inside boxes. **[visual unconfirmed at 390px]**
-
-Source: [2080000671781110136](https://x.com/zander_supafast/status/2080000671781110136)
-
-### BTN-1 — two brand-filled buttons on screen (P1)
-
-The header's "Connect Wallet" uses the same brand gradient as each page's primary CTA
-("Burn XEN", "Stake FENIX"), so every core screen shows two equally-weighted brand
-buttons. Confirmed in the burn screenshot. The header CTA is persistent chrome and should
-be `secondary` or `outline` so the page's own action wins.
-
-Source: [1802684455670136954](https://x.com/zander_supafast/status/1802684455670136954)
+**Cost:**
+- Three draw calls a frame, with zero per-particle CPU work.
+- three.js is a separate 138 KB gzip chunk, loaded at browser idle. The home HTML does
+  not reference it.
+- The loop pauses off-screen and in hidden tabs, caps at 60fps, and shows one still frame
+  under `prefers-reduced-motion`.
+- The hero orbs moved from framer-motion plus `blur-3xl` to compositor-only CSS keyframes.
 
 ## Systemic recommendations
 
-1. **Sweep components onto semantic tokens** (COL-1, COL-2, COL-3). One change, three
-   checks, and dark mode stops being manual.
-2. **Split brand from danger** (COL-4) — either move `destructive` to a true red outside
-   the brand ramp, or desaturate it.
-3. **Add `id`/`htmlFor` to the shared `Input`/`Label` pair** (FORM-1) rather than at each
-   call site, so future forms inherit it.
+1. **Finish the token layer (COL-1/COL-2).** Add semantic tokens for the remaining
+   recurring pairs and sweep them:
+   - `--foreground-strong`: `ash-700`/`ash-300`
+   - `--border-subtle`: `ash-100`/`ash-800`
+   - `--surface-hover`: `ash-50`/`ash-800/30`
+
+   That retires most of the 66 hand-written `dark:` overrides.
+2. **Share the amount field.** Burn and stake duplicate about 80 lines of amount input,
+   validation and Max handling. Their drift is how stake ended up without the
+   unsupported-network guard. A `useTokenAmount` hook plus an `<AmountField>` would keep
+   them identical.
+3. **Lazy-load the wallet stack.** `createAppKit` runs at module scope in `providers.tsx`,
+   so every route downloads the AppKit/WalletConnect tree (about 400 KB) before anyone
+   clicks Connect. This needs a spike, because `useAppKit` in the header depends on it.
+
+## Outside catalog (reviewer judgment: performance and correctness)
+
+All fixed in this pass unless marked otherwise.
+
+- **Hydration failure on home.** The mobile chain cards put a `<div>` skeleton inside a
+  `<p>` 30 times, so React discarded the server HTML and re-rendered the page.
+  - The 8 copy-pasted number cells became one `SupplyValue` component.
+- **"NaN" in success alerts.** Burn and stake read `amount` after the form had cleared
+  it; stake also reported the reset 365-day term instead of the term staked. Both now
+  snapshot what was submitted.
+- **Polling and freshness.**
+  - Removed the global 15s `refetchInterval`, which also re-resolved ENS names every 15s.
+  - Cadences now match the data: account reads 60s, protocol stats 30s, the 13-week
+    flush cooldown 10 minutes.
+  - Every confirmed write (burn, approve, stake, end, defer, flush) invalidates contract
+    reads in one place. Before, end/defer/flush did not refresh at all until the next poll.
+- **Rewards panel.**
+  - It re-rendered every second just to compute a boolean. It now flips once, when the
+    cooldown ends.
+  - "Your share" counted only the first page of 10 stakes; it now counts all of them.
+- **"Max" left dust.** It used the 4-decimal display string. It now uses the exact
+  balance.
+- **Stake on an unsupported network.** It had no guard; it now matches burn, in all 21
+  locales.
+- **Paint cost.**
+  - `.glow-card` no longer applies `backdrop-blur`: the cards sit on a solid page, so the
+    blur was invisible and cost GPU time.
+  - The 12 home donuts are fixed-size, with no ResizeObservers and no SVG drop-shadow
+    filters.
+- **Dead code removed:**
+  - `ui/tabs`, `ui/select`, `ui/tooltip`
+  - `.glass`, `.bg-fenix-gradient*`
+  - the `glow`/`float`/`pulse-slow` animations and an inert RTL rule
+  - three unused contract types
+  - the never-set `--mouse-x` glow
+- **Clipboard hook.** It no longer leaks its timer, stacks timers on repeat clicks, or
+  claims "copied" when the write fails.
+- **Open:** framer-motion (about 42 KB) loads on every route for a 220ms page fade in
+  `template.tsx`; a CSS transition or `LazyMotion` would do it.
 
 ## Verified clean
 
-`FORM-2` (instructional placeholders, no "e.g."), `FORM-4` (focus + disabled states
-designed), `MOT-5` (skeletons in 9 components, one spinner total), `BTN-5` (hover/active
-on all six variants, 200ms transitions), `BTN-2` (verb labels — only an unused
-`common.confirm` string), `MODAL-1` (no "Are you sure?" modals exist), `IMG-1` (lucide
-only; the three inline SVGs are brand marks plus a vendored GitHub icon lucide 1.x
-dropped), `LAY-3` (Tailwind's 4px scale throughout), `HIER-5` (real on-chain data, no
-lorem).
-
-## Outside catalog
-
-- **Dead chains render as permanent skeletons.** Evmos and Dogechain have no reachable
-  RPC, so their dashboard cards load forever. No catalog check covers "correct loading
-  state, impossible data" — but MOT-5's spirit (loading is a designed state) argues for a
-  distinct "unavailable" state rather than an infinite skeleton.
-- **`/` is English-only for non-JS clients.** The SEO root serves English content and
-  redirects via script. Correct for crawlers; a non-JS user in another locale is stranded
-  on English.
+`BTN-1` (one brand-filled CTA per view; the header wallet button stays demoted) ·
+`BTN-2` · `BTN-5` · `FORM-1` (ids wired through `ui/field`) · `FORM-2` · `FORM-4` ·
+`MODAL-1` · `IMG-1` (lucide only) · `LAY-3` · `COL-2` (every route checked in both
+themes) · `MOT-6` · `HIER-5` · `TYPE-2`.

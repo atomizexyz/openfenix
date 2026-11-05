@@ -63,6 +63,7 @@
     "error_exceeds_balance": "数量がXEN残高を超えています"
   },
   "stake": {
+    "unsupported_network": "サポートされているネットワークに切り替えてください",
     "title": "FENIXをステーク",
     "description": "FENIXトークンをロックしてエクイティベースの分配で利回りを獲得",
     "amount_label": "FENIX数量",

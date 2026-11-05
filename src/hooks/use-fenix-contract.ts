@@ -1,9 +1,43 @@
 "use client";
 
+import { useEffect } from "react";
+import { useQueryClient, type Query } from "@tanstack/react-query";
 import { useReadContract, useReadContracts, useWriteContract, useWaitForTransactionReceipt, useConnection } from "wagmi";
 import { FENIX_ABI, XEN_ABI } from "@/config/abi";
 import { getChainConfig } from "@/config/chains";
 import { parseEther } from "viem";
+
+/*
+ * Polling cadence, matched to how often each value can actually change. There
+ * is no global interval: a read that does not poll on purpose does not poll.
+ * Every confirmed write (see useConfirmedWrite) refreshes all contract reads at
+ * once, so the user's own actions never wait on a poll to show up.
+ */
+/** Protocol-wide figures other people's burns and stakes move. */
+const PROTOCOL_POLL_MS = 30_000;
+/** The connected wallet's own state; mostly changes through our own writes. */
+const ACCOUNT_POLL_MS = 60_000;
+/** The reward-flush cooldown moves once a flush, roughly every 13 weeks. */
+const COOLDOWN_POLL_MS = 10 * 60_000;
+
+function isContractRead(query: Query) {
+  const kind = query.queryKey[0];
+  return kind === "readContract" || kind === "readContracts";
+}
+
+/** A contract write that refreshes every contract read once it confirms. */
+function useConfirmedWrite() {
+  const queryClient = useQueryClient();
+  const { mutate: writeContract, data: hash, isPending, error } = useWriteContract();
+  const { isLoading: isConfirming, isSuccess } =
+    useWaitForTransactionReceipt({ hash });
+
+  useEffect(() => {
+    if (isSuccess) queryClient.invalidateQueries({ predicate: isContractRead });
+  }, [isSuccess, hash, queryClient]);
+
+  return { writeContract, hash, isPending, isConfirming, isSuccess, error };
+}
 
 export function useFenixStats(chainId?: number) {
   const config = chainId ? getChainConfig(chainId) : undefined;
@@ -19,7 +53,7 @@ export function useFenixStats(chainId?: number) {
           { address, abi: FENIX_ABI, functionName: "shareRate", chainId },
         ]
       : [],
-    query: { enabled: !!address && !!chainId, refetchInterval: 15_000 },
+    query: { enabled: !!address && !!chainId, refetchInterval: PROTOCOL_POLL_MS },
   });
 
   return {
@@ -45,7 +79,7 @@ export function useFenixBalance(chainId?: number) {
     chainId,
     query: {
       enabled: !!config?.fenixContract && !!userAddress && !!chainId,
-      refetchInterval: 15_000,
+      refetchInterval: ACCOUNT_POLL_MS,
     },
   });
 }
@@ -62,7 +96,7 @@ export function useXenBalance(chainId?: number) {
     chainId,
     query: {
       enabled: !!config?.xenContract && !!userAddress && !!chainId,
-      refetchInterval: 15_000,
+      refetchInterval: ACCOUNT_POLL_MS,
     },
   });
 }
@@ -82,7 +116,7 @@ export function useXenAllowance(chainId?: number) {
     chainId,
     query: {
       enabled: !!config?.xenContract && !!userAddress && !!config?.fenixContract && !!chainId,
-      refetchInterval: 15_000,
+      refetchInterval: ACCOUNT_POLL_MS,
     },
   });
 }
@@ -99,10 +133,13 @@ export function useStakeCount(chainId?: number) {
     chainId,
     query: {
       enabled: !!config?.fenixContract && !!userAddress && !!chainId,
-      refetchInterval: 15_000,
+      refetchInterval: ACCOUNT_POLL_MS,
     },
   });
 }
+
+/** Page size that reads every stake the wallet has, in one multicall. */
+export const ALL_STAKES = Number.POSITIVE_INFINITY;
 
 export function useUserStakes(chainId?: number, page = 0, pageSize = 10) {
   const { address: userAddress } = useConnection();
@@ -128,7 +165,7 @@ export function useUserStakes(chainId?: number, page = 0, pageSize = 10) {
         : [],
     query: {
       enabled: !!config?.fenixContract && !!userAddress && !!chainId && pageLength > 0,
-      refetchInterval: 15_000,
+      refetchInterval: ACCOUNT_POLL_MS,
     },
   });
 
@@ -140,9 +177,8 @@ export function useUserStakes(chainId?: number, page = 0, pageSize = 10) {
 }
 
 export function useBurnXen() {
-  const { mutate: writeContract, data: hash, isPending, error } = useWriteContract();
-  const { isLoading: isConfirming, isSuccess } =
-    useWaitForTransactionReceipt({ hash });
+  const { writeContract, hash, isPending, isConfirming, isSuccess, error } =
+    useConfirmedWrite();
 
   function burn(chainId: number, amount: string) {
     const config = getChainConfig(chainId);
@@ -161,9 +197,8 @@ export function useBurnXen() {
 }
 
 export function useApproveXen() {
-  const { mutate: writeContract, data: hash, isPending, error } = useWriteContract();
-  const { isLoading: isConfirming, isSuccess } =
-    useWaitForTransactionReceipt({ hash });
+  const { writeContract, hash, isPending, isConfirming, isSuccess, error } =
+    useConfirmedWrite();
 
   function approve(chainId: number, amount: string) {
     const config = getChainConfig(chainId);
@@ -182,9 +217,8 @@ export function useApproveXen() {
 }
 
 export function useStartStake() {
-  const { mutate: writeContract, data: hash, isPending, error } = useWriteContract();
-  const { isLoading: isConfirming, isSuccess } =
-    useWaitForTransactionReceipt({ hash });
+  const { writeContract, hash, isPending, isConfirming, isSuccess, error } =
+    useConfirmedWrite();
 
   function startStake(chainId: number, amount: string, termDays: number) {
     const config = getChainConfig(chainId);
@@ -203,9 +237,8 @@ export function useStartStake() {
 }
 
 export function useEndStake() {
-  const { mutate: writeContract, data: hash, isPending, error } = useWriteContract();
-  const { isLoading: isConfirming, isSuccess } =
-    useWaitForTransactionReceipt({ hash });
+  const { writeContract, hash, isPending, isConfirming, isSuccess, error } =
+    useConfirmedWrite();
 
   function endStake(chainId: number, stakeIndex: number) {
     const config = getChainConfig(chainId);
@@ -224,9 +257,8 @@ export function useEndStake() {
 }
 
 export function useDeferStake() {
-  const { mutate: writeContract, data: hash, isPending, error } = useWriteContract();
-  const { isLoading: isConfirming, isSuccess } =
-    useWaitForTransactionReceipt({ hash });
+  const { writeContract, hash, isPending, isConfirming, isSuccess, error } =
+    useConfirmedWrite();
 
   function deferStake(chainId: number, stakeIndex: number, stakerAddress: `0x${string}`) {
     const config = getChainConfig(chainId);
@@ -254,15 +286,14 @@ export function useCooldownUnlockTs(chainId?: number) {
     chainId,
     query: {
       enabled: !!config?.fenixContract && !!chainId,
-      refetchInterval: 30_000,
+      refetchInterval: COOLDOWN_POLL_MS,
     },
   });
 }
 
 export function useFlushRewards() {
-  const { mutate: writeContract, data: hash, isPending, error } = useWriteContract();
-  const { isLoading: isConfirming, isSuccess } =
-    useWaitForTransactionReceipt({ hash });
+  const { writeContract, hash, isPending, isConfirming, isSuccess, error } =
+    useConfirmedWrite();
 
   function flushRewards(chainId: number) {
     const config = getChainConfig(chainId);

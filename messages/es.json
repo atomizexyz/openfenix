@@ -63,6 +63,7 @@
     "error_exceeds_balance": "La cantidad supera tu saldo de XEN"
   },
   "stake": {
+    "unsupported_network": "Por favor, cambia a una red compatible",
     "title": "Staking de FENIX",
     "description": "Bloquea tus tokens FENIX para ganar rendimiento mediante distribución basada en equidad",
     "amount_label": "Cantidad de FENIX",

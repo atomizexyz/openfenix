@@ -63,6 +63,7 @@
     "error_exceeds_balance": "Số lượng vượt quá số dư XEN của bạn"
   },
   "stake": {
+    "unsupported_network": "Vui lòng chuyển sang mạng được hỗ trợ",
     "title": "Stake FENIX",
     "description": "Khóa token FENIX của bạn để kiếm lợi nhuận thông qua phân phối dựa trên vốn chủ sở hữu",
     "amount_label": "Số Lượng FENIX",

@@ -13,7 +13,8 @@ const Skeleton = React.forwardRef<HTMLDivElement, SkeletonProps>(
         ref={ref}
         className={cn(
           "relative overflow-hidden rounded-lg bg-ash-200 dark:bg-ash-800",
-          "before:absolute before:inset-0 before:-translate-x-full before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent before:animate-shimmer",
+          "before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent before:animate-shimmer",
+          "motion-reduce:before:hidden",
           "dark:before:via-white/10",
           className
         )}

@@ -63,6 +63,7 @@
     "error_exceeds_balance": "จำนวนเกินยอดคงเหลือ XEN ของคุณ"
   },
   "stake": {
+    "unsupported_network": "โปรดสลับไปยังเครือข่ายที่รองรับ",
     "title": "สเตค FENIX",
     "description": "ล็อคโทเคน FENIX ของคุณเพื่อรับผลตอบแทนผ่านการกระจายตามส่วนแบ่ง",
     "amount_label": "จำนวน FENIX",

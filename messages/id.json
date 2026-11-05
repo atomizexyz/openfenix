@@ -63,6 +63,7 @@
     "error_exceeds_balance": "Jumlah melebihi saldo XEN Anda"
   },
   "stake": {
+    "unsupported_network": "Silakan beralih ke jaringan yang didukung",
     "title": "Stake FENIX",
     "description": "Kunci token FENIX Anda untuk mendapatkan imbal hasil melalui distribusi berbasis ekuitas",
     "amount_label": "Jumlah FENIX",

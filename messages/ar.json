@@ -63,6 +63,7 @@
     "error_exceeds_balance": "المبلغ يتجاوز رصيدك من XEN"
   },
   "stake": {
+    "unsupported_network": "يرجى التبديل إلى شبكة مدعومة",
     "title": "رهن FENIX",
     "description": "قفل رموز FENIX الخاصة بك لكسب العائد من خلال التوزيع القائم على الأسهم",
     "amount_label": "كمية FENIX",

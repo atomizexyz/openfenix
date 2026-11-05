@@ -63,6 +63,7 @@
     "error_exceeds_balance": "수량이 XEN 잔액을 초과합니다"
   },
   "stake": {
+    "unsupported_network": "지원되는 네트워크로 전환해 주세요",
     "title": "FENIX 스테이킹",
     "description": "FENIX 토큰을 잠금하여 에쿼티 기반 분배를 통해 수익을 획득하세요",
     "amount_label": "FENIX 수량",
