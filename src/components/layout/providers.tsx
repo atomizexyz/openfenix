@@ -61,6 +61,19 @@ function AppKitThemeSync() {
   return null;
 }
 
+/**
+ * next-themes renders its anti-flash <script> from inside this client
+ * component. In the server HTML it must stay executable: it sets the theme
+ * class before first paint. But whenever React creates it on the client (a
+ * locale switch remounts these providers), React 19 logs "Encountered a script
+ * tag while rendering React component" -- client-created scripts never run.
+ * Marking the client copy as a data block skips that warning without changing
+ * the server HTML. next-themes already puts suppressHydrationWarning on the
+ * element, so the differing `type` is not a hydration mismatch.
+ */
+const THEME_SCRIPT_PROPS =
+  typeof window === "undefined" ? undefined : { type: "application/json" };
+
 export function Providers({ children }: { children: ReactNode }) {
   const [queryClient] = useState(
     () =>
@@ -79,7 +92,12 @@ export function Providers({ children }: { children: ReactNode }) {
   );
 
   return (
-    <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+    <ThemeProvider
+      attribute="class"
+      defaultTheme="dark"
+      enableSystem
+      scriptProps={THEME_SCRIPT_PROPS}
+    >
       <AppKitThemeSync />
       <WagmiProvider config={config} reconnectOnMount>
         <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
