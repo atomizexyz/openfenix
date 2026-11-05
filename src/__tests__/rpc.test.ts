@@ -49,6 +49,12 @@ function expectedReadUrls(chainId: number): string[] {
   return generated.length > 0 ? generated : [...chain.rpcUrls.default.http];
 }
 
+function expectEndpointLabel(configuredUrl: string, label: string): void {
+  const [publicLabel, suffix] = label.split("#");
+  expect([configuredUrl, new URL(configuredUrl).origin]).toContain(publicLabel);
+  if (suffix !== undefined) expect(suffix).toMatch(/^\d+$/);
+}
+
 function fetchedUrl(input: unknown): string {
   if (typeof input === "string") return input;
   if (input instanceof URL) return input.href;
@@ -127,8 +133,7 @@ describe("createChainTransport", () => {
       expect(instance.config.type).toBe("smartHyperevm");
       expect(value.endpoints).toHaveLength(urls.length);
       for (const [index, endpoint] of value.endpoints.entries()) {
-        const configuredUrl = urls[index]!;
-        expect([configuredUrl, new URL(configuredUrl).origin]).toContain(endpoint.url);
+        expectEndpointLabel(urls[index]!, endpoint.url);
       }
       expect(value.snapshot()).toHaveLength(urls.length);
       expect(typeof value.cacheStats).toBe("function");
@@ -188,9 +193,7 @@ describe("MEV-protected writes", () => {
       expect(endpoints).toHaveLength(publicUrls.length + 1);
       expect(endpoints[0]?.url).toBe(new URL(blinkUrl).origin);
       for (const [index, configuredUrl] of publicUrls.entries()) {
-        expect([configuredUrl, new URL(configuredUrl).origin]).toContain(
-          endpoints[index + 1]?.url,
-        );
+        expectEndpointLabel(configuredUrl, endpoints[index + 1]!.url);
       }
     }
   });

@@ -1,24 +1,24 @@
 /**
- * Benchmarks every public RPC chainlist.org knows about for the chains FENIX is
- * deployed on, then writes the winners to src/config/rpc-endpoints.generated.ts.
+ * Benchmarks curated candidates and every public RPC chainlist.org knows about
+ * for the chains FENIX is deployed on, then writes all qualifying endpoints to
+ * src/config/rpc-endpoints.generated.ts.
  *
  *   bun run scan:rpcs
  *
  * An endpoint has to earn its place: it must report the right chain id, keep up
  * with its peers' block height, answer CORS preflight (the app is browser-only,
  * so an endpoint that curl likes but a browser refuses is useless), and survive
- * repeated calls. Survivors are ranked by median latency.
+ * repeated calls. Qualifying endpoints are ranked by median latency.
  */
 
 import { writeFileSync } from "node:fs";
 import { FENIX_CHAINS } from "../src/config/chains";
+import { RPC_ENDPOINT_CANDIDATES } from "../src/config/rpc-candidates";
 
 const CHAINLIST_URL = "https://chainlist.org/rpcs.json";
 const MULTICALL3 = "0xcA11bde05977b3631167028862bE2a173976CA11";
 const MULTICALL3_GET_BLOCK_NUMBER = "0x42cbb15c";
 
-/** Endpoints kept per chain. Enough for real failover without a long tail. */
-const KEEP_PER_CHAIN = 5;
 /** Latency samples per endpoint; median is what counts. */
 const SAMPLES = 3;
 const TIMEOUT_MS = 5_000;
@@ -27,6 +27,33 @@ const CONCURRENCY = 24;
 const MAX_BLOCKS_BEHIND = 30;
 /** Origin sent on probes so CORS behaviour matches the deployed site. */
 const ORIGIN = "https://fenix.fyi";
+const CREDENTIAL_QUERY_PARAMETER =
+  /^(?:.*apikey|key|token|accesstoken|auth|authorization|secret|credential|projectid)$/;
+const CREDENTIAL_PATH_SEGMENT =
+  /^(?:[0-9a-f]{24,}|[a-z0-9_-]{32,}|[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12})$/i;
+
+function isCredentialFreeHttpsUrl(value: string): boolean {
+  try {
+    const url = new URL(value);
+    if (
+      url.protocol !== "https:" ||
+      url.username ||
+      url.password ||
+      value.includes("${")
+    ) {
+      return false;
+    }
+    if (url.pathname.split("/").some((segment) => CREDENTIAL_PATH_SEGMENT.test(segment))) {
+      return false;
+    }
+    return [...url.searchParams.keys()].every((name) => {
+      const normalized = name.toLowerCase().replace(/[^a-z0-9]/g, "");
+      return !CREDENTIAL_QUERY_PARAMETER.test(normalized);
+    });
+  } catch {
+    return false;
+  }
+}
 
 interface ChainlistRpc {
   url: string;
@@ -56,6 +83,35 @@ interface RpcCallResult {
   result?: unknown;
   cors: boolean;
   error?: string;
+}
+
+async function supportsBrowserCors(url: string): Promise<boolean> {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
+  try {
+    const res = await fetch(url, {
+      method: "OPTIONS",
+      headers: {
+        origin: ORIGIN,
+        "access-control-request-method": "POST",
+        "access-control-request-headers": "content-type",
+      },
+      signal: controller.signal,
+    });
+    const allowOrigin = res.headers.get("access-control-allow-origin");
+    const methods = res.headers.get("access-control-allow-methods")?.toUpperCase();
+    const headers = res.headers.get("access-control-allow-headers")?.toLowerCase();
+    return (
+      res.ok &&
+      (allowOrigin === "*" || allowOrigin === ORIGIN) &&
+      (methods === "*" || methods?.split(/[\s,]+/).includes("POST") === true) &&
+      (headers === "*" || headers?.split(/[\s,]+/).includes("content-type") === true)
+    );
+  } catch {
+    return false;
+  } finally {
+    clearTimeout(timer);
+  }
 }
 
 async function rpcCall(
@@ -135,12 +191,15 @@ async function probe(url: string, tracking: string, chainId: number): Promise<Pr
     batch: false,
   });
 
-  const id = await rpcCall(url, "eth_chainId");
+  const [id, browserCors] = await Promise.all([
+    rpcCall(url, "eth_chainId"),
+    supportsBrowserCors(url),
+  ]);
   if (!id.ok) return fail(id.error ?? "unreachable");
   if (Number(id.result) !== chainId) {
     return fail(`wrong chain (got ${Number(id.result)})`, id.cors);
   }
-  if (!id.cors) return fail("no CORS", false);
+  if (!id.cors || !browserCors) return fail("no CORS", false);
 
   const latencies: number[] = [];
   let blockNumber = 0;
@@ -208,18 +267,18 @@ async function main() {
       typeof rpc === "string" ? { url: rpc, tracking: "unknown" } : rpc,
     );
 
+    const curated = (RPC_ENDPOINT_CANDIDATES[chain.id] ?? []).map((url) => ({
+      url,
+      tracking: "unknown",
+    }));
     // Fall back to whatever viem ships if chainlist has never heard of the chain.
     const fromViem = chain.rpcUrls.default.http.map((url) => ({ url, tracking: "unknown" }));
 
-    const candidates = [...listed, ...fromViem]
-      .filter((rpc) => rpc.url?.startsWith("https://"))
-      // "${INFURA_API_KEY}" style entries need credentials we don't have.
-      .filter((rpc) => !rpc.url.includes("${"))
+    const candidates = [...curated, ...listed, ...fromViem]
+      .filter((rpc) => isCredentialFreeHttpsUrl(rpc.url))
       .filter((rpc, i, all) => all.findIndex((o) => o.url === rpc.url) === i);
 
-    process.stdout.write(
-      `${chain.name} (${chain.id}): probing ${candidates.length} endpoints ... `,
-    );
+    console.log(`${chain.name} (${chain.id}): probing ${candidates.length} endpoints ...`);
 
     const probes = await pooled(candidates, CONCURRENCY, (rpc) =>
       probe(rpc.url, rpc.tracking ?? "unknown", chain.id),
@@ -237,10 +296,8 @@ async function main() {
         trackingRank(a.tracking) - trackingRank(b.tracking),
     );
 
-    selected[chain.id] = current.slice(0, KEEP_PER_CHAIN);
-    console.log(
-      `${healthy.length} healthy, ${current.length} current, keeping ${selected[chain.id].length}`,
-    );
+    selected[chain.id] = current;
+    console.log(`${healthy.length} healthy, ${current.length} current; keeping all qualifying`);
     for (const p of selected[chain.id]) {
       console.log(
         `    ${String(Math.round(p.medianMs)).padStart(5)}ms  ${p.url}` +
@@ -283,9 +340,9 @@ function render(
   return `// GENERATED by scripts/scan-rpcs.ts -- do not edit by hand.
 // Re-run with: bun run scan:rpcs
 //
-// Endpoints are ordered fastest-first by median latency, measured from a single
-// machine at generation time. Every one reported the correct chain id, was
-// within ${MAX_BLOCKS_BEHIND} blocks of the chain head, and returned permissive CORS headers.
+// All qualifying endpoints are ordered fastest-first by median latency, measured
+// from a single machine at generation time. Every one reported the correct chain
+// id, was within ${MAX_BLOCKS_BEHIND} blocks of the chain head, and returned permissive CORS headers.
 
 export interface GeneratedRpcConfig {
   http: string[];

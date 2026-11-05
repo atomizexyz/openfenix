@@ -1,14 +1,13 @@
 /**
  * End-to-end verification: run the app's exact read pipeline (viem
- * readContracts -> Multicall3) against the top latency-ranked RPC endpoint
- * for every supported chain, using the project's own config.
+ * readContracts -> Multicall3) through every supported chain's smart transport.
  *
- * Run: bun run /tmp/verify-reads.ts
+ * Run: bun run scripts/verify-reads.ts
  */
-import { createPublicClient, http, formatEther } from "viem";
+import { createPublicClient, formatEther } from "viem";
 import { FENIX_CHAINS } from "../src/config/chains";
-import { GENERATED_RPC_ENDPOINTS } from "../src/config/rpc-endpoints.generated";
 import { FENIX_ABI } from "../src/config/abi";
+import { createChainTransport } from "../src/config/rpc";
 
 const FN = [
   "totalSupply",
@@ -20,15 +19,12 @@ const FN = [
 
 const rows = await Promise.all(
   FENIX_CHAINS.map(async (cfg) => {
-    const id = cfg.chain.id;
-    const urls =
-      GENERATED_RPC_ENDPOINTS[id]?.http ?? [...cfg.chain.rpcUrls.default.http];
     const start = Date.now();
+    const client = createPublicClient({
+      chain: cfg.chain,
+      transport: createChainTransport(cfg.chain.id),
+    });
     try {
-      const client = createPublicClient({
-        chain: cfg.chain,
-        transport: http(urls[0], { timeout: 12_000 }),
-      });
       const results = await client.multicall({
         contracts: FN.map((functionName) => ({
           address: cfg.fenixContract,
@@ -46,6 +42,9 @@ const rows = await Promise.all(
     } catch (e) {
       const ms = Date.now() - start;
       return `${cfg.chain.name.padEnd(12)} FAIL     ${(e as Error).message.slice(0, 110)} (${ms}ms)`;
+    } finally {
+      const transport = client.transport.value as { close?: () => void } | undefined;
+      transport?.close?.();
     }
   })
 );

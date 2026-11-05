@@ -76,6 +76,13 @@ describe("Chain Configuration", () => {
     expect(okc?.iconSlug).toBe("okc");
   });
 
+  it("configures canonical Multicall3 on Evmos", () => {
+    const evmos = FENIX_CHAINS.find((c) => c.chain.id === 9001);
+    expect(evmos?.chain.contracts?.multicall3?.address).toBe(
+      "0xcA11bde05977b3631167028862bE2a173976CA11",
+    );
+  });
+
   it("includes EthereumPoW", () => {
     const ethw = FENIX_CHAINS.find((c) => c.chain.id === 10001);
     expect(ethw).toBeDefined();

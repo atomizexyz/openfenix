@@ -32,6 +32,14 @@ export const ethereumPow = defineChain({
   },
 });
 
+const evmosWithMulticall = defineChain({
+  ...evmos,
+  contracts: {
+    ...evmos.contracts,
+    multicall3: { address: "0xcA11bde05977b3631167028862bE2a173976CA11" },
+  },
+});
+
 export interface FenixChainConfig {
   chain: Chain;
   xenContract: `0x${string}`;
@@ -93,14 +101,13 @@ export const FENIX_CHAINS: FenixChainConfig[] = [
     enabled: true,
   },
   {
-    chain: evmos,
+    chain: evmosWithMulticall,
     xenContract:
       "0x2AB0e9e4eE70FFf1fB9D67031E44F6410170d00e" as `0x${string}`,
     fenixContract: FENIX_CONTRACT_EVMOS,
     iconSlug: "evmos",
-    // Note: no public Evmos RPC currently responds (403/404/refused across all
-    // 32 endpoints chainlist.org lists). Kept on deliberately; reads will fail
-    // until an endpoint returns. Re-check with `bun run scan:rpcs`.
+    // No public Evmos RPC currently serves reads. The deployment stays enabled
+    // so it recovers automatically when a future scan finds a working endpoint.
     enabled: true,
   },
   {
@@ -117,9 +124,8 @@ export const FENIX_CHAINS: FenixChainConfig[] = [
       "0x948eed4490833D526688fD1E5Ba0b9B35CD2c32e" as `0x${string}`,
     fenixContract: FENIX_CONTRACT,
     iconSlug: "dogechain",
-    // Note: no public Dogechain RPC currently responds, across all 9 endpoints
-    // chainlist.org lists. Kept on deliberately; reads will fail until an
-    // endpoint returns. Re-check with `bun run scan:rpcs`.
+    // No public Dogechain RPC currently serves reads. The deployment stays
+    // enabled so it recovers automatically when a future scan finds one.
     enabled: true,
   },
   {

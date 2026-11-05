@@ -65,7 +65,9 @@ function readUrls(chainId: number): string[] {
 /**
  * Adaptive RPC routing with the default 10s attempt budget. Caching and
  * latest-block pinning stay off to preserve vanilla reads on reorg-capable
- * chains; 30s head probes retain lag scoring with less browser traffic.
+ * chains. Background head probes are disabled so large multi-chain registries
+ * do not create an N-endpoint request storm; scoring uses actual calls and
+ * heads observed during normal traffic.
  */
 export function createChainTransport(chainId: number): Transport {
   const readTransportUrls = readUrls(chainId);
@@ -93,7 +95,7 @@ export function createChainTransport(chainId: number): Transport {
     batch: mevUrl ? undefined : batch,
     cache: false,
     pinLatest: false,
-    headLag: { probeInterval: 30_000 },
+    headLag: { probeInterval: false },
     // Private writes never use read retry/racing; raw writes may rebroadcast.
     nonIdempotentMethods: WRITE_METHODS,
     rebroadcastRawTransactions: true,

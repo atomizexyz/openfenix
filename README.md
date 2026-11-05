@@ -41,7 +41,7 @@ cp .env.local.example .env.local
 | `bun run test` | Vitest, watch mode |
 | `bun run test:run` | Vitest, single run |
 | `bun run gen:llms` | Regenerate `public/llms.txt` and `llms-full.txt` |
-| `bun run scan:rpcs` | Re-scan RPC endpoints by latency |
+| `bun run scan:rpcs` | Re-scan every curated and Chainlist RPC for health, browser CORS, and latency |
 | `bun run flush` | Wipe `node_modules` and reinstall |
 
 Run `gen:llms` after changing chains, locales, or protocol constants — a test
