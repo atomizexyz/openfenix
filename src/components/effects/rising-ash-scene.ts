@@ -234,8 +234,10 @@ void main(){
   vType=type;
   vSeed=aSeed;
 
-  // Thin the field on small screens without rebuilding buffers.
-  if(fract(aSeed.x*7.13+aSeed.z*3.71)>uDensity){
+  // Thin the field on small screens without rebuilding buffers. On a light
+  // page dark flakes read as dirt rather than ash, so keep fewer of them.
+  float keep=uDensity*(type>1.5?mix(1.0,0.5,uLight):1.0);
+  if(fract(aSeed.x*7.13+aSeed.z*3.71)>keep){
     gl_Position=vec4(2.0,2.0,2.0,1.0);
     return;
   }
@@ -259,7 +261,7 @@ void main(){
 
   // Thin-lens defocus, as a world-space radius at this depth.
   // Capped so the deepest particles soften rather than balloon into blobs.
-  float coc=min(uAperture*abs(dist-uFocus),radius*5.0);
+  float coc=min(uAperture*abs(dist-uFocus),radius*4.0);
   float r=sqrt(radius*radius+coc*coc);
   // Spread-out light is dimmer per pixel, but an ember is far brighter than
   // the display can show, so a defocused one keeps more apparent brightness
@@ -295,7 +297,7 @@ void main(){
     vHalfSeg=seg/r;
 
     // Cooling: sparks start hotter and die faster than embers.
-    float hot=type<0.5?mix(1450.0,1950.0,aSeed.y):mix(2100.0,2600.0,aSeed.y);
+    float hot=type<0.5?mix(1300.0,1800.0,aSeed.y):mix(1900.0,2400.0,aSeed.y);
     float cool=pow(lifeT,mix(0.55,1.1,aSeed.z));
     float kelvin=mix(hot,620.0,cool);
     // Oxygen flicker: fast, irregular, never fully out.
@@ -303,7 +305,7 @@ void main(){
     kelvin*=mix(0.93,1.04,flicker);
     // HDR: a live ember is several times brighter than display white, which
     // is what lets its core roll off to yellow-white under the film curve.
-    float radiance=pow(kelvin/1500.0,4.0)*(type<0.5?5.0:7.0);
+    float radiance=pow(kelvin/1500.0,4.0)*(type<0.5?8.0:14.0);
     vEmit=blackbody(kelvin)*radiance*energy*flicker;
   }else{
     // Tumble: in-plane spin plus an out-of-plane flip read as a width squash.
@@ -368,9 +370,15 @@ float fbm(vec2 p){
   return s;
 }
 
-// Exponential film response: hot cores roll to white instead of clipping.
+// Exponential film response applied to the peak channel, so hue survives
+// (per-channel rolloff drifts orange toward olive-yellow); only the very
+// hottest cores bleach toward white, as they do on a real sensor.
 vec3 film(vec3 c,float exposure){
-  return 1.0-exp(-c*exposure);
+  float peak=max(max(c.r,c.g),c.b);
+  if(peak<=1e-5)return vec3(0.0);
+  float mapped=1.0-exp(-peak*exposure);
+  vec3 hue=c/peak;
+  return mix(hue,vec3(1.0,0.96,0.86),smoothstep(0.82,1.0,mapped)*0.55)*mapped;
 }
 
 void main(){
@@ -391,7 +399,7 @@ void main(){
     float disc=smoothstep(1.0,0.82,d)*(0.78+0.22*smoothstep(0.5,0.95,d));
     float core=mix(sharp,disc,smoothstep(0.15,0.85,vBlur));
     // Bloom stand-in, weaker on a light page where glow reads as smudge.
-    float halo=exp(-d*1.3)*mix(0.09,0.03,uLight)*(1.0-vBlur*0.8);
+    float halo=exp(-d*1.05)*mix(0.12,0.03,uLight)*(1.0-vBlur*0.8);
 
     float exposure=mix(1.8,1.05,uLight);
     vec3 emit=film(vEmit*(core+halo),exposure)*fade;
@@ -399,7 +407,7 @@ void main(){
     // A cooled ember is a speck of grey ash. On a dark page it vanishes; on a
     // light page it is what you actually see once the glow has gone.
     float speck=smoothstep(1.25,0.55,d)*smoothstep(0.35,0.95,vT)*(1.0-vBlur)*fade;
-    float speckCov=speck*mix(0.0,0.55,uLight)*step(vType,0.5);
+    float speckCov=speck*mix(0.0,0.4,uLight)*step(vType,0.5);
     vec3 ash=vec3(0.16,0.14,0.13);
 
     rgb=emit+ash*speckCov;
@@ -427,6 +435,8 @@ void main(){
     vec3 charcoal=vec3(0.07,0.065,0.06);
     vec3 paleAsh=vec3(0.62,0.6,0.57);
     vec3 albedo=mix(charcoal,paleAsh,whiteness)*(0.82+0.36*tex);
+    // Daylight reads ash as soft grey paper, not charcoal.
+    albedo=mix(albedo,vec3(0.42,0.39,0.37)*(0.85+0.3*tex),0.45*uLight);
 
     // Lit from the fire below: warm and strong near the bottom of the frame,
     // cooler higher up. The flip turns the face into and out of the light, so
@@ -448,7 +458,7 @@ void main(){
     vec3 rim=blackbody(kelvin)*pow(kelvin/1500.0,4.0)*band*patchy*life*burns*vEnergy*3.0;
     vec3 emit=film(rim,1.6);
 
-    float cov=mask*fade*mix(0.82,0.9,uLight)*mix(1.0,0.55,vBlur);
+    float cov=mask*fade*mix(0.85,0.6,uLight)*mix(1.0,0.55,vBlur);
     rgb=lit*cov+emit*fade;
     alpha=clamp(cov+max(max(emit.r,emit.g),emit.b)*fade,0.0,1.0);
   }
@@ -623,8 +633,8 @@ export function createAshScene(
     uAspect: { value: 1 },
     uCameraZ: { value: CAMERA_Z },
     uViewportH: { value: 1 },
-    uFocus: { value: CAMERA_Z },
-    uAperture: { value: 0.012 },
+    uFocus: { value: CAMERA_Z + 2 },
+    uAperture: { value: 0.0045 },
     uDensity: { value: 1 },
     uLight: { value: light ? 1 : 0 },
   };
