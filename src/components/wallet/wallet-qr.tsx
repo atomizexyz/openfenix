@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useAccount } from "wagmi";
+import { useConnection } from "wagmi";
 import { useTranslations } from "next-intl";
 import { Cuer } from "cuer";
 import { QrCode, Copy, Check } from "lucide-react";
@@ -19,7 +19,7 @@ import { useCopyToClipboard } from "@/hooks/use-copy-to-clipboard";
 
 export function WalletQR() {
   const t = useTranslations("common");
-  const { address, isConnected } = useAccount();
+  const { address, isConnected } = useConnection();
   const [open, setOpen] = useState(false);
   const { copied, copy } = useCopyToClipboard();
 

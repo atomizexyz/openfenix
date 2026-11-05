@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { useQueries } from "@tanstack/react-query";
 import { useConfig } from "wagmi";
 // Via `wagmi/query`, not `@wagmi/core/query`: the latter is only a transitive
@@ -154,8 +154,12 @@ export function useAllChainsStats() {
 
   // Stable identity: consumers may put refetch in a dependency array, and a new
   // closure each render would loop them.
+  // Synced after commit: refetch is only ever invoked from handlers and
+  // effects, which run after this.
   const resultsRef = useRef(results);
-  resultsRef.current = results;
+  useEffect(() => {
+    resultsRef.current = results;
+  });
   const refetch = useCallback(
     () => Promise.all(resultsRef.current.map((r) => r.refetch())),
     []

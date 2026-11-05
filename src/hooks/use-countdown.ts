@@ -9,15 +9,25 @@ export interface CountdownParts {
   ready: boolean;
 }
 
-export function useCountdown(targetSeconds: number): CountdownParts {
-  const [now, setNow] = useState(Math.floor(Date.now() / 1000));
+const nowSeconds = () => Math.floor(Date.now() / 1000);
+
+/**
+ * The current unix time in seconds, re-read every `intervalMs`. Reading the
+ * clock through state keeps render pure: the value only changes on a tick.
+ */
+export function useNowSeconds(intervalMs = 1000): number {
+  const [now, setNow] = useState(nowSeconds);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setNow(Math.floor(Date.now() / 1000));
-    }, 1000);
+    const interval = setInterval(() => setNow(nowSeconds()), intervalMs);
     return () => clearInterval(interval);
-  }, []);
+  }, [intervalMs]);
+
+  return now;
+}
+
+export function useCountdown(targetSeconds: number): CountdownParts {
+  const now = useNowSeconds();
 
   const remaining = Math.max(targetSeconds - now, 0);
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useCallback } from "react";
-import { useAccount } from "wagmi";
+import { useConnection } from "wagmi";
 import { useTranslations } from "next-intl";
 import NumberFlow from "@number-flow/react";
 import {
@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { FlushCountdown } from "@/components/ui/flush-countdown";
+import { useNowSeconds } from "@/hooks/use-countdown";
 import {
   useFlushRewards,
   useFenixStats,
@@ -54,7 +55,7 @@ function StatRow({ icon, label, value, isLoading }: StatRowProps) {
 
 export function RewardsPanel() {
   const t = useTranslations("rewards");
-  const { chain, isConnected } = useAccount();
+  const { chain, isConnected } = useConnection();
 
   const {
     equityPoolSupply,
@@ -127,15 +128,16 @@ export function RewardsPanel() {
     return { sharePercent, estimatedReward };
   }, [userStakes, equityPoolTotalShares, rewardPoolNum]);
 
+  const chainId = chain?.id;
   const handleFlush = useCallback(() => {
-    if (!chain?.id) return;
-    flushRewards(chain.id);
-  }, [chain?.id, flushRewards]);
+    if (!chainId) return;
+    flushRewards(chainId);
+  }, [chainId, flushRewards]);
 
   const isProcessing = isPending || isConfirming;
   const isLoading = isStatsLoading || isStakesLoading;
-  const isCooldownActive =
-    nextFlushTs > 0 && nextFlushTs > Math.floor(Date.now() / 1000);
+  const now = useNowSeconds();
+  const isCooldownActive = nextFlushTs > 0 && nextFlushTs > now;
 
   return (
     <Card variant="glow" className="w-full max-w-lg">

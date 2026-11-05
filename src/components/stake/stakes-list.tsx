@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useCallback } from "react";
-import { useAccount } from "wagmi";
+import { useConnection } from "wagmi";
 import { useTranslations } from "next-intl";
 import NumberFlow from "@number-flow/react";
 import {
@@ -36,6 +36,7 @@ import {
   secondsToDays,
 } from "@/lib/utils";
 import { SECONDS_PER_DAY } from "@/config/constants";
+import { useNowSeconds } from "@/hooks/use-countdown";
 import { StakeStatus, type StakeInfo } from "@/types/contracts";
 
 export function getMaturityTs(stake: StakeInfo): number {
@@ -146,7 +147,9 @@ function StakeCard({
   isDeferPending,
 }: StakeCardProps) {
   const t = useTranslations("stakes");
-  const now = Math.floor(Date.now() / 1000);
+  // Stake terms are measured in days; a one-minute tick keeps status and
+  // progress current without re-rendering every card each second.
+  const now = useNowSeconds(60_000);
 
   const status = getStakeStatus(stake, now);
   const progress = getProgress(stake, now);
@@ -331,7 +334,7 @@ const PAGE_SIZE = 10;
 export function StakesList() {
   const t = useTranslations("stakes");
   const tStake = useTranslations("stake");
-  const { chain, address: userAddress } = useAccount();
+  const { chain, address: userAddress } = useConnection();
   const [page, setPage] = useState(0);
   const { data: stakesData, isLoading, stakeCount, totalPages, startIndex } = useUserStakes(chain?.id, page, PAGE_SIZE);
 
@@ -378,20 +381,21 @@ export function StakesList() {
     );
   }, [stakesData]);
 
+  const chainId = chain?.id;
   const handleEndStake = useCallback(
     (index: number) => {
-      if (!chain?.id) return;
-      endStake(chain.id, index);
+      if (!chainId) return;
+      endStake(chainId, index);
     },
-    [chain?.id, endStake]
+    [chainId, endStake]
   );
 
   const handleDeferStake = useCallback(
     (index: number) => {
-      if (!chain?.id || !userAddress) return;
-      deferStake(chain.id, index, userAddress);
+      if (!chainId || !userAddress) return;
+      deferStake(chainId, index, userAddress);
     },
-    [chain?.id, userAddress, deferStake]
+    [chainId, userAddress, deferStake]
   );
 
   // StakeForm renders directly above this list on the same page, so the empty

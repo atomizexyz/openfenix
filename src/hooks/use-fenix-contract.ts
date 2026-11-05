@@ -1,6 +1,6 @@
 "use client";
 
-import { useReadContract, useReadContracts, useWriteContract, useWaitForTransactionReceipt, useAccount } from "wagmi";
+import { useReadContract, useReadContracts, useWriteContract, useWaitForTransactionReceipt, useConnection } from "wagmi";
 import { FENIX_ABI, XEN_ABI } from "@/config/abi";
 import { getChainConfig } from "@/config/chains";
 import { parseEther } from "viem";
@@ -34,7 +34,7 @@ export function useFenixStats(chainId?: number) {
 }
 
 export function useFenixBalance(chainId?: number) {
-  const { address: userAddress } = useAccount();
+  const { address: userAddress } = useConnection();
   const config = chainId ? getChainConfig(chainId) : undefined;
 
   return useReadContract({
@@ -51,7 +51,7 @@ export function useFenixBalance(chainId?: number) {
 }
 
 export function useXenBalance(chainId?: number) {
-  const { address: userAddress } = useAccount();
+  const { address: userAddress } = useConnection();
   const config = chainId ? getChainConfig(chainId) : undefined;
 
   return useReadContract({
@@ -68,7 +68,7 @@ export function useXenBalance(chainId?: number) {
 }
 
 export function useXenAllowance(chainId?: number) {
-  const { address: userAddress } = useAccount();
+  const { address: userAddress } = useConnection();
   const config = chainId ? getChainConfig(chainId) : undefined;
 
   return useReadContract({
@@ -88,7 +88,7 @@ export function useXenAllowance(chainId?: number) {
 }
 
 export function useStakeCount(chainId?: number) {
-  const { address: userAddress } = useAccount();
+  const { address: userAddress } = useConnection();
   const config = chainId ? getChainConfig(chainId) : undefined;
 
   return useReadContract({
@@ -105,7 +105,7 @@ export function useStakeCount(chainId?: number) {
 }
 
 export function useUserStakes(chainId?: number, page = 0, pageSize = 10) {
-  const { address: userAddress } = useAccount();
+  const { address: userAddress } = useConnection();
   const config = chainId ? getChainConfig(chainId) : undefined;
   const { data: stakeCount } = useStakeCount(chainId);
 
@@ -140,7 +140,7 @@ export function useUserStakes(chainId?: number, page = 0, pageSize = 10) {
 }
 
 export function useBurnXen() {
-  const { writeContract, data: hash, isPending, error } = useWriteContract();
+  const { mutate: writeContract, data: hash, isPending, error } = useWriteContract();
   const { isLoading: isConfirming, isSuccess } =
     useWaitForTransactionReceipt({ hash });
 
@@ -161,7 +161,7 @@ export function useBurnXen() {
 }
 
 export function useApproveXen() {
-  const { writeContract, data: hash, isPending, error } = useWriteContract();
+  const { mutate: writeContract, data: hash, isPending, error } = useWriteContract();
   const { isLoading: isConfirming, isSuccess } =
     useWaitForTransactionReceipt({ hash });
 
@@ -182,7 +182,7 @@ export function useApproveXen() {
 }
 
 export function useStartStake() {
-  const { writeContract, data: hash, isPending, error } = useWriteContract();
+  const { mutate: writeContract, data: hash, isPending, error } = useWriteContract();
   const { isLoading: isConfirming, isSuccess } =
     useWaitForTransactionReceipt({ hash });
 
@@ -203,7 +203,7 @@ export function useStartStake() {
 }
 
 export function useEndStake() {
-  const { writeContract, data: hash, isPending, error } = useWriteContract();
+  const { mutate: writeContract, data: hash, isPending, error } = useWriteContract();
   const { isLoading: isConfirming, isSuccess } =
     useWaitForTransactionReceipt({ hash });
 
@@ -224,7 +224,7 @@ export function useEndStake() {
 }
 
 export function useDeferStake() {
-  const { writeContract, data: hash, isPending, error } = useWriteContract();
+  const { mutate: writeContract, data: hash, isPending, error } = useWriteContract();
   const { isLoading: isConfirming, isSuccess } =
     useWaitForTransactionReceipt({ hash });
 
@@ -260,7 +260,7 @@ export function useCooldownUnlockTs(chainId?: number) {
 }
 
 export function useFlushRewards() {
-  const { writeContract, data: hash, isPending, error } = useWriteContract();
+  const { mutate: writeContract, data: hash, isPending, error } = useWriteContract();
   const { isLoading: isConfirming, isSuccess } =
     useWaitForTransactionReceipt({ hash });
 

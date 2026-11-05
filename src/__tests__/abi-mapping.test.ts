@@ -1,9 +1,11 @@
 import { describe, it, expect } from "vitest";
+import type { AbiFunction } from "viem";
 import { FENIX_ABI } from "@/config/abi";
 
-function findFunction(name: string) {
-  return FENIX_ABI.find(
-    (entry) => entry.type === "function" && entry.name === name
+function findFunction(name: string): AbiFunction | undefined {
+  return (FENIX_ABI as readonly { type: string }[]).find(
+    (entry): entry is AbiFunction =>
+      entry.type === "function" && (entry as AbiFunction).name === name
   );
 }
 
@@ -23,7 +25,7 @@ describe("FENIX ABI mapping", () => {
     const tupleOutput = outputs![0];
     expect(tupleOutput.type).toBe("tuple");
 
-    const components = (tupleOutput as { components: { name: string; type: string }[] }).components;
+    const components = (tupleOutput as { components: readonly { name: string; type: string }[] }).components;
     const fieldNames = components.map((c) => c.name);
     expect(fieldNames).toEqual([
       "status",
@@ -39,7 +41,7 @@ describe("FENIX ABI mapping", () => {
 
   it("stakeFor output fields have correct types", () => {
     const stakeFor = findFunction("stakeFor");
-    const components = (stakeFor!.outputs![0] as { components: { name: string; type: string }[] }).components;
+    const components = (stakeFor!.outputs![0] as { components: readonly { name: string; type: string }[] }).components;
 
     const fieldTypes = Object.fromEntries(components.map((c) => [c.name, c.type]));
     expect(fieldTypes.status).toBe("uint8");

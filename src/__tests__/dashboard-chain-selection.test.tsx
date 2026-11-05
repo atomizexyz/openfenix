@@ -9,7 +9,7 @@ const { account } = vi.hoisted(() => ({
 }));
 
 vi.mock("wagmi", () => ({
-  useAccount: () => account,
+  useConnection: () => account,
 }));
 
 vi.mock("@/components/dashboard/dashboard-chain-selector", () => ({
