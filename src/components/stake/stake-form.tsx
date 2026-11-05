@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useMemo, useCallback, useEffect, useId } from "react";
-import { useAccount } from "wagmi";
+import { useState, useMemo, useCallback, useId } from "react";
+import { useConnection } from "wagmi";
 import { useTranslations } from "next-intl";
 import NumberFlow from "@number-flow/react";
 import {
@@ -70,7 +70,7 @@ function BonusRow({ icon, label, value, suffix = "x" }: BonusRowProps) {
 
 export function StakeForm() {
   const t = useTranslations("stake");
-  const { chain, isConnected } = useAccount();
+  const { chain, isConnected } = useConnection();
   const [amount, setAmount] = useState("");
   const [term, setTerm] = useState(365);
   // Owns the id the Input points `aria-describedby` at, so the validation
@@ -88,13 +88,16 @@ export function StakeForm() {
     error,
   } = useStartStake();
 
-  // Reset form on successful stake
-  useEffect(() => {
+  // Reset the form when a stake succeeds. Adjusting state during render on a
+  // change (rather than in an effect) avoids rendering the stale values once.
+  const [prevSuccess, setPrevSuccess] = useState(isSuccess);
+  if (isSuccess !== prevSuccess) {
+    setPrevSuccess(isSuccess);
     if (isSuccess) {
       setAmount("");
       setTerm(365);
     }
-  }, [isSuccess]);
+  }
 
   const balanceFormatted = useMemo(() => {
     if (!fenixBalance) return "0";
@@ -151,10 +154,11 @@ export function StakeForm() {
     }
   }, [fenixBalance]);
 
+  const chainId = chain?.id;
   const handleStake = useCallback(() => {
-    if (!chain?.id || !amount) return;
-    startStake(chain.id, amount, term);
-  }, [chain?.id, amount, term, startStake]);
+    if (!chainId || !amount) return;
+    startStake(chainId, amount, term);
+  }, [chainId, amount, term, startStake]);
 
   const isProcessing = isPending || isConfirming;
 

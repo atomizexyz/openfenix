@@ -8,6 +8,7 @@ import {
   Cell,
   ResponsiveContainer,
   Tooltip,
+  type PieLabelRenderProps,
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -55,15 +56,6 @@ function CustomTooltip({
   );
 }
 
-interface CustomLabelProps {
-  cx: number;
-  cy: number;
-  midAngle: number;
-  innerRadius: number;
-  outerRadius: number;
-  percent: number;
-}
-
 function renderCustomLabel({
   cx,
   cy,
@@ -71,8 +63,10 @@ function renderCustomLabel({
   innerRadius,
   outerRadius,
   percent,
-}: CustomLabelProps) {
-  if (percent < 0.05) return null;
+}: PieLabelRenderProps) {
+  if (midAngle === undefined || percent === undefined || percent < 0.05) {
+    return null;
+  }
 
   const RADIAN = Math.PI / 180;
   const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
@@ -100,8 +94,10 @@ function renderMiniLabel({
   innerRadius,
   outerRadius,
   percent,
-}: CustomLabelProps) {
-  if (percent < 0.08) return null;
+}: PieLabelRenderProps) {
+  if (midAngle === undefined || percent === undefined || percent < 0.08) {
+    return null;
+  }
 
   const RADIAN = Math.PI / 180;
   const radius = innerRadius + (outerRadius - innerRadius) * 0.5;

@@ -7,7 +7,7 @@ import {
   TrendingUp,
   TrendingDown,
 } from "lucide-react";
-import { useAccount } from "wagmi";
+import { useConnection } from "wagmi";
 import { mainnet } from "wagmi/chains";
 import { useMemo } from "react";
 import { Card, CardContent } from "@/components/ui/card";
@@ -226,7 +226,7 @@ export function LiquidityPairsSection({
   chainId: selectedChainId,
 }: LiquidityPairsSectionProps) {
   const t = useTranslations("dex");
-  const { chain } = useAccount();
+  const { chain } = useConnection();
   const chainId = selectedChainId ?? chain?.id ?? mainnet.id;
   const { allPairs, isLoading } = useDexScreenerPrices();
   const chainConfig = getChainConfig(chainId);

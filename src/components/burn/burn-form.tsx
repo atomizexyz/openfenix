@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useCallback, useEffect, useId } from "react";
-import { useAccount } from "wagmi";
+import { useConnection } from "wagmi";
 import { useTranslations } from "next-intl";
 import NumberFlow from "@number-flow/react";
 import { ArrowDown, CheckCircle, AlertCircle, Flame } from "lucide-react";
@@ -26,7 +26,7 @@ import { parseEther } from "viem";
 
 export function BurnForm() {
   const t = useTranslations("burn");
-  const { chain, isConnected } = useAccount();
+  const { chain, isConnected } = useConnection();
   const [amount, setAmount] = useState("");
   // Ties the "you receive" Label to the read-only <output> below. The shared
   // <Field> cannot supply this one: its context is only readable by components
@@ -63,10 +63,17 @@ export function BurnForm() {
     }
   }, [isApproveSuccess, refetchAllowance]);
 
-  // Reset amount and refetch balances after successful burn
+  // Clear the amount when a burn succeeds. Adjusting state during render on a
+  // change (rather than in an effect) avoids rendering the stale amount once.
+  const [prevBurnSuccess, setPrevBurnSuccess] = useState(isBurnSuccess);
+  if (isBurnSuccess !== prevBurnSuccess) {
+    setPrevBurnSuccess(isBurnSuccess);
+    if (isBurnSuccess) setAmount("");
+  }
+
+  // Refetch balances after a successful burn
   useEffect(() => {
     if (isBurnSuccess) {
-      setAmount("");
       refetchBalance();
       refetchAllowance();
     }
@@ -122,15 +129,16 @@ export function BurnForm() {
     }
   }, [xenBalance]);
 
+  const chainId = chain?.id;
   const handleApprove = useCallback(() => {
-    if (!chain?.id || !amount) return;
-    approve(chain.id, amount);
-  }, [chain?.id, amount, approve]);
+    if (!chainId || !amount) return;
+    approve(chainId, amount);
+  }, [chainId, amount, approve]);
 
   const handleBurn = useCallback(() => {
-    if (!chain?.id || !amount) return;
-    burn(chain.id, amount);
-  }, [chain?.id, amount, burn]);
+    if (!chainId || !amount) return;
+    burn(chainId, amount);
+  }, [chainId, amount, burn]);
 
   const isProcessing = isBurnPending || isBurnConfirming || isApprovePending || isApproveConfirming;
   const chainSupported = chain?.id ? !!getChainConfig(chain.id) : false;

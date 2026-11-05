@@ -1,6 +1,6 @@
 "use client";
 
-import { useAccount, useSwitchChain } from "wagmi";
+import { useConnection, useSwitchChain } from "wagmi";
 import { FENIX_CHAINS } from "@/config/chains";
 import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -13,8 +13,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 export function ChainSelector() {
-  const { chain } = useAccount();
-  const { switchChain } = useSwitchChain();
+  const { chain } = useConnection();
+  const { mutate: switchChain } = useSwitchChain();
 
   const currentChain = FENIX_CHAINS.find((c) => c.chain.id === chain?.id);
 

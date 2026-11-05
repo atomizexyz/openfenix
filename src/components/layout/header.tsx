@@ -2,13 +2,14 @@
 
 import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/routing";
-import { ConnectKitButton } from "connectkit";
-import { useDisconnect } from "wagmi";
+import { useAppKit } from "@reown/appkit/react";
+import { useConnection, useDisconnect, useEnsName } from "wagmi";
+import { mainnet } from "wagmi/chains";
 import { useTheme } from "next-themes";
 import { Sun, Moon, Menu, X, LogOut, Copy, Check, ExternalLink } from "lucide-react";
 import { FenixLogo, FenixWordmark } from "@/components/icons";
 import { useState, useCallback } from "react";
-import { cn } from "@/lib/utils";
+import { cn, shortenAddress } from "@/lib/utils";
 import { useCopyToClipboard } from "@/hooks/use-copy-to-clipboard";
 import {
   DropdownMenu,
@@ -38,61 +39,57 @@ import { WalletQR } from "@/components/wallet/wallet-qr";
  */
 function WalletButton() {
   const t = useTranslations("nav");
-  const { disconnect } = useDisconnect();
+  const { open } = useAppKit();
+  const { address, isConnected } = useConnection();
+  // ENS lives on mainnet whatever chain the wallet is on.
+  const { data: ensName } = useEnsName({ address, chainId: mainnet.id });
+  const { mutate: disconnect } = useDisconnect();
   const { copied, copy } = useCopyToClipboard();
 
   const handleDisconnect = useCallback(() => {
     disconnect();
   }, [disconnect]);
 
+  if (!isConnected || !address) {
+    return (
+      <Button variant="brand" onClick={() => open({ view: "Connect" })}>
+        {t("connect")}
+      </Button>
+    );
+  }
+
   return (
-    <ConnectKitButton.Custom>
-      {({ isConnected, show, truncatedAddress, ensName, address }) => {
-        if (!isConnected) {
-          return (
-            <Button variant="brand" onClick={show}>
-              {t("connect")}
-            </Button>
-          );
-        }
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="outline">{ensName || shortenAddress(address)}</Button>
+      </DropdownMenuTrigger>
 
-        return (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline">{ensName || truncatedAddress}</Button>
-            </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-52">
+        <DropdownMenuItem onClick={() => copy(address)}>
+          {copied ? (
+            <Check className="h-4 w-4 text-emerald-500" />
+          ) : (
+            <Copy className="h-4 w-4" />
+          )}
+          {copied ? t("copied") : t("copy_address")}
+        </DropdownMenuItem>
 
-            <DropdownMenuContent align="end" className="w-52">
-              {address && (
-                <DropdownMenuItem onClick={() => copy(address)}>
-                  {copied ? (
-                    <Check className="h-4 w-4 text-emerald-500" />
-                  ) : (
-                    <Copy className="h-4 w-4" />
-                  )}
-                  {copied ? t("copied") : t("copy_address")}
-                </DropdownMenuItem>
-              )}
+        <DropdownMenuItem onClick={() => open({ view: "Account" })}>
+          <ExternalLink className="h-4 w-4" />
+          {t("wallet_details")}
+        </DropdownMenuItem>
 
-              <DropdownMenuItem onClick={() => show?.()}>
-                <ExternalLink className="h-4 w-4" />
-                {t("wallet_details")}
-              </DropdownMenuItem>
+        <DropdownMenuSeparator />
 
-              <DropdownMenuSeparator />
-
-              <DropdownMenuItem
-                onClick={handleDisconnect}
-                className="text-red-600 focus:bg-red-50 focus:text-red-600 dark:text-red-400 dark:focus:bg-red-950/30 dark:focus:text-red-400"
-              >
-                <LogOut className="h-4 w-4 text-red-600 dark:text-red-400" />
-                {t("disconnect")}
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        );
-      }}
-    </ConnectKitButton.Custom>
+        <DropdownMenuItem
+          onClick={handleDisconnect}
+          className="text-red-600 focus:bg-red-50 focus:text-red-600 dark:text-red-400 dark:focus:bg-red-950/30 dark:focus:text-red-400"
+        >
+          <LogOut className="h-4 w-4 text-red-600 dark:text-red-400" />
+          {t("disconnect")}
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }
 

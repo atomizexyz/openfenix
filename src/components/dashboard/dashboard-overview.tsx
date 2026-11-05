@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useAccount } from "wagmi";
+import { useConnection } from "wagmi";
 import { mainnet } from "wagmi/chains";
 import { DashboardChainSelector } from "@/components/dashboard/dashboard-chain-selector";
 import { LiquidityPairsSection } from "@/components/dashboard/liquidity-pairs";
@@ -11,7 +11,7 @@ import { YieldChart } from "@/components/charts/yield-chart";
 import { getChainConfig } from "@/config/chains";
 
 export function DashboardOverview() {
-  const { chain: walletChain } = useAccount();
+  const { chain: walletChain } = useConnection();
   const [selectedChainId, setSelectedChainId] = useState<number>();
 
   const walletChainId = walletChain && getChainConfig(walletChain.id)

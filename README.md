@@ -27,7 +27,7 @@ cp .env.local.example .env.local
 
 | Variable | Without it |
 | --- | --- |
-| `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID` | WalletConnect falls back to the shared `demo` project |
+| `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID` | Reown AppKit falls back to a placeholder id that Reown rejects, so WalletConnect (QR / mobile) will not work. Create one at [dashboard.reown.com](https://dashboard.reown.com) and allowlist your domains there |
 | `NEXT_PUBLIC_BLINK_API_KEY` | Writes use the public RPCs, with no MEV protection |
 
 ## Scripts

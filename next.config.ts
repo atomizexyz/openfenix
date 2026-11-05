@@ -13,10 +13,20 @@ const nextConfig: NextConfig = {
     // and means no remotePatterns are needed at all.
     unoptimized: true,
   },
-  webpack: (config) => {
-    config.resolve.fallback = { ...config.resolve.fallback, "pino-pretty": false };
-    config.externals = [...(config.externals || []), "pino-pretty"];
-    return config;
+  turbopack: {
+    resolveAlias: {
+      // pino (pulled in by WalletConnect) optionally requires pino-pretty, a
+      // dev-only log formatter. Alias it away so it never reaches the bundle.
+      "pino-pretty": false,
+      // AppKit lazily imports the Coinbase Wallet and Base Account SDKs for
+      // connectors that src/components/layout/providers.tsx disables
+      // (enableCoinbase / enableBaseAccount). They install as optional deps of
+      // @reown/appkit-utils regardless; aliasing them keeps that tree (and the
+      // CDP SDK's unresolvable x402 imports) out of the bundle.
+      "@coinbase/wallet-sdk": false,
+      "@base-org/account": false,
+      "@coinbase/cdp-sdk": false,
+    },
   },
 };
 
