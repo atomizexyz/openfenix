@@ -61,7 +61,7 @@ export function LocaleSelector({
             )}
           >
             <span>{LOCALE_NAMES[l]}</span>
-            <span className="text-xs text-ash-400">{l.toUpperCase()}</span>
+            <span className="text-xs text-muted-foreground">{l.toUpperCase()}</span>
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>

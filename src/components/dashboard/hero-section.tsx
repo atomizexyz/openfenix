@@ -81,7 +81,7 @@ function FlushCountdownDisplay() {
                 value={days}
                 transformTiming={{ duration: 400, easing: "ease-out" }}
               />
-              <span className="font-normal text-muted-foreground">d</span>
+              <span className="text-muted-foreground font-normal">d</span>
             </>
           )}
           <NumberFlow
@@ -89,19 +89,19 @@ function FlushCountdownDisplay() {
             format={{ minimumIntegerDigits: days > 0 ? 2 : 1 }}
             transformTiming={{ duration: 400, easing: "ease-out" }}
           />
-          <span className="font-normal text-muted-foreground">h</span>
+          <span className="text-muted-foreground font-normal">h</span>
           <NumberFlow
             value={minutes}
             format={{ minimumIntegerDigits: 2 }}
             transformTiming={{ duration: 400, easing: "ease-out" }}
           />
-          <span className="font-normal text-muted-foreground">m</span>
+          <span className="text-muted-foreground font-normal">m</span>
           <NumberFlow
             value={seconds}
             format={{ minimumIntegerDigits: 2 }}
             transformTiming={{ duration: 400, easing: "ease-out" }}
           />
-          <span className="font-normal text-muted-foreground">s</span>
+          <span className="text-muted-foreground font-normal">s</span>
         </span>
       )}
     </motion.div>

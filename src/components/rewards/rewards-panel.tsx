@@ -166,7 +166,7 @@ export function RewardsPanel() {
                   }}
                   transformTiming={{ duration: 600, easing: "ease-out" }}
                 />{" "}
-                <span className="text-ash-400">FENIX</span>
+                <span className="text-muted-foreground">FENIX</span>
               </span>
             }
           />
@@ -185,7 +185,7 @@ export function RewardsPanel() {
                   }}
                   transformTiming={{ duration: 600, easing: "ease-out" }}
                 />{" "}
-                <span className="text-ash-400">FENIX</span>
+                <span className="text-muted-foreground">FENIX</span>
               </span>
             }
           />

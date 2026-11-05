@@ -155,7 +155,7 @@ export function Footer() {
         </div>
 
         <div className="mt-8 border-t border-border pt-8">
-          <p className="text-center text-xs text-ash-400 dark:text-ash-500">
+          <p className="text-center text-xs text-muted-foreground">
             &copy; {new Date().getFullYear()} {t("copyright")}
           </p>
         </div>

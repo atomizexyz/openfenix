@@ -114,7 +114,7 @@ export function YieldChart({ amount, term, className }: YieldChartProps) {
       <CardContent>
         {!hasData ? (
           <div className="flex h-[280px] items-center justify-center">
-            <p className="text-sm text-ash-400 dark:text-ash-500">
+            <p className="text-sm text-muted-foreground">
               {t("yield_empty")}
             </p>
           </div>
@@ -169,7 +169,7 @@ export function YieldChart({ amount, term, className }: YieldChartProps) {
                 tick={{ fontSize: 11 }}
                 tickLine={false}
                 axisLine={false}
-                className="text-ash-400 dark:text-ash-500"
+                className="text-muted-foreground"
                 tickFormatter={(value) =>
                   value >= 365
                     ? `${(value / 365).toFixed(1)}y`
@@ -181,7 +181,7 @@ export function YieldChart({ amount, term, className }: YieldChartProps) {
                 tick={{ fontSize: 11 }}
                 tickLine={false}
                 axisLine={false}
-                className="text-ash-400 dark:text-ash-500"
+                className="text-muted-foreground"
                 tickFormatter={(value) => formatCompact(value)}
                 width={55}
               />

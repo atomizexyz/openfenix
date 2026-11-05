@@ -63,7 +63,7 @@ function StatCard({ icon, label, value, suffix, isLoading, usdValue, usdIsLoadin
                 )}
               </span>
               {suffix && (
-                <span className="text-sm font-medium text-ash-400 dark:text-ash-500">
+                <span className="text-sm font-medium text-muted-foreground">
                   {suffix}
                 </span>
               )}
@@ -73,7 +73,7 @@ function StatCard({ icon, label, value, suffix, isLoading, usdValue, usdIsLoadin
           {usdIsLoading ? (
             <Skeleton className="mt-1 h-4 w-20" />
           ) : usdValue !== undefined ? (
-            <p className="mt-1 text-sm text-ash-400 dark:text-ash-500">
+            <p className="mt-1 text-sm text-muted-foreground">
               {formatUsd(usdValue)}
             </p>
           ) : null}

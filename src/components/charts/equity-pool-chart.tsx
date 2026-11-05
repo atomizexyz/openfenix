@@ -173,7 +173,7 @@ export function SupplyChart({ chainId, className }: SupplyChartProps) {
           </div>
         ) : data.length === 0 ? (
           <div className="flex h-[280px] items-center justify-center">
-            <p className="text-sm text-ash-400 dark:text-ash-500">
+            <p className="text-sm text-muted-foreground">
               {t("no_pool_data")}
             </p>
           </div>
@@ -311,7 +311,7 @@ function MiniSupplyChart({ stats }: { stats: ChainStats }) {
           <UnavailableSupplyChart />
         ) : data.length === 0 ? (
           <div className="flex h-[160px] items-center justify-center">
-            <p className="text-xs text-ash-400 dark:text-ash-500">--</p>
+            <p className="text-xs text-muted-foreground">--</p>
           </div>
         ) : (
           <div className="flex flex-col items-center">

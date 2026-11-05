@@ -27,7 +27,7 @@ export function FlushCountdown({ target, readyLabel }: FlushCountdownProps) {
             value={days}
             transformTiming={{ duration: 400, easing: "ease-out" }}
           />
-          <span className="text-ash-400">d</span>{" "}
+          <span className="text-muted-foreground">d</span>{" "}
         </>
       )}
       <NumberFlow
@@ -35,19 +35,19 @@ export function FlushCountdown({ target, readyLabel }: FlushCountdownProps) {
         format={{ minimumIntegerDigits: days > 0 ? 2 : 1 }}
         transformTiming={{ duration: 400, easing: "ease-out" }}
       />
-      <span className="text-ash-400">h</span>{" "}
+      <span className="text-muted-foreground">h</span>{" "}
       <NumberFlow
         value={minutes}
         format={{ minimumIntegerDigits: 2 }}
         transformTiming={{ duration: 400, easing: "ease-out" }}
       />
-      <span className="text-ash-400">m</span>{" "}
+      <span className="text-muted-foreground">m</span>{" "}
       <NumberFlow
         value={seconds}
         format={{ minimumIntegerDigits: 2 }}
         transformTiming={{ duration: 400, easing: "ease-out" }}
       />
-      <span className="text-ash-400">s</span>
+      <span className="text-muted-foreground">s</span>
     </span>
   );
 }
