@@ -1,0 +1,15 @@
+export const DOGECHAIN_RPC_ENDPOINTS = [
+  "https://2000.rpc.thirdweb.com",
+  "https://dogechain-sj.ankr.com",
+  "https://dogechain.ankr.com",
+  "https://dogechain.rpc.thirdweb.com",
+  "https://lb.routeme.sh/rpc/evm/2000",
+  "https://rpc-ancient.dogechain.dog",
+  "https://rpc-sg.dogechain.dog",
+  "https://rpc-us.dogechain.dog",
+  "https://rpc.ankr.com/dogechain",
+  "https://rpc.dogechain.dog",
+  "https://rpc01-sg.dogechain.dog",
+  "https://rpc02-sg.dogechain.dog",
+  "https://rpc03-sg.dogechain.dog",
+] as const;
