@@ -8,110 +8,37 @@ import NumberFlow from "@number-flow/react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { FenixLogo } from "@/components/icons";
+import { RisingAsh } from "@/components/effects/rising-ash";
 import { useCooldownUnlockTs } from "@/hooks/use-fenix-contract";
 import { useCountdown } from "@/hooks/use-countdown";
 import { mainnet } from "wagmi/chains";
 
+// Warm ambient light behind the ash. Pure CSS keyframes on transform, so the
+// drift runs on the compositor; the radial gradient is already soft, so no
+// blur filter (which would be re-rasterised every frame) is needed.
 const ORB_CONFIG = [
-  { size: 320, x: "15%", y: "20%", delay: 0, duration: 18, color: "rgba(249, 115, 22, 0.15)" },
-  { size: 240, x: "75%", y: "60%", delay: 2, duration: 22, color: "rgba(239, 68, 68, 0.12)" },
-  { size: 180, x: "50%", y: "30%", delay: 4, duration: 16, color: "rgba(245, 158, 11, 0.10)" },
-  { size: 280, x: "85%", y: "15%", delay: 1, duration: 20, color: "rgba(249, 115, 22, 0.08)" },
-  { size: 200, x: "25%", y: "75%", delay: 3, duration: 24, color: "rgba(220, 38, 38, 0.10)" },
+  { size: 360, x: "15%", y: "20%", delay: 0, duration: 18, color: "rgba(249, 115, 22, 0.15)" },
+  { size: 280, x: "75%", y: "60%", delay: -2, duration: 22, color: "rgba(239, 68, 68, 0.12)" },
+  { size: 220, x: "50%", y: "30%", delay: -4, duration: 16, color: "rgba(245, 158, 11, 0.10)" },
+  { size: 320, x: "85%", y: "15%", delay: -1, duration: 20, color: "rgba(249, 115, 22, 0.08)" },
+  { size: 240, x: "25%", y: "75%", delay: -3, duration: 24, color: "rgba(220, 38, 38, 0.10)" },
 ];
-
-const PARTICLE_COUNT = 56;
-
-const EMBER_COLORS = [
-  "bg-fenix-400/80",
-  "bg-fenix-500/90",
-  "bg-ember-400/80",
-  "bg-amber-400/70",
-  "bg-orange-300/80",
-];
-
-function seededRandom(seed: number) {
-  const value = Math.sin(seed * 12.9898) * 43758.5453;
-  return value - Math.floor(value);
-}
-
-const PARTICLES = Array.from({ length: PARTICLE_COUNT }, (_, i) => {
-  const random = (offset: number) => seededRandom(i * 7.31 + offset);
-  const duration = 6 + random(3) * 7;
-
-  return {
-    size: 3 + random(1) * 6,
-    startX: random(2) * 100,
-    duration,
-    delay: -random(4) * duration,
-    color: EMBER_COLORS[i % EMBER_COLORS.length],
-    drift: (random(5) - 0.5) * 170,
-    flickerMid: 0.65 + random(6) * 0.35,
-    travel: 850 + random(7) * 400,
-  };
-});
 
 function FloatingOrbs() {
   return (
-    <div className="pointer-events-none absolute inset-0 overflow-hidden">
+    <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
       {ORB_CONFIG.map((orb, i) => (
-        <motion.div
+        <div
           key={i}
-          className="absolute rounded-full blur-3xl"
+          className="hero-orb absolute rounded-full"
           style={{
             width: orb.size,
             height: orb.size,
             left: orb.x,
             top: orb.y,
             background: `radial-gradient(circle, ${orb.color} 0%, transparent 70%)`,
-          }}
-          animate={{
-            x: [0, 30, -20, 15, 0],
-            y: [0, -25, 15, -10, 0],
-            scale: [1, 1.1, 0.95, 1.05, 1],
-          }}
-          transition={{
-            duration: orb.duration,
-            delay: orb.delay,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        />
-      ))}
-    </div>
-  );
-}
-
-function FloatingParticles() {
-  return (
-    <div className="pointer-events-none absolute inset-0 overflow-hidden">
-      {PARTICLES.map((particle, i) => (
-        <motion.div
-          key={i}
-          className={`hero-ember absolute rounded-full ${particle.color}`}
-          style={{
-            width: particle.size,
-            height: particle.size,
-            left: `${particle.startX}%`,
-            bottom: -10,
-            boxShadow: `0 0 0 1px rgba(124, 45, 18, 0.24), 0 0 ${particle.size * 2.8}px ${particle.size * 1.2}px rgba(249, 115, 22, 0.58)`,
-          }}
-          animate={{
-            y: [0, -particle.travel],
-            x: [
-              0,
-              particle.drift * 0.4,
-              particle.drift,
-              particle.drift * 0.6,
-            ],
-            opacity: [0, 1, particle.flickerMid, 1, 0.7, 0],
-            scale: [1, 1.3, 0.8, 1.1, 0.6],
-          }}
-          transition={{
-            duration: particle.duration,
-            delay: particle.delay,
-            repeat: Infinity,
-            ease: "easeOut",
+            animationDuration: `${orb.duration}s`,
+            animationDelay: `${orb.delay}s`,
           }}
         />
       ))}
@@ -154,7 +81,7 @@ function FlushCountdownDisplay() {
                 value={days}
                 transformTiming={{ duration: 400, easing: "ease-out" }}
               />
-              <span className="text-ash-400 font-normal">d</span>
+              <span className="font-normal text-muted-foreground">d</span>
             </>
           )}
           <NumberFlow
@@ -162,19 +89,19 @@ function FlushCountdownDisplay() {
             format={{ minimumIntegerDigits: days > 0 ? 2 : 1 }}
             transformTiming={{ duration: 400, easing: "ease-out" }}
           />
-          <span className="text-ash-400 font-normal">h</span>
+          <span className="font-normal text-muted-foreground">h</span>
           <NumberFlow
             value={minutes}
             format={{ minimumIntegerDigits: 2 }}
             transformTiming={{ duration: 400, easing: "ease-out" }}
           />
-          <span className="text-ash-400 font-normal">m</span>
+          <span className="font-normal text-muted-foreground">m</span>
           <NumberFlow
             value={seconds}
             format={{ minimumIntegerDigits: 2 }}
             transformTiming={{ duration: 400, easing: "ease-out" }}
           />
-          <span className="text-ash-400 font-normal">s</span>
+          <span className="font-normal text-muted-foreground">s</span>
         </span>
       )}
     </motion.div>
@@ -192,11 +119,13 @@ export function HeroSection() {
         className="hero-sunset pointer-events-none absolute inset-0 dark:hidden"
       />
       <FloatingOrbs />
+      <RisingAsh />
 
-      {/* Preserve the darker vignette in dark mode. */}
-      <FloatingParticles />
-
-      <div className="pointer-events-none absolute inset-0 hidden bg-[radial-gradient(ellipse_at_center,_transparent_0%,_rgba(10,10,10,0.85)_70%)] dark:block" />
+      {/* Lens vignette over the ash, dark theme only. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 hidden bg-[radial-gradient(ellipse_at_center,_transparent_0%,_rgba(10,10,10,0.85)_70%)] dark:block"
+      />
 
       {/* Content */}
       <div className="relative z-10 mx-auto max-w-4xl text-center">
@@ -235,7 +164,7 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.4, ease: "easeOut" }}
-          className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-ash-700 dark:text-ash-400 sm:text-xl"
+          className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-foreground-secondary sm:text-xl"
         >
           {t("subtitle")}
         </motion.p>
