@@ -63,6 +63,7 @@
     "error_exceeds_balance": "Amount exceeds your XEN balance"
   },
   "stake": {
+    "unsupported_network": "Please switch to a supported network",
     "title": "Stake FENIX",
     "description": "Lock your FENIX tokens to earn yield through equity-based distribution",
     "amount_label": "FENIX Amount",

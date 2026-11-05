@@ -16,28 +16,3 @@ export enum StakeStatus {
   EndedEarly = 3,
   EndedLate = 4,
 }
-
-export interface BurnRecord {
-  user: `0x${string}`;
-  xenBurned: bigint;
-  fenixMinted: bigint;
-  timestamp: bigint;
-  txHash: string;
-}
-
-export interface PoolInfo {
-  totalShares: bigint;
-  totalStaked: bigint;
-  rewardPool: bigint;
-  shareRate: bigint;
-}
-
-export interface ProtocolStats {
-  totalXenBurned: bigint;
-  totalFenixMinted: bigint;
-  totalStaked: bigint;
-  totalShares: bigint;
-  currentShareRate: bigint;
-  rewardPoolBalance: bigint;
-  adoptionPoolBalance: bigint;
-}

@@ -63,6 +63,7 @@
     "error_exceeds_balance": "Сума перевищує ваш баланс XEN"
   },
   "stake": {
+    "unsupported_network": "Будь ласка, перемкніться на підтримувану мережу",
     "title": "Стейкінг FENIX",
     "description": "Заблокуйте ваші токени FENIX для отримання доходу через розподіл на основі часток",
     "amount_label": "Кількість FENIX",

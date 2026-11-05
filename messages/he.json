@@ -63,6 +63,7 @@
     "error_exceeds_balance": "הסכום חורג מיתרת ה-XEN שלך"
   },
   "stake": {
+    "unsupported_network": "אנא עבור לרשת נתמכת",
     "title": "הפקדת FENIX",
     "description": "נעלו את אסימוני FENIX שלכם כדי להרוויח תשואה דרך חלוקה מבוססת הון",
     "amount_label": "כמות FENIX",

@@ -63,6 +63,7 @@
     "error_exceeds_balance": "राशि आपके XEN बैलेंस से अधिक है"
   },
   "stake": {
+    "unsupported_network": "कृपया समर्थित नेटवर्क पर स्विच करें",
     "title": "FENIX स्टेक करें",
     "description": "इक्विटी-आधारित वितरण के माध्यम से यील्ड कमाने के लिए अपने FENIX टोकन लॉक करें",
     "amount_label": "FENIX राशि",

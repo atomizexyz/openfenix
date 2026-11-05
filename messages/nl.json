@@ -63,6 +63,7 @@
     "error_exceeds_balance": "Bedrag is hoger dan je XEN-saldo"
   },
   "stake": {
+    "unsupported_network": "Schakel over naar een ondersteund netwerk",
     "title": "FENIX Staken",
     "description": "Vergrendel uw FENIX-tokens om rendement te verdienen via op vermogen gebaseerde distributie",
     "amount_label": "FENIX Bedrag",

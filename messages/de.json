@@ -63,6 +63,7 @@
     "error_exceeds_balance": "Betrag übersteigt dein XEN-Guthaben"
   },
   "stake": {
+    "unsupported_network": "Bitte zu einem unterstützten Netzwerk wechseln",
     "title": "FENIX Staken",
     "description": "Sperre deine FENIX-Token, um Rendite durch eigenkapitalbasierte Verteilung zu verdienen",
     "amount_label": "FENIX Menge",

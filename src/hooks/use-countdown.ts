@@ -26,6 +26,30 @@ export function useNowSeconds(intervalMs = 1000): number {
   return now;
 }
 
+// setTimeout overflows past 2^31-1 ms (~24.8 days); longer waits re-arm.
+const MAX_TIMEOUT_MS = 2_147_483_647;
+
+/**
+ * Whether unix time `targetSeconds` has passed. Unlike useNowSeconds this does
+ * not tick: it re-renders once, when the moment arrives, so a component that
+ * only needs a before/after answer is not re-rendered every second.
+ */
+export function useHasPassed(targetSeconds: number): boolean {
+  const [now, setNow] = useState(nowSeconds);
+
+  useEffect(() => {
+    const ms = (targetSeconds - nowSeconds()) * 1000;
+    if (ms <= 0) return;
+    const timer = setTimeout(
+      () => setNow(nowSeconds()),
+      Math.min(ms + 250, MAX_TIMEOUT_MS)
+    );
+    return () => clearTimeout(timer);
+  }, [targetSeconds, now]);
+
+  return targetSeconds <= now;
+}
+
 export function useCountdown(targetSeconds: number): CountdownParts {
   const now = useNowSeconds();
 

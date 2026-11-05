@@ -67,8 +67,10 @@ export function Providers({ children }: { children: ReactNode }) {
       new QueryClient({
         defaultOptions: {
           queries: {
-            staleTime: 5_000,
-            refetchInterval: 15_000,
+            // No global refetchInterval: each read polls at a cadence matched
+            // to its data (see use-fenix-contract.ts), and one that should not
+            // poll -- ENS names, say -- no longer re-resolves every 15s.
+            staleTime: 15_000,
             retry: 2,
             retryDelay: 1_000,
           },

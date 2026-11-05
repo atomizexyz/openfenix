@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useMemo, useCallback, useEffect, useId } from "react";
+import { useState, useMemo, useCallback, useId } from "react";
 import { useConnection } from "wagmi";
 import { useTranslations } from "next-intl";
 import NumberFlow from "@number-flow/react";
-import { ArrowDown, CheckCircle, AlertCircle, Flame } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { ArrowDown, CheckCircle, AlertCircle } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -22,7 +22,7 @@ import {
 import { getChainConfig } from "@/config/chains";
 import { formatEther, cn } from "@/lib/utils";
 import { XEN_TO_FENIX_RATIO } from "@/config/constants";
-import { parseEther } from "viem";
+import { parseEther, formatEther as formatEtherExact } from "viem";
 
 export function BurnForm() {
   const t = useTranslations("burn");
@@ -37,8 +37,11 @@ export function BurnForm() {
   // button (WCAG 3.3.1).
   const amountErrorId = useId();
 
-  const { data: xenBalance, isLoading: isBalanceLoading, refetch: refetchBalance } = useXenBalance(chain?.id);
-  const { data: xenAllowance, refetch: refetchAllowance } = useXenAllowance(chain?.id);
+  const { data: xenBalance, isLoading: isBalanceLoading } = useXenBalance(chain?.id);
+  const { data: xenAllowance } = useXenAllowance(chain?.id);
+  // What the last burn actually sent. The form clears on success, so the
+  // confirmation has to read from here rather than from the (now empty) field.
+  const [submitted, setSubmitted] = useState<{ xen: number; fenix: number } | null>(null);
 
   const {
     burn,
@@ -56,28 +59,15 @@ export function BurnForm() {
     error: approveError,
   } = useApproveXen();
 
-  // Refetch allowance after successful approval
-  useEffect(() => {
-    if (isApproveSuccess) {
-      refetchAllowance();
-    }
-  }, [isApproveSuccess, refetchAllowance]);
-
   // Clear the amount when a burn succeeds. Adjusting state during render on a
   // change (rather than in an effect) avoids rendering the stale amount once.
+  // Balance and allowance refresh themselves: every confirmed write
+  // invalidates the contract reads (useConfirmedWrite).
   const [prevBurnSuccess, setPrevBurnSuccess] = useState(isBurnSuccess);
   if (isBurnSuccess !== prevBurnSuccess) {
     setPrevBurnSuccess(isBurnSuccess);
     if (isBurnSuccess) setAmount("");
   }
-
-  // Refetch balances after a successful burn
-  useEffect(() => {
-    if (isBurnSuccess) {
-      refetchBalance();
-      refetchAllowance();
-    }
-  }, [isBurnSuccess, refetchBalance, refetchAllowance]);
 
   const balanceFormatted = useMemo(() => {
     if (!xenBalance) return "0";
@@ -125,7 +115,8 @@ export function BurnForm() {
 
   const handleMax = useCallback(() => {
     if (xenBalance) {
-      setAmount(formatEther(xenBalance as bigint));
+      // Exact, not the 4-decimal display string: "Max" must leave no dust.
+      setAmount(formatEtherExact(xenBalance as bigint));
     }
   }, [xenBalance]);
 
@@ -137,23 +128,16 @@ export function BurnForm() {
 
   const handleBurn = useCallback(() => {
     if (!chainId || !amount) return;
+    setSubmitted({ xen: parseFloat(amount), fenix: fenixReceived });
     burn(chainId, amount);
-  }, [chainId, amount, burn]);
+  }, [chainId, amount, fenixReceived, burn]);
 
   const isProcessing = isBurnPending || isBurnConfirming || isApprovePending || isApproveConfirming;
   const chainSupported = chain?.id ? !!getChainConfig(chain.id) : false;
 
   return (
     <Card variant="glow" className="w-full">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Flame className="h-5 w-5 text-fenix-500" />
-          {t("title")}
-        </CardTitle>
-        <CardDescription>{t("description")}</CardDescription>
-      </CardHeader>
-
-      <CardContent className="space-y-6">
+      <CardContent className="space-y-6 pt-6">
         {/* XEN Input */}
         <Field className="space-y-2">
           <div className="flex items-center justify-between">
@@ -294,13 +278,13 @@ export function BurnForm() {
         </div>
 
         {/* Status messages */}
-        {isBurnSuccess && (
+        {isBurnSuccess && submitted && (
           <Alert variant="success">
             <CheckCircle />
             <AlertDescription>
               {t("success", {
-                xen: parseFloat(amount).toLocaleString(),
-                fenix: fenixReceived.toLocaleString(undefined, {
+                xen: submitted.xen.toLocaleString(),
+                fenix: submitted.fenix.toLocaleString(undefined, {
                   maximumFractionDigits: 4,
                 }),
               })}

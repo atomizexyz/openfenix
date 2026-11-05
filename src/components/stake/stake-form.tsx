@@ -5,14 +5,13 @@ import { useConnection } from "wagmi";
 import { useTranslations } from "next-intl";
 import NumberFlow from "@number-flow/react";
 import {
-  Lock,
   Clock,
   Maximize2,
   Sparkles,
   CheckCircle,
   AlertCircle,
 } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -31,7 +30,8 @@ import {
   calculateInflation,
 } from "@/lib/utils";
 import { MAX_STAKE_DAYS, MIN_STAKE_DAYS } from "@/config/constants";
-import { parseEther } from "viem";
+import { parseEther, formatEther as formatEtherExact } from "viem";
+import { getChainConfig } from "@/config/chains";
 
 const TERM_MARKERS = [
   { value: 1, label: "1d" },
@@ -79,6 +79,9 @@ export function StakeForm() {
   const amountErrorId = useId();
 
   const { data: fenixBalance, isLoading: isBalanceLoading } = useFenixBalance(chain?.id);
+  // What the last stake actually sent. The form resets on success, so the
+  // confirmation reads from here, not from the cleared amount and default term.
+  const [submitted, setSubmitted] = useState<{ amount: number; term: number } | null>(null);
 
   const {
     startStake,
@@ -150,31 +153,28 @@ export function StakeForm() {
 
   const handleMax = useCallback(() => {
     if (fenixBalance) {
-      setAmount(formatEther(fenixBalance as bigint));
+      // Exact, not the 4-decimal display string: "Max" must leave no dust.
+      setAmount(formatEtherExact(fenixBalance as bigint));
     }
   }, [fenixBalance]);
 
   const chainId = chain?.id;
   const handleStake = useCallback(() => {
     if (!chainId || !amount) return;
+    setSubmitted({ amount: parsedAmount, term });
     startStake(chainId, amount, term);
-  }, [chainId, amount, term, startStake]);
+  }, [chainId, amount, parsedAmount, term, startStake]);
 
   const isProcessing = isPending || isConfirming;
+  // Same guard as the burn form: a wallet on a chain with no FENIX deployment
+  // cannot stake, so say so instead of failing at the contract call.
+  const chainSupported = chain?.id ? !!getChainConfig(chain.id) : false;
 
   return (
     // `id` is the anchor StakesList's empty-state CTA scrolls to; `scroll-mt-20`
-    // clears the 4rem sticky header so the card title is not hidden under it.
+    // clears the 4rem sticky header so the top of the form is not hidden under it.
     <Card id="stake-form" variant="glow" className="w-full scroll-mt-20">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Lock className="h-5 w-5 text-fenix-500" />
-          {t("title")}
-        </CardTitle>
-        <CardDescription>{t("description")}</CardDescription>
-      </CardHeader>
-
-      <CardContent className="space-y-6">
+      <CardContent className="space-y-6 pt-6">
         {/* FENIX Amount Input */}
         <Field className="space-y-2">
           <div className="flex items-center justify-between">
@@ -361,7 +361,7 @@ export function StakeForm() {
           size="lg"
           onClick={handleStake}
           loading={isProcessing}
-          disabled={!isConnected || !isValidAmount || isProcessing}
+          disabled={!isConnected || !chainSupported || !isValidAmount || isProcessing}
         >
           {isConfirming
             ? t("confirming")
@@ -371,15 +371,22 @@ export function StakeForm() {
         </Button>
 
         {/* Status Messages */}
-        {isSuccess && (
+        {isSuccess && submitted && (
           <Alert variant="success">
             <CheckCircle />
             <AlertDescription>
               {t("success", {
-                amount: parseFloat(amount).toLocaleString(),
-                term: term.toLocaleString(),
+                amount: submitted.amount.toLocaleString(),
+                term: submitted.term.toLocaleString(),
               })}
             </AlertDescription>
+          </Alert>
+        )}
+
+        {isConnected && !chainSupported && (
+          <Alert variant="warning">
+            <AlertCircle />
+            <AlertDescription>{t("unsupported_network")}</AlertDescription>
           </Alert>
         )}
 

@@ -61,8 +61,8 @@ function StatusDot({ status }: { status: ChainStats["status"] }) {
   if (status === "loading") {
     return (
       <span role="img" aria-label={t("loading")} className="relative flex h-2.5 w-2.5">
-        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-ash-400 opacity-75" />
-        <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-ash-400" />
+        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-muted-foreground opacity-75" />
+        <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-muted-foreground" />
       </span>
     );
   }
@@ -76,11 +76,14 @@ function StatusDot({ status }: { status: ChainStats["status"] }) {
     );
   }
 
+  // Steady, not pinging: a ping says "still working", and a chain that has
+  // answered is done. It also keeps ten infinite animations off the page.
   return (
-    <span role="img" aria-label={t("active")} className="relative flex h-2.5 w-2.5">
-      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-75" />
-      <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500" />
-    </span>
+    <span
+      role="img"
+      aria-label={t("active")}
+      className="flex h-2.5 w-2.5 rounded-full bg-emerald-500"
+    />
   );
 }
 
@@ -145,6 +148,41 @@ function parseChainStats(stats: ChainStats) {
   return { chain, equityNum, rewardNum, circulatingNum, shareRateNum, addressUrl };
 }
 
+/**
+ * One supply figure in either layout: a skeleton while the chain loads, the
+ * animated number once it answers, a muted dash if the read came back empty.
+ */
+function SupplyValue({
+  status,
+  value,
+  className,
+  skeletonClassName,
+  digits = 2,
+  compact = true,
+}: {
+  status: ChainStats["status"];
+  value: number | undefined;
+  className?: string;
+  skeletonClassName: string;
+  digits?: number;
+  compact?: boolean;
+}) {
+  if (status === "loading") return <Skeleton className={skeletonClassName} />;
+  if (value === undefined) return <span className="text-muted-foreground">--</span>;
+
+  const number = (
+    <NumberFlow
+      value={value}
+      format={{
+        notation: compact && value > 1_000_000 ? "compact" : "standard",
+        maximumFractionDigits: digits,
+      }}
+      transformTiming={{ duration: 600, easing: "ease-out" }}
+    />
+  );
+  return className ? <span className={className}>{number}</span> : number;
+}
+
 function ChainRow({ stats }: { stats: ChainStats }) {
   const t = useTranslations("chain_table");
   const { chainConfig, status } = stats;
@@ -206,79 +244,42 @@ function ChainRow({ stats }: { stats: ChainStats }) {
 
       {/* Equity Supply */}
       <td className="whitespace-nowrap px-3 py-3 text-right font-mono text-sm sm:px-4">
-        {status === "loading" ? (
-          <Skeleton className="ml-auto h-5 w-20" />
-        ) : equityNum !== undefined ? (
-          <span className="text-foreground">
-            <NumberFlow
-              value={equityNum}
-              format={{
-                notation: equityNum > 1_000_000 ? "compact" : "standard",
-                maximumFractionDigits: 2,
-              }}
-              transformTiming={{ duration: 600, easing: "ease-out" }}
-            />
-          </span>
-        ) : (
-          <span className="text-muted-foreground">--</span>
-        )}
+        <SupplyValue
+          status={status}
+          value={equityNum}
+          className="text-foreground"
+          skeletonClassName="ml-auto h-5 w-20"
+        />
       </td>
 
       {/* Reward Supply */}
       <td className="whitespace-nowrap px-3 py-3 text-right font-mono text-sm sm:px-4">
-        {status === "loading" ? (
-          <Skeleton className="ml-auto h-5 w-20" />
-        ) : rewardNum !== undefined ? (
-          <span className="text-foreground">
-            <NumberFlow
-              value={rewardNum}
-              format={{
-                notation: rewardNum > 1_000_000 ? "compact" : "standard",
-                maximumFractionDigits: 2,
-              }}
-              transformTiming={{ duration: 600, easing: "ease-out" }}
-            />
-          </span>
-        ) : (
-          <span className="text-muted-foreground">--</span>
-        )}
+        <SupplyValue
+          status={status}
+          value={rewardNum}
+          className="text-foreground"
+          skeletonClassName="ml-auto h-5 w-20"
+        />
       </td>
 
       {/* Circulating Supply */}
       <td className="whitespace-nowrap px-3 py-3 text-right font-mono text-sm sm:px-4">
-        {status === "loading" ? (
-          <Skeleton className="ml-auto h-5 w-20" />
-        ) : circulatingNum !== undefined ? (
-          <span className="text-foreground">
-            <NumberFlow
-              value={circulatingNum}
-              format={{
-                notation: circulatingNum > 1_000_000 ? "compact" : "standard",
-                maximumFractionDigits: 2,
-              }}
-              transformTiming={{ duration: 600, easing: "ease-out" }}
-            />
-          </span>
-        ) : (
-          <span className="text-muted-foreground">--</span>
-        )}
+        <SupplyValue
+          status={status}
+          value={circulatingNum}
+          className="text-foreground"
+          skeletonClassName="ml-auto h-5 w-20"
+        />
       </td>
 
       {/* Share Rate */}
       <td className="whitespace-nowrap px-3 py-3 text-right font-mono text-sm sm:px-4">
-        {status === "loading" ? (
-          <Skeleton className="ml-auto h-5 w-16" />
-        ) : shareRateNum !== undefined ? (
-          <span className="text-brand-foreground">
-            <NumberFlow
-              value={shareRateNum}
-              format={{ maximumFractionDigits: 4 }}
-              transformTiming={{ duration: 600, easing: "ease-out" }}
-            />
-          </span>
-        ) : (
-          <span className="text-muted-foreground">--</span>
-        )}
+        <SupplyValue
+          status={status}
+          value={shareRateNum}
+          className="text-brand-foreground"
+          skeletonClassName="ml-auto h-5 w-16" digits={4} compact={false}
+        />
       </td>
 
       {/* Address */}
@@ -358,82 +359,53 @@ function ChainCard({ stats }: { stats: ChainStats }) {
             <p className="text-xs text-muted-foreground">
               {t("equity_supply")}
             </p>
-            <p className="font-mono text-sm font-semibold text-foreground">
-              {status === "loading" ? (
-                <Skeleton className="h-5 w-16" />
-              ) : equityNum !== undefined ? (
-                <NumberFlow
-                  value={equityNum}
-                  format={{
-                    notation: equityNum > 1_000_000 ? "compact" : "standard",
-                    maximumFractionDigits: 2,
-                  }}
-                  transformTiming={{ duration: 600, easing: "ease-out" }}
-                />
-              ) : (
-                "--"
-              )}
-            </p>
+            {/* A div, not a p: the loading skeleton is a block element. */}
+            <div className="font-mono text-sm font-semibold text-foreground">
+              <SupplyValue
+                status={status}
+                value={equityNum}
+                skeletonClassName="h-5 w-16"
+              />
+            </div>
           </div>
           <div>
             <p className="text-xs text-muted-foreground">
               {t("reward_supply")}
             </p>
-            <p className="font-mono text-sm font-semibold text-foreground">
-              {status === "loading" ? (
-                <Skeleton className="h-5 w-16" />
-              ) : rewardNum !== undefined ? (
-                <NumberFlow
-                  value={rewardNum}
-                  format={{
-                    notation: rewardNum > 1_000_000 ? "compact" : "standard",
-                    maximumFractionDigits: 2,
-                  }}
-                  transformTiming={{ duration: 600, easing: "ease-out" }}
-                />
-              ) : (
-                "--"
-              )}
-            </p>
+            {/* A div, not a p: the loading skeleton is a block element. */}
+            <div className="font-mono text-sm font-semibold text-foreground">
+              <SupplyValue
+                status={status}
+                value={rewardNum}
+                skeletonClassName="h-5 w-16"
+              />
+            </div>
           </div>
           <div>
             <p className="text-xs text-muted-foreground">
               {t("circulating_supply")}
             </p>
-            <p className="font-mono text-sm font-semibold text-foreground">
-              {status === "loading" ? (
-                <Skeleton className="h-5 w-16" />
-              ) : circulatingNum !== undefined ? (
-                <NumberFlow
-                  value={circulatingNum}
-                  format={{
-                    notation: circulatingNum > 1_000_000 ? "compact" : "standard",
-                    maximumFractionDigits: 2,
-                  }}
-                  transformTiming={{ duration: 600, easing: "ease-out" }}
-                />
-              ) : (
-                "--"
-              )}
-            </p>
+            {/* A div, not a p: the loading skeleton is a block element. */}
+            <div className="font-mono text-sm font-semibold text-foreground">
+              <SupplyValue
+                status={status}
+                value={circulatingNum}
+                skeletonClassName="h-5 w-16"
+              />
+            </div>
           </div>
           <div>
             <p className="text-xs text-muted-foreground">
               {t("share_rate")}
             </p>
-            <p className="font-mono text-sm font-semibold text-brand-foreground">
-              {status === "loading" ? (
-                <Skeleton className="h-5 w-12" />
-              ) : shareRateNum !== undefined ? (
-                <NumberFlow
-                  value={shareRateNum}
-                  format={{ maximumFractionDigits: 4 }}
-                  transformTiming={{ duration: 600, easing: "ease-out" }}
-                />
-              ) : (
-                "--"
-              )}
-            </p>
+            {/* A div, not a p: the loading skeleton is a block element. */}
+            <div className="font-mono text-sm font-semibold text-brand-foreground">
+              <SupplyValue
+                status={status}
+                value={shareRateNum}
+                skeletonClassName="h-5 w-12" digits={4} compact={false}
+              />
+            </div>
           </div>
           <div>
             <p className="text-xs text-muted-foreground">
@@ -457,7 +429,7 @@ export function ChainTable() {
 
   return (
     <section className="space-y-6">
-      <div className="text-center">
+      <div>
         <h2 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
           {t("title")}
         </h2>

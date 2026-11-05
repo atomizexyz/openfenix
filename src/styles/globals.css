@@ -145,39 +145,19 @@
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
 
-  --animate-glow: glow 2s ease-in-out infinite alternate;
-  --animate-pulse-slow: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-  --animate-float: float 6s ease-in-out infinite;
-  --animate-shimmer: shimmer 2s linear infinite;
+  --animate-shimmer: shimmer 1.8s ease-in-out infinite;
 }
 
-@keyframes glow {
-  from {
-    box-shadow: 0 0 20px rgba(249, 115, 22, 0.2),
-      0 0 40px rgba(249, 115, 22, 0.1);
-  }
-  to {
-    box-shadow: 0 0 30px rgba(249, 115, 22, 0.4),
-      0 0 60px rgba(249, 115, 22, 0.2);
-  }
-}
-
-@keyframes float {
-  0%,
-  100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
+/* Sweeps the skeleton highlight across its box. Transform rather than
+   background-position: the highlight is a pseudo-element the size of the box,
+   so moving its background did nothing visible, and a transform animates on
+   the compositor instead of repainting every frame. */
 @keyframes shimmer {
   0% {
-    background-position: -200% 0;
+    transform: translateX(-100%);
   }
   100% {
-    background-position: 200% 0;
+    transform: translateX(100%);
   }
 }
 
@@ -196,16 +176,18 @@ body {
   @apply bg-gradient-to-r from-fenix-500 via-ember-500 to-fenix-600 bg-clip-text text-transparent;
 }
 
-/* Glow card effect */
+/* Glow card effect. No backdrop blur: these cards sit on a solid page, so a
+   blur changed nothing on screen while costing GPU time on every scroll. */
 .glow-card {
-  @apply relative overflow-hidden rounded-2xl border border-border bg-card/80 backdrop-blur-sm;
+  @apply relative overflow-hidden rounded-2xl border border-border bg-card/80;
 }
 
+/* A warm wash from the top edge on hover. */
 .glow-card::before {
   content: "";
   @apply pointer-events-none absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-500;
   background: radial-gradient(
-    600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    600px circle at 50% 0%,
     rgba(249, 115, 22, 0.06),
     transparent 40%
   );
@@ -213,24 +195,6 @@ body {
 
 .glow-card:hover::before {
   opacity: 1;
-}
-
-/* Glass effect */
-.glass {
-  @apply border border-white/20 bg-white/10 backdrop-blur-xl dark:border-white/10 dark:bg-white/5;
-}
-
-/* Fenix gradient backgrounds */
-.bg-fenix-gradient {
-  background: linear-gradient(135deg, #f97316 0%, #ef4444 50%, #dc2626 100%);
-}
-
-.bg-fenix-gradient-subtle {
-  background: linear-gradient(
-    135deg,
-    rgba(249, 115, 22, 0.1) 0%,
-    rgba(239, 68, 68, 0.05) 100%
-  );
 }
 
 /* Light-mode hero sunset. The dark theme keeps its original vignette. */
@@ -316,9 +280,4 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
   @apply bg-ash-400 dark:bg-ash-600;
-}
-
-/* RTL support */
-[dir="rtl"] .rtl\:space-x-reverse > :not([hidden]) ~ :not([hidden]) {
-  --tw-space-x-reverse: 1;
 }

@@ -63,6 +63,7 @@
     "error_exceeds_balance": "مبلغ از موجودی XEN شما بیشتر است"
   },
   "stake": {
+    "unsupported_network": "لطفاً به یک شبکه پشتیبانی‌شده تغییر دهید",
     "title": "استیک FENIX",
     "description": "توکن‌های FENIX خود را قفل کنید تا از طریق توزیع مبتنی بر سهام بازده کسب کنید",
     "amount_label": "مقدار FENIX",
