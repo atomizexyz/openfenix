@@ -1,0 +1,118 @@
+RPC PERFORMANCE VALIDATION
+
+Status: THE STRICT LATENCY TARGETS ARE NOT MET.
+
+12 worker agents evaluated all 12 configured chains and 176 configured RPC URLs.
+The final runs contain 33,060 measured requests, including 2,000 successful
+production smart reads across the 10 reachable chains (100 samples per workload).
+Evmos and Dogechain's configured fallback hostnames do not resolve. Their four
+workloads are unavailable, rather than passing or error-free.
+
+Available-workload results:
+  Smart P50 <= fastest healthy direct P50:  5 / 20 passed.
+  Smart P99 <= worst healthy direct P99:   19 / 20 passed.
+  Chains passing both bounds on both workloads: 0 / 12 configured chains.
+
+IMPLEMENTED
+
+- Each chain owns independent routing, race, hedge, timeout, retry and batching
+  settings in src/config/rpc-policies.ts and its own learned transport state.
+- Removed HTTP batching delays on the six chains where batching was enabled.
+  Application Multicall3 batching continues to group contract reads.
+- Added a delayed backup on multi-provider chains. A deterministic two-provider
+  stall test improved from approximately 10.1 seconds to 351-353 milliseconds.
+- Persisted a Bun patch for smart-hyperevm@0.1.0 so expired block-height samples
+  stop permanently penalizing a formerly fast endpoint. Fresh lag remains
+  penalized. The compiled dependency regression failed before and passed after.
+- Added repeatable live measurements, isolated benchmark batching, bounded
+  preflight retries, pacing, raw errors, source fingerprints, and strict gates.
+
+REMAINING GAPS
+
+PulseChain contract-read P50 was 171.30 ms against 111.85 ms direct (+59.45 ms).
+Its per-method scores stopped learning from recovered PublicNode providers
+following temporary slowdowns. The current router lacks bounded per-method
+exploration or score expiry with revalidation; this recovery limitation remains.
+
+OKC block-read P50 missed by 13.97 ms, and Moonbeam contract-read P50 missed by
+11.78 ms. Those fastest healthy providers were sampled frequently; their gaps
+do not establish the same recovery failure. Other median misses were generally
+0.035-2.03 ms. They remain failures under the requested zero-tolerance rule;
+these samples do not establish statistical equivalence or persistent regression.
+
+EthereumPoW block-read P99 was 130.11 ms versus 108.02 ms direct. It has one
+configured provider, so there is no second connection available for racing.
+Pacing eliminated the provider rate limiting seen in the earlier unpaced run.
+
+VALIDATION
+
+260 tests passed; ESLint, TypeScript, and the production static build passed.
+A frozen offline Bun install verified the persisted dependency patch.
+The application's five-function Multicall3 smoke check passed on all 10 reachable
+chains and failed on Evmos/Dogechain as expected from their unavailable RPCs.
+The build used Reown's existing demo project ID and emitted 403 fallback warnings.
+The benchmark summary exits nonzero because the live percentile gates fail.
+
+METHOD AND LIMITS
+
+Read-only block-number and FENIX totalSupply requests; no transactions submitted.
+Final validation compares production and direct transports in interleaved rounds.
+All selected measurements match current policies, RPC code and patched router.
+Historical runs are retained, but none replace a later failing final measurement.
+The earlier baseline comparisons are separate experiments; they do not establish
+same-time causal speedup percentages for the final patched source.
+
+Quantiles use nearest rank over complete successful responses. Direct baselines
+must finish every requested sample successfully. Failing or unavailable providers
+are reported explicitly and cannot supply a fast-error latency baseline. Cold
+requests and warm-up traffic are retained separately. Five consecutive measured
+failures stop further attempts on that workload; partial series cannot pass.
+
+These are single-host Bun network measurements. CORS checks are recorded, but
+Bun does not enforce browser CORS. Browser/UI latency, chain-head canonicality,
+and transaction submission performance are not certified. A 100-sample P99 is
+preliminary tail evidence and does not guarantee future network latency.
+
+REPRODUCE
+
+bun run bench:rpcs --variant=production --samples=100 --warmup=5 --concurrency=4 --interval-ms=250
+bun run bench:rpcs --chains=10001 --variant=production --samples=100 --warmup=5 --concurrency=1 --interval-ms=2000
+bun run bench:rpcs:summary
+bun run verify:reads
+
+The summary below includes the four unavailable workloads in its /24 totals.
+For comparisons limited to measured, reachable workloads, use the /20 totals above.
+Raw samples, eligibility, errors, policies and fingerprints are in summary.json
+and the referenced per-chain files in this directory.
+
+FINAL RESULTS
+
+| Chain | Read | Smart P50 / fastest ms | Smart P99 / worst ms | Baseline P50 / P99 ms | Healthy / full / all | Result |
+|---|---|---:|---:|---:|---:|---|
+| Ethereum (1) | eth_blockNumber | 33.63 / 34.01 | 121.07 / 6957.22 | — / — | 34 / 41 / 44 | pass |
+| Ethereum (1) | eth_call | 34.88 / 34.84 | 120.26 / 595.69 | — / — | 29 / 37 / 44 | fail |
+| Polygon (137) | eth_blockNumber | 36.79 / 35.88 | 117.42 / 1813.76 | — / — | 14 / 18 / 20 | fail |
+| Polygon (137) | eth_call | 46.26 / 46.84 | 133.74 / 2060.28 | — / — | 13 / 18 / 20 | pass |
+| BNB Smart Chain (56) | eth_blockNumber | 31.82 / 31.70 | 153.12 / 814.57 | — / — | 42 / 46 / 49 | fail |
+| BNB Smart Chain (56) | eth_call | 32.92 / 32.29 | 120.58 / 709.29 | — / — | 42 / 46 / 49 | fail |
+| Avalanche (43114) | eth_blockNumber | 37.18 / 36.00 | 124.94 / 812.42 | — / — | 12 / 12 / 14 | fail |
+| Avalanche (43114) | eth_call | 47.81 / 48.19 | 153.20 / 421.18 | — / — | 12 / 12 / 14 | pass |
+| Moonbeam (1284) | eth_blockNumber | 39.45 / 38.22 | 123.31 / 405.77 | — / — | 3 / 3 / 3 | fail |
+| Moonbeam (1284) | eth_call | 97.07 / 85.28 | 417.54 / 2419.91 | — / — | 2 / 3 / 3 | fail |
+| Evmos (9001) | eth_blockNumber | — / — | — / — | — / — | 0 / 0 / 1 | unavailable |
+| Evmos (9001) | eth_call | — / — | — / — | — / — | 0 / 0 / 1 | unavailable |
+| Fantom (250) | eth_blockNumber | 39.09 / 37.06 | 116.42 / 305.55 | — / — | 2 / 6 / 10 | fail |
+| Fantom (250) | eth_call | 104.66 / 102.82 | 200.65 / 441.89 | — / — | 2 / 8 / 10 | fail |
+| Dogechain (2000) | eth_blockNumber | — / — | — / — | — / — | 0 / 0 / 1 | unavailable |
+| Dogechain (2000) | eth_call | — / — | — / — | — / — | 0 / 0 / 1 | unavailable |
+| OKC (66) | eth_blockNumber | 191.84 / 177.87 | 277.30 / 520.76 | — / — | 2 / 2 / 5 | fail |
+| OKC (66) | eth_call | 186.12 / 185.41 | 286.17 / 515.74 | — / — | 2 / 2 / 5 | fail |
+| EthereumPoW (10001) | eth_blockNumber | 30.63 / 29.22 | 130.11 / 108.02 | — / — | 1 / 1 / 1 | fail |
+| EthereumPoW (10001) | eth_call | 29.83 / 28.96 | 109.35 / 286.07 | — / — | 1 / 1 / 1 | fail |
+| Base (8453) | eth_blockNumber | 32.86 / 31.85 | 121.94 / 1645.85 | — / — | 15 / 16 / 18 | fail |
+| Base (8453) | eth_call | 32.45 / 32.80 | 117.44 / 1828.16 | — / — | 14 / 15 / 18 | pass |
+| PulseChain (369) | eth_blockNumber | 108.72 / 112.93 | 191.64 / 339.48 | — / — | 8 / 8 / 10 | pass |
+| PulseChain (369) | eth_call | 171.30 / 111.85 | 301.30 / 403.11 | — / — | 8 / 9 / 10 | fail |
+
+12/12 chains complete; 12 match current configuration; 0 pass both read workloads. Production P50 passes 5/24; P99 19/24.
+Saved artifacts/rpc-performance/summary.json (not-passed)

@@ -35,16 +35,18 @@ const rows = await Promise.all(
       const failed = results.filter((r) => r.status === "failure");
       const ms = Date.now() - start;
       if (failed.length > 0) {
+        process.exitCode = 1;
         return `${cfg.chain.name.padEnd(12)} PARTIAL  ${failed.length}/${FN.length} calls failed in multicall (${ms}ms)`;
       }
       const [supply, , , , shareRate] = results.map((r) => r.result as bigint);
       return `${cfg.chain.name.padEnd(12)} OK       1 multicall, ${FN.length} reads, ${String(ms).padStart(5)}ms  totalSupply=${Number(formatEther(supply)).toLocaleString("en-US", { maximumFractionDigits: 0 })}  shareRate=${formatEther(shareRate)}`;
     } catch (e) {
+      process.exitCode = 1;
       const ms = Date.now() - start;
       return `${cfg.chain.name.padEnd(12)} FAIL     ${(e as Error).message.slice(0, 110)} (${ms}ms)`;
     } finally {
-      const transport = client.transport.value as { close?: () => void } | undefined;
-      transport?.close?.();
+      const transport = client.transport as { close?: () => void };
+      transport.close?.();
     }
   })
 );

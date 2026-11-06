@@ -1,0 +1,12 @@
+Ethereum     OK       1 multicall, 5 reads,   235ms  totalSupply=272,288,468  shareRate=11.77159442244439467
+Polygon      OK       1 multicall, 5 reads,   226ms  totalSupply=18,481,609,042  shareRate=18.951631417609024191
+BNB Smart Chain OK       1 multicall, 5 reads,   281ms  totalSupply=2,297,595,127  shareRate=22.181955396367121369
+Avalanche    OK       1 multicall, 5 reads,   265ms  totalSupply=381,788,120  shareRate=7.737605159571515062
+Moonbeam     OK       1 multicall, 5 reads,   380ms  totalSupply=6,940,978,834  shareRate=6.749146118854079792
+Evmos        PARTIAL  5/5 calls failed in multicall (173ms)
+Fantom       OK       1 multicall, 5 reads,   333ms  totalSupply=173,482,828,768  shareRate=265.158449692708431588
+Dogechain    PARTIAL  5/5 calls failed in multicall (232ms)
+OKC          OK       1 multicall, 5 reads,   650ms  totalSupply=2,077,819,152  shareRate=1.90201005421454084
+EthereumPoW  OK       1 multicall, 5 reads,   253ms  totalSupply=15,815,632,319  shareRate=16.204081801751030857
+Base         OK       1 multicall, 5 reads,   304ms  totalSupply=7,869,713,612  shareRate=8.722290587955324559
+PulseChain   OK       1 multicall, 5 reads,   535ms  totalSupply=5,999,339,985  shareRate=12.365091270954735575

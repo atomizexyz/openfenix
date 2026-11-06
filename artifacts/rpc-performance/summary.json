@@ -1,0 +1,3451 @@
+{
+  "summarySchemaVersion": 1,
+  "generatedAt": "2026-11-06T00:24:52.949Z",
+  "scope": "Single-machine Bun/Node read latency; browser behavior and head freshness are not certified",
+  "status": "not-passed",
+  "expectedChainCount": 12,
+  "completedChainCount": 12,
+  "currentConfigurationChainCount": 12,
+  "missingChainIds": [],
+  "staleChainIds": [],
+  "passingChainCount": 0,
+  "expectedWorkloadCount": 24,
+  "productionP50PassedCount": 5,
+  "productionP99PassedCount": 19,
+  "empiricalProductionP50PassedCount": 5,
+  "empiricalProductionP99PassedCount": 19,
+  "passCountScope": "Only reports matching the current chain policy, ordered endpoint URLs, src/config/rpc.ts fingerprint, and installed smart-hyperevm router fingerprint count toward production passes",
+  "measuredSampleCount": 33060,
+  "upstreamAmplificationScope": "All phases, including cold/warmup; measured-only counts were not collected",
+  "selection": "Latest completed, uncontaminated report per chain; production-only exact gates recomputed from raw samples",
+  "ignoredFiles": [
+    {
+      "file": "artifacts/rpc-performance/bsc-cors.json",
+      "reason": "Not a benchmark schemaVersion=1 report"
+    },
+    {
+      "file": "artifacts/rpc-performance/ethereum-cors.json",
+      "reason": "Not a benchmark schemaVersion=1 report"
+    }
+  ],
+  "chains": [
+    {
+      "chainId": 1,
+      "name": "Ethereum",
+      "status": "fail",
+      "empiricalStatus": "fail",
+      "sourceFile": "artifacts/rpc-performance/ethereum-final.json",
+      "startedAt": "2026-11-06T00:07:37.004Z",
+      "finishedAt": "2026-11-06T00:23:49.796Z",
+      "sourceFingerprints": {
+        "src/config/rpc.ts": "f57d3f685075cd2724fc9dfc3867261a8a843a477e2b0cdd57fd3dd9ef8c3c1c",
+        "src/config/rpc-policies.ts": "c96b6d3f9d53b69a0609303619860bcba9581da313c21aa4c1fc0543cc96a497",
+        "src/config/rpc-endpoints.generated.ts": "4af6d54f1adf401433d643071a6857d24546a6be7f5c3c82156fdabfd85f2a08",
+        "scripts/benchmark-rpcs.ts": "2058a143694a92d1ac5b2a0653d45993b8cefda008db133949a543f5e8e7e5b2",
+        "scripts/rpc-benchmark/statistics.ts": "14acddd6cde37e3fde08b10c5f6dbf67da64c77fa119d138b1bece41283811b4",
+        "package.json": "3cf5745b4dfe321ab8b8873d4692cfd441a5d9ba1b231cd09b1d606901b30ddd",
+        "bun.lock": "5ef73cc491625fd4309bfdf22931c5ab61c1416d0c5a3118b974e034f2169995",
+        "node_modules/@bloxwap/smart-hyperevm/dist/chunk-htm8ngjg.js": "299fd4a8e8c73b876386b138bfb07094f9baf2cb2f78df48ae10a7017d9326df"
+      },
+      "sourceFingerprintsAtEnd": {
+        "src/config/rpc.ts": "f57d3f685075cd2724fc9dfc3867261a8a843a477e2b0cdd57fd3dd9ef8c3c1c",
+        "src/config/rpc-policies.ts": "c96b6d3f9d53b69a0609303619860bcba9581da313c21aa4c1fc0543cc96a497",
+        "src/config/rpc-endpoints.generated.ts": "4af6d54f1adf401433d643071a6857d24546a6be7f5c3c82156fdabfd85f2a08",
+        "scripts/benchmark-rpcs.ts": "2058a143694a92d1ac5b2a0653d45993b8cefda008db133949a543f5e8e7e5b2",
+        "scripts/rpc-benchmark/statistics.ts": "14acddd6cde37e3fde08b10c5f6dbf67da64c77fa119d138b1bece41283811b4",
+        "package.json": "3cf5745b4dfe321ab8b8873d4692cfd441a5d9ba1b231cd09b1d606901b30ddd",
+        "bun.lock": "5ef73cc491625fd4309bfdf22931c5ab61c1416d0c5a3118b974e034f2169995",
+        "node_modules/@bloxwap/smart-hyperevm/dist/chunk-htm8ngjg.js": "299fd4a8e8c73b876386b138bfb07094f9baf2cb2f78df48ae10a7017d9326df"
+      },
+      "sourceFilesChangedDuringRun": [],
+      "productionPolicy": {
+        "routing": "best",
+        "raceWidth": 2,
+        "hedge": {
+          "minDelay": 250,
+          "multiplier": 2
+        },
+        "timeoutMs": 10000,
+        "retryCount": 2,
+        "batchWaitMs": 0
+      },
+      "policyMatchesCurrentSource": true,
+      "configurationMatchesCurrentSource": true,
+      "endpointsMatchCurrentSource": true,
+      "rpcSourceMatchesCurrentSource": true,
+      "dependencyMatchesCurrentSource": true,
+      "staleReasons": [],
+      "expectedSamplesPerWorkload": 100,
+      "concurrency": 4,
+      "configuredEndpointCount": 44,
+      "chainIdVerifiedEndpointCount": 44,
+      "untestedEndpoints": [],
+      "cors": {
+        "browserPerformanceVerified": false,
+        "preflightPassedEndpoints": 44,
+        "postHeaderPassedEndpoints": 44,
+        "bothPassedEndpoints": 44,
+        "endpointIssues": [],
+        "productionResponsesWithoutAllowedOrigin": 0,
+        "baselineResponsesWithoutAllowedOrigin": null,
+        "note": "Bun/Node does not enforce CORS; these are diagnostics and the latency gate is runtime-only."
+      },
+      "sampleCounts": {
+        "measured": 8169,
+        "warmup": 435,
+        "cold": 90,
+        "production": {
+          "measured": 200,
+          "warmup": 10,
+          "cold": 2
+        },
+        "baseline": {
+          "measured": 0,
+          "warmup": 0,
+          "cold": 0
+        }
+      },
+      "amplification": {
+        "production": {
+          "phases": "cold + warmup + measured",
+          "logicalRequests": 212,
+          "upstreamHttpRequests": 425,
+          "upstreamReadCalls": 423,
+          "upstreamChainChecks": 2,
+          "httpRequestsPerLogicalRequest": 2.0047169811320753,
+          "readCallsPerLogicalRequest": 1.9952830188679245,
+          "measuredOnlyAmplification": null,
+          "note": "Source telemetry spans all phases; measured-only amplification cannot be recovered.",
+          "events": {
+            "request": 423,
+            "head": 211,
+            "success": 423,
+            "race": 211
+          }
+        },
+        "baseline": null
+      },
+      "workloads": [
+        {
+          "method": "eth_blockNumber",
+          "status": "pass",
+          "smart": {
+            "attempts": 100,
+            "successes": 100,
+            "errors": 0,
+            "successRate": 1,
+            "p50Ms": 33.63270800001919,
+            "p99Ms": 121.0679999999702,
+            "maxMs": 124.98675000004005,
+            "failureP50Ms": null
+          },
+          "baseline": null,
+          "p50": {
+            "pass": true,
+            "smartMs": 33.63270800001919,
+            "limitMs": 34.007417000015266,
+            "directId": "direct:1",
+            "directUrl": "https://eth-mainnet.g.alchemy.com/public"
+          },
+          "p99": {
+            "pass": true,
+            "smartMs": 121.0679999999702,
+            "limitMs": 6957.22329200001,
+            "directId": "direct:43",
+            "directUrl": "https://ethereum-json-rpc.stakely.io"
+          },
+          "allSmartRequestsSucceeded": true,
+          "healthyDirectCount": 34,
+          "fullSampleDirectCount": 41,
+          "configuredEndpointCount": 44,
+          "measuredDirectAttempts": 4209,
+          "measuredDirectSuccesses": 4129,
+          "measuredDirectErrors": 80,
+          "excludedDirect": [
+            {
+              "id": "direct:4",
+              "url": "https://1.rpc.thirdweb.com",
+              "summary": {
+                "attempts": 100,
+                "successes": 99,
+                "errors": 1,
+                "successRate": 0.99,
+                "p50Ms": 51.288917000056244,
+                "p99Ms": 189.53166700003203,
+                "maxMs": 189.53166700003203,
+                "failureP50Ms": 26.988624999998137
+              },
+              "stopped": null
+            },
+            {
+              "id": "direct:13",
+              "url": "https://public.1rpc.io/eth",
+              "summary": {
+                "attempts": 29,
+                "successes": 22,
+                "errors": 7,
+                "successRate": 0.7586206896551724,
+                "p50Ms": 256.1578750000044,
+                "p99Ms": 4856.308291999972,
+                "maxMs": 4856.308291999972,
+                "failureP50Ms": 3231.807709000015
+              },
+              "stopped": "Five consecutive measured failures; remaining samples not collected"
+            },
+            {
+              "id": "direct:22",
+              "url": "https://api.tatum.io/v3/blockchain/node/ethereum-mainnet",
+              "summary": {
+                "attempts": 51,
+                "successes": 44,
+                "errors": 7,
+                "successRate": 0.8627450980392157,
+                "p50Ms": 78.0407079999568,
+                "p99Ms": 180.74599999998463,
+                "maxMs": 180.74599999998463,
+                "failureP50Ms": 89.42820800002664
+              },
+              "stopped": "Five consecutive measured failures; remaining samples not collected"
+            },
+            {
+              "id": "direct:23",
+              "url": "https://1rpc.io/eth",
+              "summary": {
+                "attempts": 29,
+                "successes": 18,
+                "errors": 11,
+                "successRate": 0.6206896551724138,
+                "p50Ms": 217.9036250000354,
+                "p99Ms": 4807.245082999987,
+                "maxMs": 4807.245082999987,
+                "failureP50Ms": 3145.6744160000235
+              },
+              "stopped": "Five consecutive measured failures; remaining samples not collected"
+            },
+            {
+              "id": "direct:26",
+              "url": "https://ethereum.web3cdn.rest",
+              "summary": {
+                "attempts": 100,
+                "successes": 99,
+                "errors": 1,
+                "successRate": 0.99,
+                "p50Ms": 171.45270799996797,
+                "p99Ms": 282.575916999951,
+                "maxMs": 282.575916999951,
+                "failureP50Ms": 168.52758300001733
+              },
+              "stopped": null
+            },
+            {
+              "id": "direct:31",
+              "url": "https://api.zan.top/eth-mainnet",
+              "summary": {
+                "attempts": 100,
+                "successes": 90,
+                "errors": 10,
+                "successRate": 0.9,
+                "p50Ms": 194.3495830000611,
+                "p99Ms": 1107.5678749999497,
+                "maxMs": 1107.5678749999497,
+                "failureP50Ms": 193.51745799998753
+              },
+              "stopped": null
+            },
+            {
+              "id": "direct:32",
+              "url": "https://eth.api.pocket.network",
+              "summary": {
+                "attempts": 100,
+                "successes": 99,
+                "errors": 1,
+                "successRate": 0.99,
+                "p50Ms": 191.8887500000419,
+                "p99Ms": 315.0981669999892,
+                "maxMs": 315.0981669999892,
+                "failureP50Ms": 165.95841600000858
+              },
+              "stopped": null
+            },
+            {
+              "id": "direct:34",
+              "url": "https://api.blockvectra.com/v1/eth_mainnet/public",
+              "summary": {
+                "attempts": 100,
+                "successes": 71,
+                "errors": 29,
+                "successRate": 0.71,
+                "p50Ms": 200.4230840000091,
+                "p99Ms": 535.3542909999378,
+                "maxMs": 535.3542909999378,
+                "failureP50Ms": 195.63704199995846
+              },
+              "stopped": null
+            },
+            {
+              "id": "direct:37",
+              "url": "https://xrpc.cl/eth",
+              "summary": {
+                "attempts": 100,
+                "successes": 99,
+                "errors": 1,
+                "successRate": 0.99,
+                "p50Ms": 209.7987500000163,
+                "p99Ms": 333.6949580000364,
+                "maxMs": 333.6949580000364,
+                "failureP50Ms": 202.63683299999684
+              },
+              "stopped": null
+            },
+            {
+              "id": "direct:38",
+              "url": "https://eth.senseinode.com",
+              "summary": {
+                "attempts": 100,
+                "successes": 88,
+                "errors": 12,
+                "successRate": 0.88,
+                "p50Ms": 160.22658299992327,
+                "p99Ms": 534.310541999992,
+                "maxMs": 534.310541999992,
+                "failureP50Ms": 10001.770082999952
+              },
+              "stopped": null
+            }
+          ]
+        },
+        {
+          "method": "eth_call",
+          "status": "fail",
+          "smart": {
+            "attempts": 100,
+            "successes": 100,
+            "errors": 0,
+            "successRate": 1,
+            "p50Ms": 34.87658400007058,
+            "p99Ms": 120.26058299990837,
+            "maxMs": 122.94479099998716,
+            "failureP50Ms": null
+          },
+          "baseline": null,
+          "p50": {
+            "pass": false,
+            "smartMs": 34.87658400007058,
+            "limitMs": 34.84199999994598,
+            "directId": "direct:1",
+            "directUrl": "https://eth-mainnet.g.alchemy.com/public"
+          },
+          "p99": {
+            "pass": true,
+            "smartMs": 120.26058299990837,
+            "limitMs": 595.6940829999512,
+            "directId": "direct:21",
+            "directUrl": "https://ethereum-rpc.publicnode.com"
+          },
+          "allSmartRequestsSucceeded": true,
+          "healthyDirectCount": 29,
+          "fullSampleDirectCount": 37,
+          "configuredEndpointCount": 44,
+          "measuredDirectAttempts": 3760,
+          "measuredDirectSuccesses": 3720,
+          "measuredDirectErrors": 40,
+          "excludedDirect": [
+            {
+              "id": "direct:4",
+              "url": "https://1.rpc.thirdweb.com",
+              "summary": {
+                "attempts": 100,
+                "successes": 99,
+                "errors": 1,
+                "successRate": 0.99,
+                "p50Ms": 93.23074999998789,
+                "p99Ms": 363.78075000003446,
+                "maxMs": 363.78075000003446,
+                "failureP50Ms": 118.88699999998789
+              },
+              "stopped": null
+            },
+            {
+              "id": "direct:6",
+              "url": "https://rpc.flashbots.net/fast",
+              "summary": {
+                "attempts": 0,
+                "successes": 0,
+                "errors": 0,
+                "successRate": null,
+                "p50Ms": null,
+                "p99Ms": null,
+                "maxMs": null,
+                "failureP50Ms": null
+              },
+              "stopped": "All cold and first warm-up attempts failed; no latency baseline available"
+            },
+            {
+              "id": "direct:7",
+              "url": "https://rpc.flashbots.net",
+              "summary": {
+                "attempts": 0,
+                "successes": 0,
+                "errors": 0,
+                "successRate": null,
+                "p50Ms": null,
+                "p99Ms": null,
+                "maxMs": null,
+                "failureP50Ms": null
+              },
+              "stopped": "All cold and first warm-up attempts failed; no latency baseline available"
+            },
+            {
+              "id": "direct:13",
+              "url": "https://public.1rpc.io/eth",
+              "summary": {
+                "attempts": 28,
+                "successes": 16,
+                "errors": 12,
+                "successRate": 0.5714285714285714,
+                "p50Ms": 6482.176541999972,
+                "p99Ms": 8596.485417000018,
+                "maxMs": 8596.485417000018,
+                "failureP50Ms": 403.423541999975
+              },
+              "stopped": "Five consecutive measured failures; remaining samples not collected"
+            },
+            {
+              "id": "direct:22",
+              "url": "https://api.tatum.io/v3/blockchain/node/ethereum-mainnet",
+              "summary": {
+                "attempts": 0,
+                "successes": 0,
+                "errors": 0,
+                "successRate": null,
+                "p50Ms": null,
+                "p99Ms": null,
+                "maxMs": null,
+                "failureP50Ms": null
+              },
+              "stopped": "All cold and first warm-up attempts failed; no latency baseline available"
+            },
+            {
+              "id": "direct:23",
+              "url": "https://1rpc.io/eth",
+              "summary": {
+                "attempts": 0,
+                "successes": 0,
+                "errors": 0,
+                "successRate": null,
+                "p50Ms": null,
+                "p99Ms": null,
+                "maxMs": null,
+                "failureP50Ms": null
+              },
+              "stopped": "All cold and first warm-up attempts failed; no latency baseline available"
+            },
+            {
+              "id": "direct:26",
+              "url": "https://ethereum.web3cdn.rest",
+              "summary": {
+                "attempts": 100,
+                "successes": 99,
+                "errors": 1,
+                "successRate": 0.99,
+                "p50Ms": 175.46354100003373,
+                "p99Ms": 284.5190420000581,
+                "maxMs": 284.5190420000581,
+                "failureP50Ms": 171.75325000006706
+              },
+              "stopped": null
+            },
+            {
+              "id": "direct:30",
+              "url": "https://rpc.mevblocker.io/fullprivacy",
+              "summary": {
+                "attempts": 100,
+                "successes": 99,
+                "errors": 1,
+                "successRate": 0.99,
+                "p50Ms": 196.98408399999607,
+                "p99Ms": 457.3821250000037,
+                "maxMs": 457.3821250000037,
+                "failureP50Ms": 10000.625541999936
+              },
+              "stopped": null
+            },
+            {
+              "id": "direct:31",
+              "url": "https://api.zan.top/eth-mainnet",
+              "summary": {
+                "attempts": 0,
+                "successes": 0,
+                "errors": 0,
+                "successRate": null,
+                "p50Ms": null,
+                "p99Ms": null,
+                "maxMs": null,
+                "failureP50Ms": null
+              },
+              "stopped": "All cold and first warm-up attempts failed; no latency baseline available"
+            },
+            {
+              "id": "direct:34",
+              "url": "https://api.blockvectra.com/v1/eth_mainnet/public",
+              "summary": {
+                "attempts": 32,
+                "successes": 18,
+                "errors": 14,
+                "successRate": 0.5625,
+                "p50Ms": 202.6940830000094,
+                "p99Ms": 546.0150420000136,
+                "maxMs": 546.0150420000136,
+                "failureP50Ms": 198.09454199997708
+              },
+              "stopped": "Five consecutive measured failures; remaining samples not collected"
+            },
+            {
+              "id": "direct:37",
+              "url": "https://xrpc.cl/eth",
+              "summary": {
+                "attempts": 100,
+                "successes": 98,
+                "errors": 2,
+                "successRate": 0.98,
+                "p50Ms": 216.6832909999648,
+                "p99Ms": 439.7747920000111,
+                "maxMs": 439.7747920000111,
+                "failureP50Ms": 201.15166599990334
+              },
+              "stopped": null
+            },
+            {
+              "id": "direct:38",
+              "url": "https://eth.senseinode.com",
+              "summary": {
+                "attempts": 100,
+                "successes": 97,
+                "errors": 3,
+                "successRate": 0.97,
+                "p50Ms": 186.71441700001014,
+                "p99Ms": 524.9175830000313,
+                "maxMs": 524.9175830000313,
+                "failureP50Ms": 10001.450208000024
+              },
+              "stopped": null
+            },
+            {
+              "id": "direct:39",
+              "url": "https://rpc.mevblocker.io/noreverts",
+              "summary": {
+                "attempts": 100,
+                "successes": 99,
+                "errors": 1,
+                "successRate": 0.99,
+                "p50Ms": 199.92204199999105,
+                "p99Ms": 306.49983400001656,
+                "maxMs": 306.49983400001656,
+                "failureP50Ms": 10002.116083000088
+              },
+              "stopped": null
+            },
+            {
+              "id": "direct:40",
+              "url": "https://public-eth.nownodes.io",
+              "summary": {
+                "attempts": 100,
+                "successes": 99,
+                "errors": 1,
+                "successRate": 0.99,
+                "p50Ms": 219.68887500010896,
+                "p99Ms": 329.75204200000735,
+                "maxMs": 329.75204200000735,
+                "failureP50Ms": 226.96849999995902
+              },
+              "stopped": null
+            },
+            {
+              "id": "direct:43",
+              "url": "https://ethereum-json-rpc.stakely.io",
+              "summary": {
+                "attempts": 100,
+                "successes": 96,
+                "errors": 4,
+                "successRate": 0.96,
+                "p50Ms": 643.4797090000939,
+                "p99Ms": 8012.666040999931,
+                "maxMs": 8012.666040999931,
+                "failureP50Ms": 2932.0899999999674
+              },
+              "stopped": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "chainId": 137,
+      "name": "Polygon",
+      "status": "fail",
+      "empiricalStatus": "fail",
+      "sourceFile": "artifacts/rpc-performance/polygon-final.json",
+      "startedAt": "2026-11-06T00:07:42.466Z",
+      "finishedAt": "2026-11-06T00:19:10.477Z",
+      "sourceFingerprints": {
+        "src/config/rpc.ts": "f57d3f685075cd2724fc9dfc3867261a8a843a477e2b0cdd57fd3dd9ef8c3c1c",
+        "src/config/rpc-policies.ts": "c96b6d3f9d53b69a0609303619860bcba9581da313c21aa4c1fc0543cc96a497",
+        "src/config/rpc-endpoints.generated.ts": "4af6d54f1adf401433d643071a6857d24546a6be7f5c3c82156fdabfd85f2a08",
+        "scripts/benchmark-rpcs.ts": "2058a143694a92d1ac5b2a0653d45993b8cefda008db133949a543f5e8e7e5b2",
+        "scripts/rpc-benchmark/statistics.ts": "14acddd6cde37e3fde08b10c5f6dbf67da64c77fa119d138b1bece41283811b4",
+        "package.json": "3cf5745b4dfe321ab8b8873d4692cfd441a5d9ba1b231cd09b1d606901b30ddd",
+        "bun.lock": "5ef73cc491625fd4309bfdf22931c5ab61c1416d0c5a3118b974e034f2169995",
+        "node_modules/@bloxwap/smart-hyperevm/dist/chunk-htm8ngjg.js": "299fd4a8e8c73b876386b138bfb07094f9baf2cb2f78df48ae10a7017d9326df"
+      },
+      "sourceFingerprintsAtEnd": {
+        "src/config/rpc.ts": "f57d3f685075cd2724fc9dfc3867261a8a843a477e2b0cdd57fd3dd9ef8c3c1c",
+        "src/config/rpc-policies.ts": "c96b6d3f9d53b69a0609303619860bcba9581da313c21aa4c1fc0543cc96a497",
+        "src/config/rpc-endpoints.generated.ts": "4af6d54f1adf401433d643071a6857d24546a6be7f5c3c82156fdabfd85f2a08",
+        "scripts/benchmark-rpcs.ts": "2058a143694a92d1ac5b2a0653d45993b8cefda008db133949a543f5e8e7e5b2",
+        "scripts/rpc-benchmark/statistics.ts": "14acddd6cde37e3fde08b10c5f6dbf67da64c77fa119d138b1bece41283811b4",
+        "package.json": "3cf5745b4dfe321ab8b8873d4692cfd441a5d9ba1b231cd09b1d606901b30ddd",
+        "bun.lock": "5ef73cc491625fd4309bfdf22931c5ab61c1416d0c5a3118b974e034f2169995",
+        "node_modules/@bloxwap/smart-hyperevm/dist/chunk-htm8ngjg.js": "299fd4a8e8c73b876386b138bfb07094f9baf2cb2f78df48ae10a7017d9326df"
+      },
+      "sourceFilesChangedDuringRun": [],
+      "productionPolicy": {
+        "routing": "best",
+        "raceWidth": 2,
+        "hedge": {
+          "minDelay": 250,
+          "multiplier": 2
+        },
+        "timeoutMs": 10000,
+        "retryCount": 2,
+        "batchWaitMs": 0
+      },
+      "policyMatchesCurrentSource": true,
+      "configurationMatchesCurrentSource": true,
+      "endpointsMatchCurrentSource": true,
+      "rpcSourceMatchesCurrentSource": true,
+      "dependencyMatchesCurrentSource": true,
+      "staleReasons": [],
+      "expectedSamplesPerWorkload": 100,
+      "concurrency": 4,
+      "configuredEndpointCount": 20,
+      "chainIdVerifiedEndpointCount": 20,
+      "untestedEndpoints": [],
+      "cors": {
+        "browserPerformanceVerified": false,
+        "preflightPassedEndpoints": 20,
+        "postHeaderPassedEndpoints": 20,
+        "bothPassedEndpoints": 20,
+        "endpointIssues": [],
+        "productionResponsesWithoutAllowedOrigin": 2,
+        "baselineResponsesWithoutAllowedOrigin": null,
+        "note": "Bun/Node does not enforce CORS; these are diagnostics and the latency gate is runtime-only."
+      },
+      "sampleCounts": {
+        "measured": 3910,
+        "warmup": 210,
+        "cold": 42,
+        "production": {
+          "measured": 200,
+          "warmup": 10,
+          "cold": 2
+        },
+        "baseline": {
+          "measured": 0,
+          "warmup": 0,
+          "cold": 0
+        }
+      },
+      "amplification": {
+        "production": {
+          "phases": "cold + warmup + measured",
+          "logicalRequests": 212,
+          "upstreamHttpRequests": 426,
+          "upstreamReadCalls": 423,
+          "upstreamChainChecks": 3,
+          "httpRequestsPerLogicalRequest": 2.009433962264151,
+          "readCallsPerLogicalRequest": 1.9952830188679245,
+          "measuredOnlyAmplification": null,
+          "note": "Source telemetry spans all phases; measured-only amplification cannot be recovered.",
+          "events": {
+            "request": 423,
+            "head": 210,
+            "success": 421,
+            "race": 211,
+            "error": 2
+          }
+        },
+        "baseline": null
+      },
+      "workloads": [
+        {
+          "method": "eth_blockNumber",
+          "status": "fail",
+          "smart": {
+            "attempts": 100,
+            "successes": 100,
+            "errors": 0,
+            "successRate": 1,
+            "p50Ms": 36.788042000029236,
+            "p99Ms": 117.41595799999777,
+            "maxMs": 118.2152079999214,
+            "failureP50Ms": null
+          },
+          "baseline": null,
+          "p50": {
+            "pass": false,
+            "smartMs": 36.788042000029236,
+            "limitMs": 35.87725000001956,
+            "directId": "direct:0",
+            "directUrl": "https://polygon.drpc.org"
+          },
+          "p99": {
+            "pass": true,
+            "smartMs": 117.41595799999777,
+            "limitMs": 1813.7638750000042,
+            "directId": "direct:8",
+            "directUrl": "https://polygon-bor-rpc.publicnode.com"
+          },
+          "allSmartRequestsSucceeded": true,
+          "healthyDirectCount": 14,
+          "fullSampleDirectCount": 18,
+          "configuredEndpointCount": 20,
+          "measuredDirectAttempts": 1854,
+          "measuredDirectSuccesses": 1831,
+          "measuredDirectErrors": 23,
+          "excludedDirect": [
+            {
+              "id": "direct:1",
+              "url": "https://137.rpc.thirdweb.com",
+              "summary": {
+                "attempts": 100,
+                "successes": 98,
+                "errors": 2,
+                "successRate": 0.98,
+                "p50Ms": 92.89208299992606,
+                "p99Ms": 284.5355419999687,
+                "maxMs": 284.5355419999687,
+                "failureP50Ms": 16.225124999997206
+              },
+              "stopped": null
+            },
+            {
+              "id": "direct:5",
+              "url": "https://1rpc.io/matic",
+              "summary": {
+                "attempts": 27,
+                "successes": 18,
+                "errors": 9,
+                "successRate": 0.6666666666666666,
+                "p50Ms": 262.99299999995856,
+                "p99Ms": 8828.520749999967,
+                "maxMs": 8828.520749999967,
+                "failureP50Ms": 3827.765833000012
+              },
+              "stopped": "Five consecutive measured failures; remaining samples not collected"
+            },
+            {
+              "id": "direct:10",
+              "url": "https://polygon.rpc.thirdweb.com",
+              "summary": {
+                "attempts": 100,
+                "successes": 99,
+                "errors": 1,
+                "successRate": 0.99,
+                "p50Ms": 84.03841599996667,
+                "p99Ms": 212.31908400001703,
+                "maxMs": 212.31908400001703,
+                "failureP50Ms": 15.810457999934442
+              },
+              "stopped": null
+            },
+            {
+              "id": "direct:12",
+              "url": "https://public.1rpc.io/matic",
+              "summary": {
+                "attempts": 27,
+                "successes": 20,
+                "errors": 7,
+                "successRate": 0.7407407407407407,
+                "p50Ms": 3814.3342500000144,
+                "p99Ms": 8133.910583000019,
+                "maxMs": 8133.910583000019,
+                "failureP50Ms": 3248.68770900002
+              },
+              "stopped": "Five consecutive measured failures; remaining samples not collected"
+            },
+            {
+              "id": "direct:14",
+              "url": "https://polygon.web3cdn.rest",
+              "summary": {
+                "attempts": 100,
+                "successes": 97,
+                "errors": 3,
+                "successRate": 0.97,
+                "p50Ms": 191.47712499997579,
+                "p99Ms": 304.86429200007115,
+                "maxMs": 304.86429200007115,
+                "failureP50Ms": 191.44799999997485
+              },
+              "stopped": null
+            },
+            {
+              "id": "direct:16",
+              "url": "https://rpc-polygon.blockmachine.io",
+              "summary": {
+                "attempts": 100,
+                "successes": 99,
+                "errors": 1,
+                "successRate": 0.99,
+                "p50Ms": 188.45866700005718,
+                "p99Ms": 473.80799999999,
+                "maxMs": 473.80799999999,
+                "failureP50Ms": 168.6142080000136
+              },
+              "stopped": null
+            }
+          ]
+        },
+        {
+          "method": "eth_call",
+          "status": "pass",
+          "smart": {
+            "attempts": 100,
+            "successes": 100,
+            "errors": 0,
+            "successRate": 1,
+            "p50Ms": 46.2628750000149,
+            "p99Ms": 133.73825000005309,
+            "maxMs": 149.03979199996684,
+            "failureP50Ms": null
+          },
+          "baseline": null,
+          "p50": {
+            "pass": true,
+            "smartMs": 46.2628750000149,
+            "limitMs": 46.842124999995576,
+            "directId": "direct:0",
+            "directUrl": "https://polygon.drpc.org"
+          },
+          "p99": {
+            "pass": true,
+            "smartMs": 133.73825000005309,
+            "limitMs": 2060.276084000012,
+            "directId": "direct:8",
+            "directUrl": "https://polygon-bor-rpc.publicnode.com"
+          },
+          "allSmartRequestsSucceeded": true,
+          "healthyDirectCount": 13,
+          "fullSampleDirectCount": 18,
+          "configuredEndpointCount": 20,
+          "measuredDirectAttempts": 1856,
+          "measuredDirectSuccesses": 1824,
+          "measuredDirectErrors": 32,
+          "excludedDirect": [
+            {
+              "id": "direct:1",
+              "url": "https://137.rpc.thirdweb.com",
+              "summary": {
+                "attempts": 100,
+                "successes": 99,
+                "errors": 1,
+                "successRate": 0.99,
+                "p50Ms": 118.55320799996844,
+                "p99Ms": 264.88891700003296,
+                "maxMs": 264.88891700003296,
+                "failureP50Ms": 17.364457999996375
+              },
+              "stopped": null
+            },
+            {
+              "id": "direct:5",
+              "url": "https://1rpc.io/matic",
+              "summary": {
+                "attempts": 28,
+                "successes": 20,
+                "errors": 8,
+                "successRate": 0.7142857142857143,
+                "p50Ms": 5674.225792000012,
+                "p99Ms": 9571.950500000035,
+                "maxMs": 9571.950500000035,
+                "failureP50Ms": 3094.806209000002
+              },
+              "stopped": "Five consecutive measured failures; remaining samples not collected"
+            },
+            {
+              "id": "direct:10",
+              "url": "https://polygon.rpc.thirdweb.com",
+              "summary": {
+                "attempts": 100,
+                "successes": 99,
+                "errors": 1,
+                "successRate": 0.99,
+                "p50Ms": 123.46637500007637,
+                "p99Ms": 424.2885000000242,
+                "maxMs": 424.2885000000242,
+                "failureP50Ms": 29.117040999990422
+              },
+              "stopped": null
+            },
+            {
+              "id": "direct:12",
+              "url": "https://public.1rpc.io/matic",
+              "summary": {
+                "attempts": 28,
+                "successes": 15,
+                "errors": 13,
+                "successRate": 0.5357142857142857,
+                "p50Ms": 7216.243874999986,
+                "p99Ms": 9654.604209000012,
+                "maxMs": 9654.604209000012,
+                "failureP50Ms": 4911.482375000021
+              },
+              "stopped": "Five consecutive measured failures; remaining samples not collected"
+            },
+            {
+              "id": "direct:14",
+              "url": "https://polygon.web3cdn.rest",
+              "summary": {
+                "attempts": 100,
+                "successes": 93,
+                "errors": 7,
+                "successRate": 0.93,
+                "p50Ms": 182.30287499993574,
+                "p99Ms": 283.98112499993294,
+                "maxMs": 283.98112499993294,
+                "failureP50Ms": 176.15620800002944
+              },
+              "stopped": null
+            },
+            {
+              "id": "direct:16",
+              "url": "https://rpc-polygon.blockmachine.io",
+              "summary": {
+                "attempts": 100,
+                "successes": 99,
+                "errors": 1,
+                "successRate": 0.99,
+                "p50Ms": 182.67087500006892,
+                "p99Ms": 288.1740839999402,
+                "maxMs": 288.1740839999402,
+                "failureP50Ms": 184.14920799992979
+              },
+              "stopped": null
+            },
+            {
+              "id": "direct:19",
+              "url": "https://neproxy-prod.krystal.app/neproxy/137",
+              "summary": {
+                "attempts": 100,
+                "successes": 99,
+                "errors": 1,
+                "successRate": 0.99,
+                "p50Ms": 201.1111249999958,
+                "p99Ms": 737.6102919999976,
+                "maxMs": 737.6102919999976,
+                "failureP50Ms": 10004.061666000052
+              },
+              "stopped": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "chainId": 56,
+      "name": "BNB Smart Chain",
+      "status": "fail",
+      "empiricalStatus": "fail",
+      "sourceFile": "artifacts/rpc-performance/bsc-final.json",
+      "startedAt": "2026-11-06T00:07:46.925Z",
+      "finishedAt": "2026-11-06T00:13:31.782Z",
+      "sourceFingerprints": {
+        "src/config/rpc.ts": "f57d3f685075cd2724fc9dfc3867261a8a843a477e2b0cdd57fd3dd9ef8c3c1c",
+        "src/config/rpc-policies.ts": "c96b6d3f9d53b69a0609303619860bcba9581da313c21aa4c1fc0543cc96a497",
+        "src/config/rpc-endpoints.generated.ts": "4af6d54f1adf401433d643071a6857d24546a6be7f5c3c82156fdabfd85f2a08",
+        "scripts/benchmark-rpcs.ts": "2058a143694a92d1ac5b2a0653d45993b8cefda008db133949a543f5e8e7e5b2",
+        "scripts/rpc-benchmark/statistics.ts": "14acddd6cde37e3fde08b10c5f6dbf67da64c77fa119d138b1bece41283811b4",
+        "package.json": "3cf5745b4dfe321ab8b8873d4692cfd441a5d9ba1b231cd09b1d606901b30ddd",
+        "bun.lock": "5ef73cc491625fd4309bfdf22931c5ab61c1416d0c5a3118b974e034f2169995",
+        "node_modules/@bloxwap/smart-hyperevm/dist/chunk-htm8ngjg.js": "299fd4a8e8c73b876386b138bfb07094f9baf2cb2f78df48ae10a7017d9326df"
+      },
+      "sourceFingerprintsAtEnd": {
+        "src/config/rpc.ts": "f57d3f685075cd2724fc9dfc3867261a8a843a477e2b0cdd57fd3dd9ef8c3c1c",
+        "src/config/rpc-policies.ts": "c96b6d3f9d53b69a0609303619860bcba9581da313c21aa4c1fc0543cc96a497",
+        "src/config/rpc-endpoints.generated.ts": "4af6d54f1adf401433d643071a6857d24546a6be7f5c3c82156fdabfd85f2a08",
+        "scripts/benchmark-rpcs.ts": "2058a143694a92d1ac5b2a0653d45993b8cefda008db133949a543f5e8e7e5b2",
+        "scripts/rpc-benchmark/statistics.ts": "14acddd6cde37e3fde08b10c5f6dbf67da64c77fa119d138b1bece41283811b4",
+        "package.json": "3cf5745b4dfe321ab8b8873d4692cfd441a5d9ba1b231cd09b1d606901b30ddd",
+        "bun.lock": "5ef73cc491625fd4309bfdf22931c5ab61c1416d0c5a3118b974e034f2169995",
+        "node_modules/@bloxwap/smart-hyperevm/dist/chunk-htm8ngjg.js": "299fd4a8e8c73b876386b138bfb07094f9baf2cb2f78df48ae10a7017d9326df"
+      },
+      "sourceFilesChangedDuringRun": [],
+      "productionPolicy": {
+        "routing": "best",
+        "raceWidth": 2,
+        "hedge": {
+          "minDelay": 250,
+          "multiplier": 2
+        },
+        "timeoutMs": 10000,
+        "retryCount": 2,
+        "batchWaitMs": 0
+      },
+      "policyMatchesCurrentSource": true,
+      "configurationMatchesCurrentSource": true,
+      "endpointsMatchCurrentSource": true,
+      "rpcSourceMatchesCurrentSource": true,
+      "dependencyMatchesCurrentSource": true,
+      "staleReasons": [],
+      "expectedSamplesPerWorkload": 100,
+      "concurrency": 4,
+      "configuredEndpointCount": 49,
+      "chainIdVerifiedEndpointCount": 49,
+      "untestedEndpoints": [],
+      "cors": {
+        "browserPerformanceVerified": false,
+        "preflightPassedEndpoints": 49,
+        "postHeaderPassedEndpoints": 49,
+        "bothPassedEndpoints": 49,
+        "endpointIssues": [],
+        "productionResponsesWithoutAllowedOrigin": 1,
+        "baselineResponsesWithoutAllowedOrigin": null,
+        "note": "Bun/Node does not enforce CORS; these are diagnostics and the latency gate is runtime-only."
+      },
+      "sampleCounts": {
+        "measured": 9495,
+        "warmup": 497,
+        "cold": 100,
+        "production": {
+          "measured": 200,
+          "warmup": 10,
+          "cold": 2
+        },
+        "baseline": {
+          "measured": 0,
+          "warmup": 0,
+          "cold": 0
+        }
+      },
+      "amplification": {
+        "production": {
+          "phases": "cold + warmup + measured",
+          "logicalRequests": 212,
+          "upstreamHttpRequests": 428,
+          "upstreamReadCalls": 424,
+          "upstreamChainChecks": 4,
+          "httpRequestsPerLogicalRequest": 2.018867924528302,
+          "readCallsPerLogicalRequest": 2,
+          "measuredOnlyAmplification": null,
+          "note": "Source telemetry spans all phases; measured-only amplification cannot be recovered.",
+          "events": {
+            "request": 424,
+            "head": 210,
+            "success": 422,
+            "race": 211,
+            "error": 1,
+            "hedge": 1
+          }
+        },
+        "baseline": null
+      },
+      "workloads": [
+        {
+          "method": "eth_blockNumber",
+          "status": "fail",
+          "smart": {
+            "attempts": 100,
+            "successes": 100,
+            "errors": 0,
+            "successRate": 1,
+            "p50Ms": 31.82283300000563,
+            "p99Ms": 153.11779099999694,
+            "maxMs": 257.9747919999936,
+            "failureP50Ms": null
+          },
+          "baseline": null,
+          "p50": {
+            "pass": false,
+            "smartMs": 31.82283300000563,
+            "limitMs": 31.699083999963477,
+            "directId": "direct:0",
+            "directUrl": "https://bnb-mainnet.g.alchemy.com/public"
+          },
+          "p99": {
+            "pass": true,
+            "smartMs": 153.11779099999694,
+            "limitMs": 814.570458000002,
+            "directId": "direct:14",
+            "directUrl": "https://bsc-dataseed-public.bnbchain.org"
+          },
+          "allSmartRequestsSucceeded": true,
+          "healthyDirectCount": 42,
+          "fullSampleDirectCount": 46,
+          "configuredEndpointCount": 49,
+          "measuredDirectAttempts": 4677,
+          "measuredDirectSuccesses": 4624,
+          "measuredDirectErrors": 53,
+          "excludedDirect": [
+            {
+              "id": "direct:1",
+              "url": "https://56.rpc.thirdweb.com",
+              "summary": {
+                "attempts": 100,
+                "successes": 91,
+                "errors": 9,
+                "successRate": 0.91,
+                "p50Ms": 81.43083299999125,
+                "p99Ms": 247.95462499998393,
+                "maxMs": 247.95462499998393,
+                "failureP50Ms": 30.23308299999917
+              },
+              "stopped": null
+            },
+            {
+              "id": "direct:36",
+              "url": "https://bsc-mainnet.public.blastapi.io",
+              "summary": {
+                "attempts": 61,
+                "successes": 52,
+                "errors": 9,
+                "successRate": 0.8524590163934426,
+                "p50Ms": 97.37687500000175,
+                "p99Ms": 261.0525000000198,
+                "maxMs": 261.0525000000198,
+                "failureP50Ms": 99.71458299999358
+              },
+              "stopped": "Five consecutive measured failures; remaining samples not collected"
+            },
+            {
+              "id": "direct:39",
+              "url": "https://api.zan.top/bsc-mainnet",
+              "summary": {
+                "attempts": 100,
+                "successes": 82,
+                "errors": 18,
+                "successRate": 0.82,
+                "p50Ms": 185.81479200001922,
+                "p99Ms": 926.3522500000254,
+                "maxMs": 926.3522500000254,
+                "failureP50Ms": 182.97429200001352
+              },
+              "stopped": null
+            },
+            {
+              "id": "direct:40",
+              "url": "https://rpc-bnb.blockmachine.io",
+              "summary": {
+                "attempts": 8,
+                "successes": 3,
+                "errors": 5,
+                "successRate": 0.375,
+                "p50Ms": 175.2691249999989,
+                "p99Ms": 178.4444999999978,
+                "maxMs": 178.4444999999978,
+                "failureP50Ms": 171.21033300000272
+              },
+              "stopped": "Five consecutive measured failures; remaining samples not collected"
+            },
+            {
+              "id": "direct:41",
+              "url": "https://api.blockvectra.com/v1/bsc_mainnet/public",
+              "summary": {
+                "attempts": 100,
+                "successes": 96,
+                "errors": 4,
+                "successRate": 0.96,
+                "p50Ms": 191.8482079999958,
+                "p99Ms": 544.5872500000114,
+                "maxMs": 544.5872500000114,
+                "failureP50Ms": 191.83849999999802
+              },
+              "stopped": null
+            },
+            {
+              "id": "direct:45",
+              "url": "https://bsc.web3cdn.rest",
+              "summary": {
+                "attempts": 100,
+                "successes": 97,
+                "errors": 3,
+                "successRate": 0.97,
+                "p50Ms": 185.16033300000709,
+                "p99Ms": 324.51050000000396,
+                "maxMs": 324.51050000000396,
+                "failureP50Ms": 173.14395800000057
+              },
+              "stopped": null
+            },
+            {
+              "id": "direct:46",
+              "url": "https://rpc-bsc.blockmachine.io",
+              "summary": {
+                "attempts": 8,
+                "successes": 3,
+                "errors": 5,
+                "successRate": 0.375,
+                "p50Ms": 198.03366700000333,
+                "p99Ms": 225.890416000002,
+                "maxMs": 225.890416000002,
+                "failureP50Ms": 173.99245800000062
+              },
+              "stopped": "Five consecutive measured failures; remaining samples not collected"
+            }
+          ]
+        },
+        {
+          "method": "eth_call",
+          "status": "fail",
+          "smart": {
+            "attempts": 100,
+            "successes": 100,
+            "errors": 0,
+            "successRate": 1,
+            "p50Ms": 32.91662499999802,
+            "p99Ms": 120.57674999997835,
+            "maxMs": 126.51179199999751,
+            "failureP50Ms": null
+          },
+          "baseline": null,
+          "p50": {
+            "pass": false,
+            "smartMs": 32.91662499999802,
+            "limitMs": 32.28687499999069,
+            "directId": "direct:0",
+            "directUrl": "https://bnb-mainnet.g.alchemy.com/public"
+          },
+          "p99": {
+            "pass": true,
+            "smartMs": 120.57674999997835,
+            "limitMs": 709.2939170000027,
+            "directId": "direct:14",
+            "directUrl": "https://bsc-dataseed-public.bnbchain.org"
+          },
+          "allSmartRequestsSucceeded": true,
+          "healthyDirectCount": 42,
+          "fullSampleDirectCount": 46,
+          "configuredEndpointCount": 49,
+          "measuredDirectAttempts": 4618,
+          "measuredDirectSuccesses": 4594,
+          "measuredDirectErrors": 24,
+          "excludedDirect": [
+            {
+              "id": "direct:1",
+              "url": "https://56.rpc.thirdweb.com",
+              "summary": {
+                "attempts": 100,
+                "successes": 97,
+                "errors": 3,
+                "successRate": 0.97,
+                "p50Ms": 86.90183400001843,
+                "p99Ms": 259.23233300002175,
+                "maxMs": 259.23233300002175,
+                "failureP50Ms": 92.67266599999857
+              },
+              "stopped": null
+            },
+            {
+              "id": "direct:36",
+              "url": "https://bsc-mainnet.public.blastapi.io",
+              "summary": {
+                "attempts": 100,
+                "successes": 91,
+                "errors": 9,
+                "successRate": 0.91,
+                "p50Ms": 98.84504200000083,
+                "p99Ms": 190.2790420000092,
+                "maxMs": 190.2790420000092,
+                "failureP50Ms": 91.12075000000186
+              },
+              "stopped": null
+            },
+            {
+              "id": "direct:39",
+              "url": "https://api.zan.top/bsc-mainnet",
+              "summary": {
+                "attempts": 0,
+                "successes": 0,
+                "errors": 0,
+                "successRate": null,
+                "p50Ms": null,
+                "p99Ms": null,
+                "maxMs": null,
+                "failureP50Ms": null
+              },
+              "stopped": "All cold and first warm-up attempts failed; no latency baseline available"
+            },
+            {
+              "id": "direct:40",
+              "url": "https://rpc-bnb.blockmachine.io",
+              "summary": {
+                "attempts": 9,
+                "successes": 4,
+                "errors": 5,
+                "successRate": 0.4444444444444444,
+                "p50Ms": 182.7170000000042,
+                "p99Ms": 182.940042000002,
+                "maxMs": 182.940042000002,
+                "failureP50Ms": 170.08191699999588
+              },
+              "stopped": "Five consecutive measured failures; remaining samples not collected"
+            },
+            {
+              "id": "direct:41",
+              "url": "https://api.blockvectra.com/v1/bsc_mainnet/public",
+              "summary": {
+                "attempts": 100,
+                "successes": 99,
+                "errors": 1,
+                "successRate": 0.99,
+                "p50Ms": 193.4305000000022,
+                "p99Ms": 526.9243330000318,
+                "maxMs": 526.9243330000318,
+                "failureP50Ms": 258.8973339999793
+              },
+              "stopped": null
+            },
+            {
+              "id": "direct:45",
+              "url": "https://bsc.web3cdn.rest",
+              "summary": {
+                "attempts": 100,
+                "successes": 99,
+                "errors": 1,
+                "successRate": 0.99,
+                "p50Ms": 184.5831249999901,
+                "p99Ms": 269.81504199998744,
+                "maxMs": 269.81504199998744,
+                "failureP50Ms": 171.24579200000153
+              },
+              "stopped": null
+            },
+            {
+              "id": "direct:46",
+              "url": "https://rpc-bsc.blockmachine.io",
+              "summary": {
+                "attempts": 9,
+                "successes": 4,
+                "errors": 5,
+                "successRate": 0.4444444444444444,
+                "p50Ms": 185.74445800000103,
+                "p99Ms": 270.37400000000343,
+                "maxMs": 270.37400000000343,
+                "failureP50Ms": 172.89033400000335
+              },
+              "stopped": "Five consecutive measured failures; remaining samples not collected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "chainId": 43114,
+      "name": "Avalanche",
+      "status": "fail",
+      "empiricalStatus": "fail",
+      "sourceFile": "artifacts/rpc-performance/avalanche-final.json",
+      "startedAt": "2026-11-06T00:08:00.607Z",
+      "finishedAt": "2026-11-06T00:10:23.587Z",
+      "sourceFingerprints": {
+        "src/config/rpc.ts": "f57d3f685075cd2724fc9dfc3867261a8a843a477e2b0cdd57fd3dd9ef8c3c1c",
+        "src/config/rpc-policies.ts": "c96b6d3f9d53b69a0609303619860bcba9581da313c21aa4c1fc0543cc96a497",
+        "src/config/rpc-endpoints.generated.ts": "4af6d54f1adf401433d643071a6857d24546a6be7f5c3c82156fdabfd85f2a08",
+        "scripts/benchmark-rpcs.ts": "2058a143694a92d1ac5b2a0653d45993b8cefda008db133949a543f5e8e7e5b2",
+        "scripts/rpc-benchmark/statistics.ts": "14acddd6cde37e3fde08b10c5f6dbf67da64c77fa119d138b1bece41283811b4",
+        "package.json": "3cf5745b4dfe321ab8b8873d4692cfd441a5d9ba1b231cd09b1d606901b30ddd",
+        "bun.lock": "5ef73cc491625fd4309bfdf22931c5ab61c1416d0c5a3118b974e034f2169995",
+        "node_modules/@bloxwap/smart-hyperevm/dist/chunk-htm8ngjg.js": "299fd4a8e8c73b876386b138bfb07094f9baf2cb2f78df48ae10a7017d9326df"
+      },
+      "sourceFingerprintsAtEnd": {
+        "src/config/rpc.ts": "f57d3f685075cd2724fc9dfc3867261a8a843a477e2b0cdd57fd3dd9ef8c3c1c",
+        "src/config/rpc-policies.ts": "c96b6d3f9d53b69a0609303619860bcba9581da313c21aa4c1fc0543cc96a497",
+        "src/config/rpc-endpoints.generated.ts": "4af6d54f1adf401433d643071a6857d24546a6be7f5c3c82156fdabfd85f2a08",
+        "scripts/benchmark-rpcs.ts": "2058a143694a92d1ac5b2a0653d45993b8cefda008db133949a543f5e8e7e5b2",
+        "scripts/rpc-benchmark/statistics.ts": "14acddd6cde37e3fde08b10c5f6dbf67da64c77fa119d138b1bece41283811b4",
+        "package.json": "3cf5745b4dfe321ab8b8873d4692cfd441a5d9ba1b231cd09b1d606901b30ddd",
+        "bun.lock": "5ef73cc491625fd4309bfdf22931c5ab61c1416d0c5a3118b974e034f2169995",
+        "node_modules/@bloxwap/smart-hyperevm/dist/chunk-htm8ngjg.js": "299fd4a8e8c73b876386b138bfb07094f9baf2cb2f78df48ae10a7017d9326df"
+      },
+      "sourceFilesChangedDuringRun": [],
+      "productionPolicy": {
+        "routing": "best",
+        "raceWidth": 2,
+        "hedge": {
+          "minDelay": 250,
+          "multiplier": 2
+        },
+        "timeoutMs": 10000,
+        "retryCount": 2,
+        "batchWaitMs": false
+      },
+      "policyMatchesCurrentSource": true,
+      "configurationMatchesCurrentSource": true,
+      "endpointsMatchCurrentSource": true,
+      "rpcSourceMatchesCurrentSource": true,
+      "dependencyMatchesCurrentSource": true,
+      "staleReasons": [],
+      "expectedSamplesPerWorkload": 100,
+      "concurrency": 4,
+      "configuredEndpointCount": 14,
+      "chainIdVerifiedEndpointCount": 14,
+      "untestedEndpoints": [],
+      "cors": {
+        "browserPerformanceVerified": false,
+        "preflightPassedEndpoints": 14,
+        "postHeaderPassedEndpoints": 14,
+        "bothPassedEndpoints": 14,
+        "endpointIssues": [],
+        "productionResponsesWithoutAllowedOrigin": 1,
+        "baselineResponsesWithoutAllowedOrigin": null,
+        "note": "Bun/Node does not enforce CORS; these are diagnostics and the latency gate is runtime-only."
+      },
+      "sampleCounts": {
+        "measured": 2646,
+        "warmup": 150,
+        "cold": 30,
+        "production": {
+          "measured": 200,
+          "warmup": 10,
+          "cold": 2
+        },
+        "baseline": {
+          "measured": 0,
+          "warmup": 0,
+          "cold": 0
+        }
+      },
+      "amplification": {
+        "production": {
+          "phases": "cold + warmup + measured",
+          "logicalRequests": 212,
+          "upstreamHttpRequests": 428,
+          "upstreamReadCalls": 423,
+          "upstreamChainChecks": 5,
+          "httpRequestsPerLogicalRequest": 2.018867924528302,
+          "readCallsPerLogicalRequest": 1.9952830188679245,
+          "measuredOnlyAmplification": null,
+          "note": "Source telemetry spans all phases; measured-only amplification cannot be recovered.",
+          "events": {
+            "request": 423,
+            "head": 211,
+            "success": 422,
+            "race": 211,
+            "error": 1
+          }
+        },
+        "baseline": null
+      },
+      "workloads": [
+        {
+          "method": "eth_blockNumber",
+          "status": "fail",
+          "smart": {
+            "attempts": 100,
+            "successes": 100,
+            "errors": 0,
+            "successRate": 1,
+            "p50Ms": 37.18016700000226,
+            "p99Ms": 124.93520900000294,
+            "maxMs": 128.7446659999987,
+            "failureP50Ms": null
+          },
+          "baseline": null,
+          "p50": {
+            "pass": false,
+            "smartMs": 37.18016700000226,
+            "limitMs": 36.000499999994645,
+            "directId": "direct:0",
+            "directUrl": "https://avalanche.drpc.org"
+          },
+          "p99": {
+            "pass": true,
+            "smartMs": 124.93520900000294,
+            "limitMs": 812.4171249999999,
+            "directId": "direct:13",
+            "directUrl": "https://spectrum-01.simplystaking.xyz/avalanche-mn-rpc/ext/bc/C/rpc"
+          },
+          "allSmartRequestsSucceeded": true,
+          "healthyDirectCount": 12,
+          "fullSampleDirectCount": 12,
+          "configuredEndpointCount": 14,
+          "measuredDirectAttempts": 1224,
+          "measuredDirectSuccesses": 1206,
+          "measuredDirectErrors": 18,
+          "excludedDirect": [
+            {
+              "id": "direct:3",
+              "url": "https://43114.rpc.thirdweb.com",
+              "summary": {
+                "attempts": 13,
+                "successes": 4,
+                "errors": 9,
+                "successRate": 0.3076923076923077,
+                "p50Ms": 46.809832999999344,
+                "p99Ms": 337.0772079999988,
+                "maxMs": 337.0772079999988,
+                "failureP50Ms": 17.894957999997132
+              },
+              "stopped": "Five consecutive measured failures; remaining samples not collected"
+            },
+            {
+              "id": "direct:8",
+              "url": "https://avalanche.rpc.thirdweb.com",
+              "summary": {
+                "attempts": 11,
+                "successes": 2,
+                "errors": 9,
+                "successRate": 0.18181818181818182,
+                "p50Ms": 48.60291700000016,
+                "p99Ms": 116.28216700000121,
+                "maxMs": 116.28216700000121,
+                "failureP50Ms": 18.71233300000131
+              },
+              "stopped": "Five consecutive measured failures; remaining samples not collected"
+            }
+          ]
+        },
+        {
+          "method": "eth_call",
+          "status": "pass",
+          "smart": {
+            "attempts": 100,
+            "successes": 100,
+            "errors": 0,
+            "successRate": 1,
+            "p50Ms": 47.80962499999441,
+            "p99Ms": 153.20449999999983,
+            "maxMs": 239.85379099999955,
+            "failureP50Ms": null
+          },
+          "baseline": null,
+          "p50": {
+            "pass": true,
+            "smartMs": 47.80962499999441,
+            "limitMs": 48.18699999999808,
+            "directId": "direct:1",
+            "directUrl": "https://avalanche.rpc.sentio.xyz"
+          },
+          "p99": {
+            "pass": true,
+            "smartMs": 153.20449999999983,
+            "limitMs": 421.17516699999396,
+            "directId": "direct:0",
+            "directUrl": "https://avalanche.drpc.org"
+          },
+          "allSmartRequestsSucceeded": true,
+          "healthyDirectCount": 12,
+          "fullSampleDirectCount": 12,
+          "configuredEndpointCount": 14,
+          "measuredDirectAttempts": 1222,
+          "measuredDirectSuccesses": 1206,
+          "measuredDirectErrors": 16,
+          "excludedDirect": [
+            {
+              "id": "direct:3",
+              "url": "https://43114.rpc.thirdweb.com",
+              "summary": {
+                "attempts": 14,
+                "successes": 4,
+                "errors": 10,
+                "successRate": 0.2857142857142857,
+                "p50Ms": 158.41687499999898,
+                "p99Ms": 212.7949579999986,
+                "maxMs": 212.7949579999986,
+                "failureP50Ms": 18.008459000000585
+              },
+              "stopped": "Five consecutive measured failures; remaining samples not collected"
+            },
+            {
+              "id": "direct:8",
+              "url": "https://avalanche.rpc.thirdweb.com",
+              "summary": {
+                "attempts": 8,
+                "successes": 2,
+                "errors": 6,
+                "successRate": 0.25,
+                "p50Ms": 129.00783299999966,
+                "p99Ms": 148.82570899999882,
+                "maxMs": 148.82570899999882,
+                "failureP50Ms": 17.985208999998576
+              },
+              "stopped": "Five consecutive measured failures; remaining samples not collected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "chainId": 1284,
+      "name": "Moonbeam",
+      "status": "fail",
+      "empiricalStatus": "fail",
+      "sourceFile": "artifacts/rpc-performance/fantom-moonbeam-final.json",
+      "startedAt": "2026-11-06T00:10:24.772Z",
+      "finishedAt": "2026-11-06T00:12:09.624Z",
+      "sourceFingerprints": {
+        "src/config/rpc.ts": "f57d3f685075cd2724fc9dfc3867261a8a843a477e2b0cdd57fd3dd9ef8c3c1c",
+        "src/config/rpc-policies.ts": "c96b6d3f9d53b69a0609303619860bcba9581da313c21aa4c1fc0543cc96a497",
+        "src/config/rpc-endpoints.generated.ts": "4af6d54f1adf401433d643071a6857d24546a6be7f5c3c82156fdabfd85f2a08",
+        "scripts/benchmark-rpcs.ts": "2058a143694a92d1ac5b2a0653d45993b8cefda008db133949a543f5e8e7e5b2",
+        "scripts/rpc-benchmark/statistics.ts": "14acddd6cde37e3fde08b10c5f6dbf67da64c77fa119d138b1bece41283811b4",
+        "package.json": "3cf5745b4dfe321ab8b8873d4692cfd441a5d9ba1b231cd09b1d606901b30ddd",
+        "bun.lock": "5ef73cc491625fd4309bfdf22931c5ab61c1416d0c5a3118b974e034f2169995",
+        "node_modules/@bloxwap/smart-hyperevm/dist/chunk-htm8ngjg.js": "299fd4a8e8c73b876386b138bfb07094f9baf2cb2f78df48ae10a7017d9326df"
+      },
+      "sourceFingerprintsAtEnd": {
+        "src/config/rpc.ts": "f57d3f685075cd2724fc9dfc3867261a8a843a477e2b0cdd57fd3dd9ef8c3c1c",
+        "src/config/rpc-policies.ts": "c96b6d3f9d53b69a0609303619860bcba9581da313c21aa4c1fc0543cc96a497",
+        "src/config/rpc-endpoints.generated.ts": "4af6d54f1adf401433d643071a6857d24546a6be7f5c3c82156fdabfd85f2a08",
+        "scripts/benchmark-rpcs.ts": "2058a143694a92d1ac5b2a0653d45993b8cefda008db133949a543f5e8e7e5b2",
+        "scripts/rpc-benchmark/statistics.ts": "14acddd6cde37e3fde08b10c5f6dbf67da64c77fa119d138b1bece41283811b4",
+        "package.json": "3cf5745b4dfe321ab8b8873d4692cfd441a5d9ba1b231cd09b1d606901b30ddd",
+        "bun.lock": "5ef73cc491625fd4309bfdf22931c5ab61c1416d0c5a3118b974e034f2169995",
+        "node_modules/@bloxwap/smart-hyperevm/dist/chunk-htm8ngjg.js": "299fd4a8e8c73b876386b138bfb07094f9baf2cb2f78df48ae10a7017d9326df"
+      },
+      "sourceFilesChangedDuringRun": [],
+      "productionPolicy": {
+        "routing": "best",
+        "raceWidth": 2,
+        "hedge": {
+          "minDelay": 250,
+          "multiplier": 2
+        },
+        "timeoutMs": 10000,
+        "retryCount": 2,
+        "batchWaitMs": false
+      },
+      "policyMatchesCurrentSource": true,
+      "configurationMatchesCurrentSource": true,
+      "endpointsMatchCurrentSource": true,
+      "rpcSourceMatchesCurrentSource": true,
+      "dependencyMatchesCurrentSource": true,
+      "staleReasons": [],
+      "expectedSamplesPerWorkload": 100,
+      "concurrency": 4,
+      "configuredEndpointCount": 3,
+      "chainIdVerifiedEndpointCount": 3,
+      "untestedEndpoints": [],
+      "cors": {
+        "browserPerformanceVerified": false,
+        "preflightPassedEndpoints": 3,
+        "postHeaderPassedEndpoints": 3,
+        "bothPassedEndpoints": 3,
+        "endpointIssues": [],
+        "productionResponsesWithoutAllowedOrigin": 0,
+        "baselineResponsesWithoutAllowedOrigin": null,
+        "note": "Bun/Node does not enforce CORS; these are diagnostics and the latency gate is runtime-only."
+      },
+      "sampleCounts": {
+        "measured": 800,
+        "warmup": 40,
+        "cold": 8,
+        "production": {
+          "measured": 200,
+          "warmup": 10,
+          "cold": 2
+        },
+        "baseline": {
+          "measured": 0,
+          "warmup": 0,
+          "cold": 0
+        }
+      },
+      "amplification": {
+        "production": {
+          "phases": "cold + warmup + measured",
+          "logicalRequests": 212,
+          "upstreamHttpRequests": 426,
+          "upstreamReadCalls": 423,
+          "upstreamChainChecks": 3,
+          "httpRequestsPerLogicalRequest": 2.009433962264151,
+          "readCallsPerLogicalRequest": 1.9952830188679245,
+          "measuredOnlyAmplification": null,
+          "note": "Source telemetry spans all phases; measured-only amplification cannot be recovered.",
+          "events": {
+            "request": 423,
+            "head": 211,
+            "success": 422,
+            "race": 211
+          }
+        },
+        "baseline": null
+      },
+      "workloads": [
+        {
+          "method": "eth_blockNumber",
+          "status": "fail",
+          "smart": {
+            "attempts": 100,
+            "successes": 100,
+            "errors": 0,
+            "successRate": 1,
+            "p50Ms": 39.45112499999232,
+            "p99Ms": 123.30600000001141,
+            "maxMs": 132.57916699998896,
+            "failureP50Ms": null
+          },
+          "baseline": null,
+          "p50": {
+            "pass": false,
+            "smartMs": 39.45112499999232,
+            "limitMs": 38.21716699999524,
+            "directId": "direct:0",
+            "directUrl": "https://moonbeam.drpc.org"
+          },
+          "p99": {
+            "pass": true,
+            "smartMs": 123.30600000001141,
+            "limitMs": 405.7722500000091,
+            "directId": "direct:2",
+            "directUrl": "https://moonbeam.api.pocket.network"
+          },
+          "allSmartRequestsSucceeded": true,
+          "healthyDirectCount": 3,
+          "fullSampleDirectCount": 3,
+          "configuredEndpointCount": 3,
+          "measuredDirectAttempts": 300,
+          "measuredDirectSuccesses": 300,
+          "measuredDirectErrors": 0,
+          "excludedDirect": []
+        },
+        {
+          "method": "eth_call",
+          "status": "fail",
+          "smart": {
+            "attempts": 100,
+            "successes": 100,
+            "errors": 0,
+            "successRate": 1,
+            "p50Ms": 97.06500000000233,
+            "p99Ms": 417.53770800001803,
+            "maxMs": 522.7810000000172,
+            "failureP50Ms": null
+          },
+          "baseline": null,
+          "p50": {
+            "pass": false,
+            "smartMs": 97.06500000000233,
+            "limitMs": 85.28408300000592,
+            "directId": "direct:1",
+            "directUrl": "https://moonbeam.api.onfinality.io/public"
+          },
+          "p99": {
+            "pass": true,
+            "smartMs": 417.53770800001803,
+            "limitMs": 2419.9080419999955,
+            "directId": "direct:2",
+            "directUrl": "https://moonbeam.api.pocket.network"
+          },
+          "allSmartRequestsSucceeded": true,
+          "healthyDirectCount": 2,
+          "fullSampleDirectCount": 3,
+          "configuredEndpointCount": 3,
+          "measuredDirectAttempts": 300,
+          "measuredDirectSuccesses": 299,
+          "measuredDirectErrors": 1,
+          "excludedDirect": [
+            {
+              "id": "direct:0",
+              "url": "https://moonbeam.drpc.org",
+              "summary": {
+                "attempts": 100,
+                "successes": 99,
+                "errors": 1,
+                "successRate": 0.99,
+                "p50Ms": 197.43479199998546,
+                "p99Ms": 688.1878330000036,
+                "maxMs": 688.1878330000036,
+                "failureP50Ms": 2088.4698340000177
+              },
+              "stopped": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "chainId": 9001,
+      "name": "Evmos",
+      "status": "unavailable-or-insufficient",
+      "empiricalStatus": "unavailable-or-insufficient",
+      "sourceFile": "artifacts/rpc-performance/okc-final.json",
+      "startedAt": "2026-11-06T00:09:54.874Z",
+      "finishedAt": "2026-11-06T00:09:58.270Z",
+      "sourceFingerprints": {
+        "src/config/rpc.ts": "f57d3f685075cd2724fc9dfc3867261a8a843a477e2b0cdd57fd3dd9ef8c3c1c",
+        "src/config/rpc-policies.ts": "c96b6d3f9d53b69a0609303619860bcba9581da313c21aa4c1fc0543cc96a497",
+        "src/config/rpc-endpoints.generated.ts": "4af6d54f1adf401433d643071a6857d24546a6be7f5c3c82156fdabfd85f2a08",
+        "scripts/benchmark-rpcs.ts": "2058a143694a92d1ac5b2a0653d45993b8cefda008db133949a543f5e8e7e5b2",
+        "scripts/rpc-benchmark/statistics.ts": "14acddd6cde37e3fde08b10c5f6dbf67da64c77fa119d138b1bece41283811b4",
+        "package.json": "3cf5745b4dfe321ab8b8873d4692cfd441a5d9ba1b231cd09b1d606901b30ddd",
+        "bun.lock": "5ef73cc491625fd4309bfdf22931c5ab61c1416d0c5a3118b974e034f2169995",
+        "node_modules/@bloxwap/smart-hyperevm/dist/chunk-htm8ngjg.js": "299fd4a8e8c73b876386b138bfb07094f9baf2cb2f78df48ae10a7017d9326df"
+      },
+      "sourceFingerprintsAtEnd": {
+        "src/config/rpc.ts": "f57d3f685075cd2724fc9dfc3867261a8a843a477e2b0cdd57fd3dd9ef8c3c1c",
+        "src/config/rpc-policies.ts": "c96b6d3f9d53b69a0609303619860bcba9581da313c21aa4c1fc0543cc96a497",
+        "src/config/rpc-endpoints.generated.ts": "4af6d54f1adf401433d643071a6857d24546a6be7f5c3c82156fdabfd85f2a08",
+        "scripts/benchmark-rpcs.ts": "2058a143694a92d1ac5b2a0653d45993b8cefda008db133949a543f5e8e7e5b2",
+        "scripts/rpc-benchmark/statistics.ts": "14acddd6cde37e3fde08b10c5f6dbf67da64c77fa119d138b1bece41283811b4",
+        "package.json": "3cf5745b4dfe321ab8b8873d4692cfd441a5d9ba1b231cd09b1d606901b30ddd",
+        "bun.lock": "5ef73cc491625fd4309bfdf22931c5ab61c1416d0c5a3118b974e034f2169995",
+        "node_modules/@bloxwap/smart-hyperevm/dist/chunk-htm8ngjg.js": "299fd4a8e8c73b876386b138bfb07094f9baf2cb2f78df48ae10a7017d9326df"
+      },
+      "sourceFilesChangedDuringRun": [],
+      "productionPolicy": {
+        "routing": "best",
+        "raceWidth": false,
+        "hedge": false,
+        "timeoutMs": 10000,
+        "retryCount": 2,
+        "batchWaitMs": false
+      },
+      "policyMatchesCurrentSource": true,
+      "configurationMatchesCurrentSource": true,
+      "endpointsMatchCurrentSource": true,
+      "rpcSourceMatchesCurrentSource": true,
+      "dependencyMatchesCurrentSource": true,
+      "staleReasons": [],
+      "expectedSamplesPerWorkload": 100,
+      "concurrency": 4,
+      "configuredEndpointCount": 1,
+      "chainIdVerifiedEndpointCount": 0,
+      "untestedEndpoints": [
+        {
+          "url": "https://eth.bd.evmos.org:8545",
+          "chainIdValid": false,
+          "reportedChainId": null,
+          "reason": "getaddrinfo ENOTFOUND eth.bd.evmos.org"
+        }
+      ],
+      "cors": {
+        "browserPerformanceVerified": false,
+        "preflightPassedEndpoints": 0,
+        "postHeaderPassedEndpoints": 0,
+        "bothPassedEndpoints": 0,
+        "endpointIssues": [
+          {
+            "url": "https://eth.bd.evmos.org:8545",
+            "preflightPassed": false,
+            "postHeaderPassed": false,
+            "error": "getaddrinfo ENOTFOUND eth.bd.evmos.org"
+          }
+        ],
+        "productionResponsesWithoutAllowedOrigin": 0,
+        "baselineResponsesWithoutAllowedOrigin": null,
+        "note": "Bun/Node does not enforce CORS; these are diagnostics and the latency gate is runtime-only."
+      },
+      "sampleCounts": {
+        "measured": 0,
+        "warmup": 4,
+        "cold": 2,
+        "production": {
+          "measured": 0,
+          "warmup": 4,
+          "cold": 2
+        },
+        "baseline": {
+          "measured": 0,
+          "warmup": 0,
+          "cold": 0
+        }
+      },
+      "amplification": {
+        "production": {
+          "phases": "cold + warmup + measured",
+          "logicalRequests": 6,
+          "upstreamHttpRequests": 7,
+          "upstreamReadCalls": 0,
+          "upstreamChainChecks": 7,
+          "httpRequestsPerLogicalRequest": 1.1666666666666667,
+          "readCallsPerLogicalRequest": 0,
+          "measuredOnlyAmplification": null,
+          "note": "Source telemetry spans all phases; measured-only amplification cannot be recovered.",
+          "events": {
+            "error": 7,
+            "eject": 1
+          }
+        },
+        "baseline": null
+      },
+      "workloads": [
+        {
+          "method": "eth_blockNumber",
+          "status": "unavailable",
+          "smart": {
+            "attempts": 0,
+            "successes": 0,
+            "errors": 0,
+            "successRate": null,
+            "p50Ms": null,
+            "p99Ms": null,
+            "maxMs": null,
+            "failureP50Ms": null
+          },
+          "baseline": null,
+          "p50": {
+            "pass": false,
+            "smartMs": null,
+            "limitMs": null,
+            "directId": null,
+            "directUrl": null
+          },
+          "p99": {
+            "pass": false,
+            "smartMs": null,
+            "limitMs": null,
+            "directId": null,
+            "directUrl": null
+          },
+          "allSmartRequestsSucceeded": false,
+          "healthyDirectCount": 0,
+          "fullSampleDirectCount": 0,
+          "configuredEndpointCount": 1,
+          "measuredDirectAttempts": 0,
+          "measuredDirectSuccesses": 0,
+          "measuredDirectErrors": 0,
+          "excludedDirect": []
+        },
+        {
+          "method": "eth_call",
+          "status": "unavailable",
+          "smart": {
+            "attempts": 0,
+            "successes": 0,
+            "errors": 0,
+            "successRate": null,
+            "p50Ms": null,
+            "p99Ms": null,
+            "maxMs": null,
+            "failureP50Ms": null
+          },
+          "baseline": null,
+          "p50": {
+            "pass": false,
+            "smartMs": null,
+            "limitMs": null,
+            "directId": null,
+            "directUrl": null
+          },
+          "p99": {
+            "pass": false,
+            "smartMs": null,
+            "limitMs": null,
+            "directId": null,
+            "directUrl": null
+          },
+          "allSmartRequestsSucceeded": false,
+          "healthyDirectCount": 0,
+          "fullSampleDirectCount": 0,
+          "configuredEndpointCount": 1,
+          "measuredDirectAttempts": 0,
+          "measuredDirectSuccesses": 0,
+          "measuredDirectErrors": 0,
+          "excludedDirect": []
+        }
+      ]
+    },
+    {
+      "chainId": 250,
+      "name": "Fantom",
+      "status": "fail",
+      "empiricalStatus": "fail",
+      "sourceFile": "artifacts/rpc-performance/fantom-moonbeam-final.json",
+      "startedAt": "2026-11-06T00:08:09.966Z",
+      "finishedAt": "2026-11-06T00:10:24.766Z",
+      "sourceFingerprints": {
+        "src/config/rpc.ts": "f57d3f685075cd2724fc9dfc3867261a8a843a477e2b0cdd57fd3dd9ef8c3c1c",
+        "src/config/rpc-policies.ts": "c96b6d3f9d53b69a0609303619860bcba9581da313c21aa4c1fc0543cc96a497",
+        "src/config/rpc-endpoints.generated.ts": "4af6d54f1adf401433d643071a6857d24546a6be7f5c3c82156fdabfd85f2a08",
+        "scripts/benchmark-rpcs.ts": "2058a143694a92d1ac5b2a0653d45993b8cefda008db133949a543f5e8e7e5b2",
+        "scripts/rpc-benchmark/statistics.ts": "14acddd6cde37e3fde08b10c5f6dbf67da64c77fa119d138b1bece41283811b4",
+        "package.json": "3cf5745b4dfe321ab8b8873d4692cfd441a5d9ba1b231cd09b1d606901b30ddd",
+        "bun.lock": "5ef73cc491625fd4309bfdf22931c5ab61c1416d0c5a3118b974e034f2169995",
+        "node_modules/@bloxwap/smart-hyperevm/dist/chunk-htm8ngjg.js": "299fd4a8e8c73b876386b138bfb07094f9baf2cb2f78df48ae10a7017d9326df"
+      },
+      "sourceFingerprintsAtEnd": {
+        "src/config/rpc.ts": "f57d3f685075cd2724fc9dfc3867261a8a843a477e2b0cdd57fd3dd9ef8c3c1c",
+        "src/config/rpc-policies.ts": "c96b6d3f9d53b69a0609303619860bcba9581da313c21aa4c1fc0543cc96a497",
+        "src/config/rpc-endpoints.generated.ts": "4af6d54f1adf401433d643071a6857d24546a6be7f5c3c82156fdabfd85f2a08",
+        "scripts/benchmark-rpcs.ts": "2058a143694a92d1ac5b2a0653d45993b8cefda008db133949a543f5e8e7e5b2",
+        "scripts/rpc-benchmark/statistics.ts": "14acddd6cde37e3fde08b10c5f6dbf67da64c77fa119d138b1bece41283811b4",
+        "package.json": "3cf5745b4dfe321ab8b8873d4692cfd441a5d9ba1b231cd09b1d606901b30ddd",
+        "bun.lock": "5ef73cc491625fd4309bfdf22931c5ab61c1416d0c5a3118b974e034f2169995",
+        "node_modules/@bloxwap/smart-hyperevm/dist/chunk-htm8ngjg.js": "299fd4a8e8c73b876386b138bfb07094f9baf2cb2f78df48ae10a7017d9326df"
+      },
+      "sourceFilesChangedDuringRun": [],
+      "productionPolicy": {
+        "routing": "best",
+        "raceWidth": 2,
+        "hedge": {
+          "minDelay": 250,
+          "multiplier": 2
+        },
+        "timeoutMs": 10000,
+        "retryCount": 2,
+        "batchWaitMs": false
+      },
+      "policyMatchesCurrentSource": true,
+      "configurationMatchesCurrentSource": true,
+      "endpointsMatchCurrentSource": true,
+      "rpcSourceMatchesCurrentSource": true,
+      "dependencyMatchesCurrentSource": true,
+      "staleReasons": [],
+      "expectedSamplesPerWorkload": 100,
+      "concurrency": 4,
+      "configuredEndpointCount": 10,
+      "chainIdVerifiedEndpointCount": 10,
+      "untestedEndpoints": [],
+      "cors": {
+        "browserPerformanceVerified": false,
+        "preflightPassedEndpoints": 10,
+        "postHeaderPassedEndpoints": 10,
+        "bothPassedEndpoints": 10,
+        "endpointIssues": [],
+        "productionResponsesWithoutAllowedOrigin": 12,
+        "baselineResponsesWithoutAllowedOrigin": null,
+        "note": "Bun/Node does not enforce CORS; these are diagnostics and the latency gate is runtime-only."
+      },
+      "sampleCounts": {
+        "measured": 1702,
+        "warmup": 104,
+        "cold": 22,
+        "production": {
+          "measured": 200,
+          "warmup": 10,
+          "cold": 2
+        },
+        "baseline": {
+          "measured": 0,
+          "warmup": 0,
+          "cold": 0
+        }
+      },
+      "amplification": {
+        "production": {
+          "phases": "cold + warmup + measured",
+          "logicalRequests": 212,
+          "upstreamHttpRequests": 433,
+          "upstreamReadCalls": 423,
+          "upstreamChainChecks": 10,
+          "httpRequestsPerLogicalRequest": 2.042452830188679,
+          "readCallsPerLogicalRequest": 1.9952830188679245,
+          "measuredOnlyAmplification": null,
+          "note": "Source telemetry spans all phases; measured-only amplification cannot be recovered.",
+          "events": {
+            "request": 423,
+            "head": 204,
+            "success": 413,
+            "race": 211,
+            "error": 13,
+            "eject": 1,
+            "restore": 1
+          }
+        },
+        "baseline": null
+      },
+      "workloads": [
+        {
+          "method": "eth_blockNumber",
+          "status": "fail",
+          "smart": {
+            "attempts": 100,
+            "successes": 100,
+            "errors": 0,
+            "successRate": 1,
+            "p50Ms": 39.091958000004524,
+            "p99Ms": 116.4186250000057,
+            "maxMs": 136.78633300000365,
+            "failureP50Ms": null
+          },
+          "baseline": null,
+          "p50": {
+            "pass": false,
+            "smartMs": 39.091958000004524,
+            "limitMs": 37.06354199999623,
+            "directId": "direct:0",
+            "directUrl": "https://fantom.drpc.org"
+          },
+          "p99": {
+            "pass": true,
+            "smartMs": 116.4186250000057,
+            "limitMs": 305.552125000002,
+            "directId": "direct:8",
+            "directUrl": "https://fantom.api.pocket.network"
+          },
+          "allSmartRequestsSucceeded": true,
+          "healthyDirectCount": 2,
+          "fullSampleDirectCount": 6,
+          "configuredEndpointCount": 10,
+          "measuredDirectAttempts": 669,
+          "measuredDirectSuccesses": 621,
+          "measuredDirectErrors": 48,
+          "excludedDirect": [
+            {
+              "id": "direct:1",
+              "url": "https://fantom.rpc.thirdweb.com",
+              "summary": {
+                "attempts": 0,
+                "successes": 0,
+                "errors": 0,
+                "successRate": null,
+                "p50Ms": null,
+                "p99Ms": null,
+                "maxMs": null,
+                "failureP50Ms": null
+              },
+              "stopped": "All cold and first warm-up attempts failed; no latency baseline available"
+            },
+            {
+              "id": "direct:2",
+              "url": "https://250.rpc.thirdweb.com",
+              "summary": {
+                "attempts": 27,
+                "successes": 10,
+                "errors": 17,
+                "successRate": 0.37037037037037035,
+                "p50Ms": 48.45462499999849,
+                "p99Ms": 478.222541000001,
+                "maxMs": 478.222541000001,
+                "failureP50Ms": 18.217709000000468
+              },
+              "stopped": "Five consecutive measured failures; remaining samples not collected"
+            },
+            {
+              "id": "direct:3",
+              "url": "https://rpc3.fantom.network",
+              "summary": {
+                "attempts": 100,
+                "successes": 95,
+                "errors": 5,
+                "successRate": 0.95,
+                "p50Ms": 174.80966700000135,
+                "p99Ms": 278.94650000000547,
+                "maxMs": 278.94650000000547,
+                "failureP50Ms": 170.22520799999984
+              },
+              "stopped": null
+            },
+            {
+              "id": "direct:4",
+              "url": "https://rpcapi.fantom.network",
+              "summary": {
+                "attempts": 100,
+                "successes": 96,
+                "errors": 4,
+                "successRate": 0.96,
+                "p50Ms": 179.51858399999037,
+                "p99Ms": 283.6542909999989,
+                "maxMs": 283.6542909999989,
+                "failureP50Ms": 177.53033300000243
+              },
+              "stopped": null
+            },
+            {
+              "id": "direct:5",
+              "url": "https://rpc.fantom.network",
+              "summary": {
+                "attempts": 100,
+                "successes": 97,
+                "errors": 3,
+                "successRate": 0.97,
+                "p50Ms": 173.3297500000008,
+                "p99Ms": 278.9290000000037,
+                "maxMs": 278.9290000000037,
+                "failureP50Ms": 177.63529199999903
+              },
+              "stopped": null
+            },
+            {
+              "id": "direct:6",
+              "url": "https://rpc2.fantom.network",
+              "summary": {
+                "attempts": 19,
+                "successes": 14,
+                "errors": 5,
+                "successRate": 0.7368421052631579,
+                "p50Ms": 173.02449999999953,
+                "p99Ms": 239.83091699999932,
+                "maxMs": 239.83091699999932,
+                "failureP50Ms": 172.04475000000093
+              },
+              "stopped": "Five consecutive measured failures; remaining samples not collected"
+            },
+            {
+              "id": "direct:7",
+              "url": "https://rpcapi-tracing.fantom.network",
+              "summary": {
+                "attempts": 100,
+                "successes": 97,
+                "errors": 3,
+                "successRate": 0.97,
+                "p50Ms": 172.27504200000112,
+                "p99Ms": 270.1330420000013,
+                "maxMs": 270.1330420000013,
+                "failureP50Ms": 170.64124999999694
+              },
+              "stopped": null
+            },
+            {
+              "id": "direct:9",
+              "url": "https://api.zan.top/ftm-mainnet",
+              "summary": {
+                "attempts": 23,
+                "successes": 12,
+                "errors": 11,
+                "successRate": 0.5217391304347826,
+                "p50Ms": 186.33629199999996,
+                "p99Ms": 272.4182909999945,
+                "maxMs": 272.4182909999945,
+                "failureP50Ms": 187.36095799999748
+              },
+              "stopped": "Five consecutive measured failures; remaining samples not collected"
+            }
+          ]
+        },
+        {
+          "method": "eth_call",
+          "status": "fail",
+          "smart": {
+            "attempts": 100,
+            "successes": 100,
+            "errors": 0,
+            "successRate": 1,
+            "p50Ms": 104.66041600000608,
+            "p99Ms": 200.6520840000012,
+            "maxMs": 213.34941699999763,
+            "failureP50Ms": null
+          },
+          "baseline": null,
+          "p50": {
+            "pass": false,
+            "smartMs": 104.66041600000608,
+            "limitMs": 102.81729099999939,
+            "directId": "direct:0",
+            "directUrl": "https://fantom.drpc.org"
+          },
+          "p99": {
+            "pass": true,
+            "smartMs": 200.6520840000012,
+            "limitMs": 441.8893339999995,
+            "directId": "direct:8",
+            "directUrl": "https://fantom.api.pocket.network"
+          },
+          "allSmartRequestsSucceeded": true,
+          "healthyDirectCount": 2,
+          "fullSampleDirectCount": 8,
+          "configuredEndpointCount": 10,
+          "measuredDirectAttempts": 833,
+          "measuredDirectSuccesses": 789,
+          "measuredDirectErrors": 44,
+          "excludedDirect": [
+            {
+              "id": "direct:1",
+              "url": "https://fantom.rpc.thirdweb.com",
+              "summary": {
+                "attempts": 100,
+                "successes": 85,
+                "errors": 15,
+                "successRate": 0.85,
+                "p50Ms": 341.1886250000025,
+                "p99Ms": 622.5070830000004,
+                "maxMs": 622.5070830000004,
+                "failureP50Ms": 20.873583000000508
+              },
+              "stopped": null
+            },
+            {
+              "id": "direct:2",
+              "url": "https://250.rpc.thirdweb.com",
+              "summary": {
+                "attempts": 33,
+                "successes": 17,
+                "errors": 16,
+                "successRate": 0.5151515151515151,
+                "p50Ms": 321.83250000000044,
+                "p99Ms": 524.2635000000009,
+                "maxMs": 524.2635000000009,
+                "failureP50Ms": 18.08445799999754
+              },
+              "stopped": "Five consecutive measured failures; remaining samples not collected"
+            },
+            {
+              "id": "direct:3",
+              "url": "https://rpc3.fantom.network",
+              "summary": {
+                "attempts": 100,
+                "successes": 97,
+                "errors": 3,
+                "successRate": 0.97,
+                "p50Ms": 177.73966700000165,
+                "p99Ms": 280.3093750000007,
+                "maxMs": 280.3093750000007,
+                "failureP50Ms": 173.5291670000006
+              },
+              "stopped": null
+            },
+            {
+              "id": "direct:4",
+              "url": "https://rpcapi.fantom.network",
+              "summary": {
+                "attempts": 100,
+                "successes": 97,
+                "errors": 3,
+                "successRate": 0.97,
+                "p50Ms": 181.00750000000698,
+                "p99Ms": 291.0071250000037,
+                "maxMs": 291.0071250000037,
+                "failureP50Ms": 208.15120799999931
+              },
+              "stopped": null
+            },
+            {
+              "id": "direct:5",
+              "url": "https://rpc.fantom.network",
+              "summary": {
+                "attempts": 100,
+                "successes": 98,
+                "errors": 2,
+                "successRate": 0.98,
+                "p50Ms": 174.59616699999606,
+                "p99Ms": 1167.5240840000042,
+                "maxMs": 1167.5240840000042,
+                "failureP50Ms": 170.0057500000039
+              },
+              "stopped": null
+            },
+            {
+              "id": "direct:6",
+              "url": "https://rpc2.fantom.network",
+              "summary": {
+                "attempts": 100,
+                "successes": 97,
+                "errors": 3,
+                "successRate": 0.97,
+                "p50Ms": 173.5527909999946,
+                "p99Ms": 1167.5165839999972,
+                "maxMs": 1167.5165839999972,
+                "failureP50Ms": 170.09208299999955
+              },
+              "stopped": null
+            },
+            {
+              "id": "direct:7",
+              "url": "https://rpcapi-tracing.fantom.network",
+              "summary": {
+                "attempts": 100,
+                "successes": 98,
+                "errors": 2,
+                "successRate": 0.98,
+                "p50Ms": 171.9723329999979,
+                "p99Ms": 796.8909580000036,
+                "maxMs": 796.8909580000036,
+                "failureP50Ms": 169.2647500000021
+              },
+              "stopped": null
+            },
+            {
+              "id": "direct:9",
+              "url": "https://api.zan.top/ftm-mainnet",
+              "summary": {
+                "attempts": 0,
+                "successes": 0,
+                "errors": 0,
+                "successRate": null,
+                "p50Ms": null,
+                "p99Ms": null,
+                "maxMs": null,
+                "failureP50Ms": null
+              },
+              "stopped": "All cold and first warm-up attempts failed; no latency baseline available"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "chainId": 2000,
+      "name": "Dogechain",
+      "status": "unavailable-or-insufficient",
+      "empiricalStatus": "unavailable-or-insufficient",
+      "sourceFile": "artifacts/rpc-performance/okc-final.json",
+      "startedAt": "2026-11-06T00:09:58.271Z",
+      "finishedAt": "2026-11-06T00:10:01.805Z",
+      "sourceFingerprints": {
+        "src/config/rpc.ts": "f57d3f685075cd2724fc9dfc3867261a8a843a477e2b0cdd57fd3dd9ef8c3c1c",
+        "src/config/rpc-policies.ts": "c96b6d3f9d53b69a0609303619860bcba9581da313c21aa4c1fc0543cc96a497",
+        "src/config/rpc-endpoints.generated.ts": "4af6d54f1adf401433d643071a6857d24546a6be7f5c3c82156fdabfd85f2a08",
+        "scripts/benchmark-rpcs.ts": "2058a143694a92d1ac5b2a0653d45993b8cefda008db133949a543f5e8e7e5b2",
+        "scripts/rpc-benchmark/statistics.ts": "14acddd6cde37e3fde08b10c5f6dbf67da64c77fa119d138b1bece41283811b4",
+        "package.json": "3cf5745b4dfe321ab8b8873d4692cfd441a5d9ba1b231cd09b1d606901b30ddd",
+        "bun.lock": "5ef73cc491625fd4309bfdf22931c5ab61c1416d0c5a3118b974e034f2169995",
+        "node_modules/@bloxwap/smart-hyperevm/dist/chunk-htm8ngjg.js": "299fd4a8e8c73b876386b138bfb07094f9baf2cb2f78df48ae10a7017d9326df"
+      },
+      "sourceFingerprintsAtEnd": {
+        "src/config/rpc.ts": "f57d3f685075cd2724fc9dfc3867261a8a843a477e2b0cdd57fd3dd9ef8c3c1c",
+        "src/config/rpc-policies.ts": "c96b6d3f9d53b69a0609303619860bcba9581da313c21aa4c1fc0543cc96a497",
+        "src/config/rpc-endpoints.generated.ts": "4af6d54f1adf401433d643071a6857d24546a6be7f5c3c82156fdabfd85f2a08",
+        "scripts/benchmark-rpcs.ts": "2058a143694a92d1ac5b2a0653d45993b8cefda008db133949a543f5e8e7e5b2",
+        "scripts/rpc-benchmark/statistics.ts": "14acddd6cde37e3fde08b10c5f6dbf67da64c77fa119d138b1bece41283811b4",
+        "package.json": "3cf5745b4dfe321ab8b8873d4692cfd441a5d9ba1b231cd09b1d606901b30ddd",
+        "bun.lock": "5ef73cc491625fd4309bfdf22931c5ab61c1416d0c5a3118b974e034f2169995",
+        "node_modules/@bloxwap/smart-hyperevm/dist/chunk-htm8ngjg.js": "299fd4a8e8c73b876386b138bfb07094f9baf2cb2f78df48ae10a7017d9326df"
+      },
+      "sourceFilesChangedDuringRun": [],
+      "productionPolicy": {
+        "routing": "best",
+        "raceWidth": false,
+        "hedge": false,
+        "timeoutMs": 10000,
+        "retryCount": 2,
+        "batchWaitMs": false
+      },
+      "policyMatchesCurrentSource": true,
+      "configurationMatchesCurrentSource": true,
+      "endpointsMatchCurrentSource": true,
+      "rpcSourceMatchesCurrentSource": true,
+      "dependencyMatchesCurrentSource": true,
+      "staleReasons": [],
+      "expectedSamplesPerWorkload": 100,
+      "concurrency": 4,
+      "configuredEndpointCount": 1,
+      "chainIdVerifiedEndpointCount": 0,
+      "untestedEndpoints": [
+        {
+          "url": "https://rpc.dogechain.dog",
+          "chainIdValid": false,
+          "reportedChainId": null,
+          "reason": "getaddrinfo ENOTFOUND rpc.dogechain.dog"
+        }
+      ],
+      "cors": {
+        "browserPerformanceVerified": false,
+        "preflightPassedEndpoints": 0,
+        "postHeaderPassedEndpoints": 0,
+        "bothPassedEndpoints": 0,
+        "endpointIssues": [
+          {
+            "url": "https://rpc.dogechain.dog",
+            "preflightPassed": false,
+            "postHeaderPassed": false,
+            "error": "getaddrinfo ENOTFOUND rpc.dogechain.dog"
+          }
+        ],
+        "productionResponsesWithoutAllowedOrigin": 0,
+        "baselineResponsesWithoutAllowedOrigin": null,
+        "note": "Bun/Node does not enforce CORS; these are diagnostics and the latency gate is runtime-only."
+      },
+      "sampleCounts": {
+        "measured": 0,
+        "warmup": 4,
+        "cold": 2,
+        "production": {
+          "measured": 0,
+          "warmup": 4,
+          "cold": 2
+        },
+        "baseline": {
+          "measured": 0,
+          "warmup": 0,
+          "cold": 0
+        }
+      },
+      "amplification": {
+        "production": {
+          "phases": "cold + warmup + measured",
+          "logicalRequests": 6,
+          "upstreamHttpRequests": 7,
+          "upstreamReadCalls": 0,
+          "upstreamChainChecks": 7,
+          "httpRequestsPerLogicalRequest": 1.1666666666666667,
+          "readCallsPerLogicalRequest": 0,
+          "measuredOnlyAmplification": null,
+          "note": "Source telemetry spans all phases; measured-only amplification cannot be recovered.",
+          "events": {
+            "error": 7,
+            "eject": 1
+          }
+        },
+        "baseline": null
+      },
+      "workloads": [
+        {
+          "method": "eth_blockNumber",
+          "status": "unavailable",
+          "smart": {
+            "attempts": 0,
+            "successes": 0,
+            "errors": 0,
+            "successRate": null,
+            "p50Ms": null,
+            "p99Ms": null,
+            "maxMs": null,
+            "failureP50Ms": null
+          },
+          "baseline": null,
+          "p50": {
+            "pass": false,
+            "smartMs": null,
+            "limitMs": null,
+            "directId": null,
+            "directUrl": null
+          },
+          "p99": {
+            "pass": false,
+            "smartMs": null,
+            "limitMs": null,
+            "directId": null,
+            "directUrl": null
+          },
+          "allSmartRequestsSucceeded": false,
+          "healthyDirectCount": 0,
+          "fullSampleDirectCount": 0,
+          "configuredEndpointCount": 1,
+          "measuredDirectAttempts": 0,
+          "measuredDirectSuccesses": 0,
+          "measuredDirectErrors": 0,
+          "excludedDirect": []
+        },
+        {
+          "method": "eth_call",
+          "status": "unavailable",
+          "smart": {
+            "attempts": 0,
+            "successes": 0,
+            "errors": 0,
+            "successRate": null,
+            "p50Ms": null,
+            "p99Ms": null,
+            "maxMs": null,
+            "failureP50Ms": null
+          },
+          "baseline": null,
+          "p50": {
+            "pass": false,
+            "smartMs": null,
+            "limitMs": null,
+            "directId": null,
+            "directUrl": null
+          },
+          "p99": {
+            "pass": false,
+            "smartMs": null,
+            "limitMs": null,
+            "directId": null,
+            "directUrl": null
+          },
+          "allSmartRequestsSucceeded": false,
+          "healthyDirectCount": 0,
+          "fullSampleDirectCount": 0,
+          "configuredEndpointCount": 1,
+          "measuredDirectAttempts": 0,
+          "measuredDirectSuccesses": 0,
+          "measuredDirectErrors": 0,
+          "excludedDirect": []
+        }
+      ]
+    },
+    {
+      "chainId": 66,
+      "name": "OKC",
+      "status": "fail",
+      "empiricalStatus": "fail",
+      "sourceFile": "artifacts/rpc-performance/okc-final.json",
+      "startedAt": "2026-11-06T00:08:26.800Z",
+      "finishedAt": "2026-11-06T00:09:54.871Z",
+      "sourceFingerprints": {
+        "src/config/rpc.ts": "f57d3f685075cd2724fc9dfc3867261a8a843a477e2b0cdd57fd3dd9ef8c3c1c",
+        "src/config/rpc-policies.ts": "c96b6d3f9d53b69a0609303619860bcba9581da313c21aa4c1fc0543cc96a497",
+        "src/config/rpc-endpoints.generated.ts": "4af6d54f1adf401433d643071a6857d24546a6be7f5c3c82156fdabfd85f2a08",
+        "scripts/benchmark-rpcs.ts": "2058a143694a92d1ac5b2a0653d45993b8cefda008db133949a543f5e8e7e5b2",
+        "scripts/rpc-benchmark/statistics.ts": "14acddd6cde37e3fde08b10c5f6dbf67da64c77fa119d138b1bece41283811b4",
+        "package.json": "3cf5745b4dfe321ab8b8873d4692cfd441a5d9ba1b231cd09b1d606901b30ddd",
+        "bun.lock": "5ef73cc491625fd4309bfdf22931c5ab61c1416d0c5a3118b974e034f2169995",
+        "node_modules/@bloxwap/smart-hyperevm/dist/chunk-htm8ngjg.js": "299fd4a8e8c73b876386b138bfb07094f9baf2cb2f78df48ae10a7017d9326df"
+      },
+      "sourceFingerprintsAtEnd": {
+        "src/config/rpc.ts": "f57d3f685075cd2724fc9dfc3867261a8a843a477e2b0cdd57fd3dd9ef8c3c1c",
+        "src/config/rpc-policies.ts": "c96b6d3f9d53b69a0609303619860bcba9581da313c21aa4c1fc0543cc96a497",
+        "src/config/rpc-endpoints.generated.ts": "4af6d54f1adf401433d643071a6857d24546a6be7f5c3c82156fdabfd85f2a08",
+        "scripts/benchmark-rpcs.ts": "2058a143694a92d1ac5b2a0653d45993b8cefda008db133949a543f5e8e7e5b2",
+        "scripts/rpc-benchmark/statistics.ts": "14acddd6cde37e3fde08b10c5f6dbf67da64c77fa119d138b1bece41283811b4",
+        "package.json": "3cf5745b4dfe321ab8b8873d4692cfd441a5d9ba1b231cd09b1d606901b30ddd",
+        "bun.lock": "5ef73cc491625fd4309bfdf22931c5ab61c1416d0c5a3118b974e034f2169995",
+        "node_modules/@bloxwap/smart-hyperevm/dist/chunk-htm8ngjg.js": "299fd4a8e8c73b876386b138bfb07094f9baf2cb2f78df48ae10a7017d9326df"
+      },
+      "sourceFilesChangedDuringRun": [],
+      "productionPolicy": {
+        "routing": "best",
+        "raceWidth": 2,
+        "hedge": {
+          "minDelay": 250,
+          "multiplier": 2
+        },
+        "timeoutMs": 10000,
+        "retryCount": 2,
+        "batchWaitMs": false
+      },
+      "policyMatchesCurrentSource": true,
+      "configurationMatchesCurrentSource": true,
+      "endpointsMatchCurrentSource": true,
+      "rpcSourceMatchesCurrentSource": true,
+      "dependencyMatchesCurrentSource": true,
+      "staleReasons": [],
+      "expectedSamplesPerWorkload": 100,
+      "concurrency": 4,
+      "configuredEndpointCount": 5,
+      "chainIdVerifiedEndpointCount": 3,
+      "untestedEndpoints": [
+        {
+          "url": "https://66.rpc.thirdweb.com",
+          "chainIdValid": false,
+          "reportedChainId": null,
+          "reason": "HTTP 429"
+        },
+        {
+          "url": "https://okxchain.rpc.thirdweb.com",
+          "chainIdValid": false,
+          "reportedChainId": null,
+          "reason": "HTTP 429"
+        }
+      ],
+      "cors": {
+        "browserPerformanceVerified": false,
+        "preflightPassedEndpoints": 3,
+        "postHeaderPassedEndpoints": 3,
+        "bothPassedEndpoints": 3,
+        "endpointIssues": [
+          {
+            "url": "https://66.rpc.thirdweb.com",
+            "preflightPassed": false,
+            "postHeaderPassed": false,
+            "error": "HTTP 429"
+          },
+          {
+            "url": "https://okxchain.rpc.thirdweb.com",
+            "preflightPassed": false,
+            "postHeaderPassed": false,
+            "error": "HTTP 429"
+          }
+        ],
+        "productionResponsesWithoutAllowedOrigin": 2,
+        "baselineResponsesWithoutAllowedOrigin": null,
+        "note": "Bun/Node does not enforce CORS; these are diagnostics and the latency gate is runtime-only."
+      },
+      "sampleCounts": {
+        "measured": 697,
+        "warmup": 40,
+        "cold": 8,
+        "production": {
+          "measured": 200,
+          "warmup": 10,
+          "cold": 2
+        },
+        "baseline": {
+          "measured": 0,
+          "warmup": 0,
+          "cold": 0
+        }
+      },
+      "amplification": {
+        "production": {
+          "phases": "cold + warmup + measured",
+          "logicalRequests": 212,
+          "upstreamHttpRequests": 427,
+          "upstreamReadCalls": 422,
+          "upstreamChainChecks": 5,
+          "httpRequestsPerLogicalRequest": 2.0141509433962264,
+          "readCallsPerLogicalRequest": 1.990566037735849,
+          "measuredOnlyAmplification": null,
+          "note": "Source telemetry spans all phases; measured-only amplification cannot be recovered.",
+          "events": {
+            "request": 422,
+            "error": 3,
+            "head": 210,
+            "success": 421,
+            "race": 210
+          }
+        },
+        "baseline": null
+      },
+      "workloads": [
+        {
+          "method": "eth_blockNumber",
+          "status": "fail",
+          "smart": {
+            "attempts": 100,
+            "successes": 100,
+            "errors": 0,
+            "successRate": 1,
+            "p50Ms": 191.83849999999984,
+            "p99Ms": 277.2964159999974,
+            "maxMs": 278.3945420000091,
+            "failureP50Ms": null
+          },
+          "baseline": null,
+          "p50": {
+            "pass": false,
+            "smartMs": 191.83849999999984,
+            "limitMs": 177.87324999998964,
+            "directId": "direct:3",
+            "directUrl": "https://exchainrpc.okex.org"
+          },
+          "p99": {
+            "pass": true,
+            "smartMs": 277.2964159999974,
+            "limitMs": 520.7631660000006,
+            "directId": "direct:4",
+            "directUrl": "https://oktc-mainnet.token.im"
+          },
+          "allSmartRequestsSucceeded": true,
+          "healthyDirectCount": 2,
+          "fullSampleDirectCount": 2,
+          "configuredEndpointCount": 5,
+          "measuredDirectAttempts": 248,
+          "measuredDirectSuccesses": 240,
+          "measuredDirectErrors": 8,
+          "excludedDirect": [
+            {
+              "id": "direct:0",
+              "url": "https://oktc.drpc.org",
+              "summary": {
+                "attempts": 48,
+                "successes": 40,
+                "errors": 8,
+                "successRate": 0.8333333333333334,
+                "p50Ms": 37.49183300000004,
+                "p99Ms": 112.40141700000095,
+                "maxMs": 112.40141700000095,
+                "failureP50Ms": 34.118374999998196
+              },
+              "stopped": "Five consecutive measured failures; remaining samples not collected"
+            }
+          ]
+        },
+        {
+          "method": "eth_call",
+          "status": "fail",
+          "smart": {
+            "attempts": 100,
+            "successes": 100,
+            "errors": 0,
+            "successRate": 1,
+            "p50Ms": 186.11695899999177,
+            "p99Ms": 286.1703750000015,
+            "maxMs": 341.4205840000068,
+            "failureP50Ms": null
+          },
+          "baseline": null,
+          "p50": {
+            "pass": false,
+            "smartMs": 186.11695899999177,
+            "limitMs": 185.41300000000047,
+            "directId": "direct:3",
+            "directUrl": "https://exchainrpc.okex.org"
+          },
+          "p99": {
+            "pass": true,
+            "smartMs": 286.1703750000015,
+            "limitMs": 515.7404580000002,
+            "directId": "direct:4",
+            "directUrl": "https://oktc-mainnet.token.im"
+          },
+          "allSmartRequestsSucceeded": true,
+          "healthyDirectCount": 2,
+          "fullSampleDirectCount": 2,
+          "configuredEndpointCount": 5,
+          "measuredDirectAttempts": 249,
+          "measuredDirectSuccesses": 241,
+          "measuredDirectErrors": 8,
+          "excludedDirect": [
+            {
+              "id": "direct:0",
+              "url": "https://oktc.drpc.org",
+              "summary": {
+                "attempts": 49,
+                "successes": 41,
+                "errors": 8,
+                "successRate": 0.8367346938775511,
+                "p50Ms": 416.2647500000021,
+                "p99Ms": 599.0683749999989,
+                "maxMs": 599.0683749999989,
+                "failureP50Ms": 34.14733299999352
+              },
+              "stopped": "Five consecutive measured failures; remaining samples not collected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "chainId": 10001,
+      "name": "EthereumPoW",
+      "status": "fail",
+      "empiricalStatus": "fail",
+      "sourceFile": "artifacts/rpc-performance/ethw-final.json",
+      "startedAt": "2026-11-06T00:08:26.800Z",
+      "finishedAt": "2026-11-06T00:12:17.590Z",
+      "sourceFingerprints": {
+        "src/config/rpc.ts": "f57d3f685075cd2724fc9dfc3867261a8a843a477e2b0cdd57fd3dd9ef8c3c1c",
+        "src/config/rpc-policies.ts": "c96b6d3f9d53b69a0609303619860bcba9581da313c21aa4c1fc0543cc96a497",
+        "src/config/rpc-endpoints.generated.ts": "4af6d54f1adf401433d643071a6857d24546a6be7f5c3c82156fdabfd85f2a08",
+        "scripts/benchmark-rpcs.ts": "2058a143694a92d1ac5b2a0653d45993b8cefda008db133949a543f5e8e7e5b2",
+        "scripts/rpc-benchmark/statistics.ts": "14acddd6cde37e3fde08b10c5f6dbf67da64c77fa119d138b1bece41283811b4",
+        "package.json": "3cf5745b4dfe321ab8b8873d4692cfd441a5d9ba1b231cd09b1d606901b30ddd",
+        "bun.lock": "5ef73cc491625fd4309bfdf22931c5ab61c1416d0c5a3118b974e034f2169995",
+        "node_modules/@bloxwap/smart-hyperevm/dist/chunk-htm8ngjg.js": "299fd4a8e8c73b876386b138bfb07094f9baf2cb2f78df48ae10a7017d9326df"
+      },
+      "sourceFingerprintsAtEnd": {
+        "src/config/rpc.ts": "f57d3f685075cd2724fc9dfc3867261a8a843a477e2b0cdd57fd3dd9ef8c3c1c",
+        "src/config/rpc-policies.ts": "c96b6d3f9d53b69a0609303619860bcba9581da313c21aa4c1fc0543cc96a497",
+        "src/config/rpc-endpoints.generated.ts": "4af6d54f1adf401433d643071a6857d24546a6be7f5c3c82156fdabfd85f2a08",
+        "scripts/benchmark-rpcs.ts": "2058a143694a92d1ac5b2a0653d45993b8cefda008db133949a543f5e8e7e5b2",
+        "scripts/rpc-benchmark/statistics.ts": "14acddd6cde37e3fde08b10c5f6dbf67da64c77fa119d138b1bece41283811b4",
+        "package.json": "3cf5745b4dfe321ab8b8873d4692cfd441a5d9ba1b231cd09b1d606901b30ddd",
+        "bun.lock": "5ef73cc491625fd4309bfdf22931c5ab61c1416d0c5a3118b974e034f2169995",
+        "node_modules/@bloxwap/smart-hyperevm/dist/chunk-htm8ngjg.js": "299fd4a8e8c73b876386b138bfb07094f9baf2cb2f78df48ae10a7017d9326df"
+      },
+      "sourceFilesChangedDuringRun": [],
+      "productionPolicy": {
+        "routing": "best",
+        "raceWidth": false,
+        "hedge": false,
+        "timeoutMs": 10000,
+        "retryCount": 2,
+        "batchWaitMs": false
+      },
+      "policyMatchesCurrentSource": true,
+      "configurationMatchesCurrentSource": true,
+      "endpointsMatchCurrentSource": true,
+      "rpcSourceMatchesCurrentSource": true,
+      "dependencyMatchesCurrentSource": true,
+      "staleReasons": [],
+      "expectedSamplesPerWorkload": 100,
+      "concurrency": 1,
+      "configuredEndpointCount": 1,
+      "chainIdVerifiedEndpointCount": 1,
+      "untestedEndpoints": [],
+      "cors": {
+        "browserPerformanceVerified": false,
+        "preflightPassedEndpoints": 1,
+        "postHeaderPassedEndpoints": 1,
+        "bothPassedEndpoints": 1,
+        "endpointIssues": [],
+        "productionResponsesWithoutAllowedOrigin": 0,
+        "baselineResponsesWithoutAllowedOrigin": null,
+        "note": "Bun/Node does not enforce CORS; these are diagnostics and the latency gate is runtime-only."
+      },
+      "sampleCounts": {
+        "measured": 400,
+        "warmup": 20,
+        "cold": 4,
+        "production": {
+          "measured": 200,
+          "warmup": 10,
+          "cold": 2
+        },
+        "baseline": {
+          "measured": 0,
+          "warmup": 0,
+          "cold": 0
+        }
+      },
+      "amplification": {
+        "production": {
+          "phases": "cold + warmup + measured",
+          "logicalRequests": 212,
+          "upstreamHttpRequests": 213,
+          "upstreamReadCalls": 212,
+          "upstreamChainChecks": 1,
+          "httpRequestsPerLogicalRequest": 1.0047169811320755,
+          "readCallsPerLogicalRequest": 1,
+          "measuredOnlyAmplification": null,
+          "note": "Source telemetry spans all phases; measured-only amplification cannot be recovered.",
+          "events": {
+            "request": 212,
+            "head": 106,
+            "success": 212
+          }
+        },
+        "baseline": null
+      },
+      "workloads": [
+        {
+          "method": "eth_blockNumber",
+          "status": "fail",
+          "smart": {
+            "attempts": 100,
+            "successes": 100,
+            "errors": 0,
+            "successRate": 1,
+            "p50Ms": 30.63025000000198,
+            "p99Ms": 130.1112090000097,
+            "maxMs": 134.90504100000544,
+            "failureP50Ms": null
+          },
+          "baseline": null,
+          "p50": {
+            "pass": false,
+            "smartMs": 30.63025000000198,
+            "limitMs": 29.223792000004323,
+            "directId": "direct:0",
+            "directUrl": "https://mainnet.ethereumpow.org"
+          },
+          "p99": {
+            "pass": false,
+            "smartMs": 130.1112090000097,
+            "limitMs": 108.02495799999451,
+            "directId": "direct:0",
+            "directUrl": "https://mainnet.ethereumpow.org"
+          },
+          "allSmartRequestsSucceeded": true,
+          "healthyDirectCount": 1,
+          "fullSampleDirectCount": 1,
+          "configuredEndpointCount": 1,
+          "measuredDirectAttempts": 100,
+          "measuredDirectSuccesses": 100,
+          "measuredDirectErrors": 0,
+          "excludedDirect": []
+        },
+        {
+          "method": "eth_call",
+          "status": "fail",
+          "smart": {
+            "attempts": 100,
+            "successes": 100,
+            "errors": 0,
+            "successRate": 1,
+            "p50Ms": 29.832832999993116,
+            "p99Ms": 109.35250000000087,
+            "maxMs": 134.39533300000767,
+            "failureP50Ms": null
+          },
+          "baseline": null,
+          "p50": {
+            "pass": false,
+            "smartMs": 29.832832999993116,
+            "limitMs": 28.961749999994936,
+            "directId": "direct:0",
+            "directUrl": "https://mainnet.ethereumpow.org"
+          },
+          "p99": {
+            "pass": true,
+            "smartMs": 109.35250000000087,
+            "limitMs": 286.06804199999897,
+            "directId": "direct:0",
+            "directUrl": "https://mainnet.ethereumpow.org"
+          },
+          "allSmartRequestsSucceeded": true,
+          "healthyDirectCount": 1,
+          "fullSampleDirectCount": 1,
+          "configuredEndpointCount": 1,
+          "measuredDirectAttempts": 100,
+          "measuredDirectSuccesses": 100,
+          "measuredDirectErrors": 0,
+          "excludedDirect": []
+        }
+      ]
+    },
+    {
+      "chainId": 8453,
+      "name": "Base",
+      "status": "fail",
+      "empiricalStatus": "fail",
+      "sourceFile": "artifacts/rpc-performance/base-final.json",
+      "startedAt": "2026-11-06T00:08:04.531Z",
+      "finishedAt": "2026-11-06T00:12:05.958Z",
+      "sourceFingerprints": {
+        "src/config/rpc.ts": "f57d3f685075cd2724fc9dfc3867261a8a843a477e2b0cdd57fd3dd9ef8c3c1c",
+        "src/config/rpc-policies.ts": "c96b6d3f9d53b69a0609303619860bcba9581da313c21aa4c1fc0543cc96a497",
+        "src/config/rpc-endpoints.generated.ts": "4af6d54f1adf401433d643071a6857d24546a6be7f5c3c82156fdabfd85f2a08",
+        "scripts/benchmark-rpcs.ts": "2058a143694a92d1ac5b2a0653d45993b8cefda008db133949a543f5e8e7e5b2",
+        "scripts/rpc-benchmark/statistics.ts": "14acddd6cde37e3fde08b10c5f6dbf67da64c77fa119d138b1bece41283811b4",
+        "package.json": "3cf5745b4dfe321ab8b8873d4692cfd441a5d9ba1b231cd09b1d606901b30ddd",
+        "bun.lock": "5ef73cc491625fd4309bfdf22931c5ab61c1416d0c5a3118b974e034f2169995",
+        "node_modules/@bloxwap/smart-hyperevm/dist/chunk-htm8ngjg.js": "299fd4a8e8c73b876386b138bfb07094f9baf2cb2f78df48ae10a7017d9326df"
+      },
+      "sourceFingerprintsAtEnd": {
+        "src/config/rpc.ts": "f57d3f685075cd2724fc9dfc3867261a8a843a477e2b0cdd57fd3dd9ef8c3c1c",
+        "src/config/rpc-policies.ts": "c96b6d3f9d53b69a0609303619860bcba9581da313c21aa4c1fc0543cc96a497",
+        "src/config/rpc-endpoints.generated.ts": "4af6d54f1adf401433d643071a6857d24546a6be7f5c3c82156fdabfd85f2a08",
+        "scripts/benchmark-rpcs.ts": "2058a143694a92d1ac5b2a0653d45993b8cefda008db133949a543f5e8e7e5b2",
+        "scripts/rpc-benchmark/statistics.ts": "14acddd6cde37e3fde08b10c5f6dbf67da64c77fa119d138b1bece41283811b4",
+        "package.json": "3cf5745b4dfe321ab8b8873d4692cfd441a5d9ba1b231cd09b1d606901b30ddd",
+        "bun.lock": "5ef73cc491625fd4309bfdf22931c5ab61c1416d0c5a3118b974e034f2169995",
+        "node_modules/@bloxwap/smart-hyperevm/dist/chunk-htm8ngjg.js": "299fd4a8e8c73b876386b138bfb07094f9baf2cb2f78df48ae10a7017d9326df"
+      },
+      "sourceFilesChangedDuringRun": [],
+      "productionPolicy": {
+        "routing": "best",
+        "raceWidth": 2,
+        "hedge": {
+          "minDelay": 250,
+          "multiplier": 2
+        },
+        "timeoutMs": 10000,
+        "retryCount": 2,
+        "batchWaitMs": false
+      },
+      "policyMatchesCurrentSource": true,
+      "configurationMatchesCurrentSource": true,
+      "endpointsMatchCurrentSource": true,
+      "rpcSourceMatchesCurrentSource": true,
+      "dependencyMatchesCurrentSource": true,
+      "staleReasons": [],
+      "expectedSamplesPerWorkload": 100,
+      "concurrency": 4,
+      "configuredEndpointCount": 18,
+      "chainIdVerifiedEndpointCount": 18,
+      "untestedEndpoints": [],
+      "cors": {
+        "browserPerformanceVerified": false,
+        "preflightPassedEndpoints": 18,
+        "postHeaderPassedEndpoints": 18,
+        "bothPassedEndpoints": 18,
+        "endpointIssues": [],
+        "productionResponsesWithoutAllowedOrigin": 0,
+        "baselineResponsesWithoutAllowedOrigin": null,
+        "note": "Bun/Node does not enforce CORS; these are diagnostics and the latency gate is runtime-only."
+      },
+      "sampleCounts": {
+        "measured": 3330,
+        "warmup": 187,
+        "cold": 38,
+        "production": {
+          "measured": 200,
+          "warmup": 10,
+          "cold": 2
+        },
+        "baseline": {
+          "measured": 0,
+          "warmup": 0,
+          "cold": 0
+        }
+      },
+      "amplification": {
+        "production": {
+          "phases": "cold + warmup + measured",
+          "logicalRequests": 212,
+          "upstreamHttpRequests": 428,
+          "upstreamReadCalls": 423,
+          "upstreamChainChecks": 5,
+          "httpRequestsPerLogicalRequest": 2.018867924528302,
+          "readCallsPerLogicalRequest": 1.9952830188679245,
+          "measuredOnlyAmplification": null,
+          "note": "Source telemetry spans all phases; measured-only amplification cannot be recovered.",
+          "events": {
+            "request": 423,
+            "head": 210,
+            "success": 421,
+            "race": 211,
+            "error": 2
+          }
+        },
+        "baseline": null
+      },
+      "workloads": [
+        {
+          "method": "eth_blockNumber",
+          "status": "fail",
+          "smart": {
+            "attempts": 100,
+            "successes": 100,
+            "errors": 0,
+            "successRate": 1,
+            "p50Ms": 32.86012500000652,
+            "p99Ms": 121.93591600000218,
+            "maxMs": 122.31358300001011,
+            "failureP50Ms": null
+          },
+          "baseline": null,
+          "p50": {
+            "pass": false,
+            "smartMs": 32.86012500000652,
+            "limitMs": 31.84625000000233,
+            "directId": "direct:0",
+            "directUrl": "https://base-mainnet.g.alchemy.com/public"
+          },
+          "p99": {
+            "pass": true,
+            "smartMs": 121.93591600000218,
+            "limitMs": 1645.847207999992,
+            "directId": "direct:9",
+            "directUrl": "https://base-rpc.publicnode.com"
+          },
+          "allSmartRequestsSucceeded": true,
+          "healthyDirectCount": 15,
+          "fullSampleDirectCount": 16,
+          "configuredEndpointCount": 18,
+          "measuredDirectAttempts": 1615,
+          "measuredDirectSuccesses": 1581,
+          "measuredDirectErrors": 34,
+          "excludedDirect": [
+            {
+              "id": "direct:1",
+              "url": "https://base.drpc.org",
+              "summary": {
+                "attempts": 5,
+                "successes": 0,
+                "errors": 5,
+                "successRate": 0,
+                "p50Ms": null,
+                "p99Ms": null,
+                "maxMs": null,
+                "failureP50Ms": 41.859832999998616
+              },
+              "stopped": "Five consecutive measured failures; remaining samples not collected"
+            },
+            {
+              "id": "direct:14",
+              "url": "https://api.zan.top/base-mainnet",
+              "summary": {
+                "attempts": 100,
+                "successes": 76,
+                "errors": 24,
+                "successRate": 0.76,
+                "p50Ms": 199.99662499999977,
+                "p99Ms": 650.8768329999875,
+                "maxMs": 650.8768329999875,
+                "failureP50Ms": 197.55183399999805
+              },
+              "stopped": null
+            },
+            {
+              "id": "direct:15",
+              "url": "https://rpc-base.blockmachine.io",
+              "summary": {
+                "attempts": 10,
+                "successes": 5,
+                "errors": 5,
+                "successRate": 0.5,
+                "p50Ms": 217.36049999999886,
+                "p99Ms": 229.63112499999988,
+                "maxMs": 229.63112499999988,
+                "failureP50Ms": 175.52404199999728
+              },
+              "stopped": "Five consecutive measured failures; remaining samples not collected"
+            }
+          ]
+        },
+        {
+          "method": "eth_call",
+          "status": "pass",
+          "smart": {
+            "attempts": 100,
+            "successes": 100,
+            "errors": 0,
+            "successRate": 1,
+            "p50Ms": 32.44558299999335,
+            "p99Ms": 117.44191599998157,
+            "maxMs": 119.97791699999652,
+            "failureP50Ms": null
+          },
+          "baseline": null,
+          "p50": {
+            "pass": true,
+            "smartMs": 32.44558299999335,
+            "limitMs": 32.7980000000025,
+            "directId": "direct:0",
+            "directUrl": "https://base-mainnet.g.alchemy.com/public"
+          },
+          "p99": {
+            "pass": true,
+            "smartMs": 117.44191599998157,
+            "limitMs": 1828.1605420000124,
+            "directId": "direct:9",
+            "directUrl": "https://base-rpc.publicnode.com"
+          },
+          "allSmartRequestsSucceeded": true,
+          "healthyDirectCount": 14,
+          "fullSampleDirectCount": 15,
+          "configuredEndpointCount": 18,
+          "measuredDirectAttempts": 1515,
+          "measuredDirectSuccesses": 1504,
+          "measuredDirectErrors": 11,
+          "excludedDirect": [
+            {
+              "id": "direct:1",
+              "url": "https://base.drpc.org",
+              "summary": {
+                "attempts": 5,
+                "successes": 0,
+                "errors": 5,
+                "successRate": 0,
+                "p50Ms": null,
+                "p99Ms": null,
+                "maxMs": null,
+                "failureP50Ms": 36.515707999998995
+              },
+              "stopped": "Five consecutive measured failures; remaining samples not collected"
+            },
+            {
+              "id": "direct:13",
+              "url": "https://rpc.degenprotocol.io/base",
+              "summary": {
+                "attempts": 100,
+                "successes": 99,
+                "errors": 1,
+                "successRate": 0.99,
+                "p50Ms": 385.2826249999998,
+                "p99Ms": 505.7851249999949,
+                "maxMs": 505.7851249999949,
+                "failureP50Ms": 402.179667000004
+              },
+              "stopped": null
+            },
+            {
+              "id": "direct:14",
+              "url": "https://api.zan.top/base-mainnet",
+              "summary": {
+                "attempts": 0,
+                "successes": 0,
+                "errors": 0,
+                "successRate": null,
+                "p50Ms": null,
+                "p99Ms": null,
+                "maxMs": null,
+                "failureP50Ms": null
+              },
+              "stopped": "All cold and first warm-up attempts failed; no latency baseline available"
+            },
+            {
+              "id": "direct:15",
+              "url": "https://rpc-base.blockmachine.io",
+              "summary": {
+                "attempts": 10,
+                "successes": 5,
+                "errors": 5,
+                "successRate": 0.5,
+                "p50Ms": 175.6030839999985,
+                "p99Ms": 333.92804199999955,
+                "maxMs": 333.92804199999955,
+                "failureP50Ms": 170.4094999999943
+              },
+              "stopped": "Five consecutive measured failures; remaining samples not collected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "chainId": 369,
+      "name": "PulseChain",
+      "status": "fail",
+      "empiricalStatus": "fail",
+      "sourceFile": "artifacts/rpc-performance/pulsechain-final.json",
+      "startedAt": "2026-11-06T00:07:54.773Z",
+      "finishedAt": "2026-11-06T00:10:20.399Z",
+      "sourceFingerprints": {
+        "src/config/rpc.ts": "f57d3f685075cd2724fc9dfc3867261a8a843a477e2b0cdd57fd3dd9ef8c3c1c",
+        "src/config/rpc-policies.ts": "c96b6d3f9d53b69a0609303619860bcba9581da313c21aa4c1fc0543cc96a497",
+        "src/config/rpc-endpoints.generated.ts": "4af6d54f1adf401433d643071a6857d24546a6be7f5c3c82156fdabfd85f2a08",
+        "scripts/benchmark-rpcs.ts": "2058a143694a92d1ac5b2a0653d45993b8cefda008db133949a543f5e8e7e5b2",
+        "scripts/rpc-benchmark/statistics.ts": "14acddd6cde37e3fde08b10c5f6dbf67da64c77fa119d138b1bece41283811b4",
+        "package.json": "3cf5745b4dfe321ab8b8873d4692cfd441a5d9ba1b231cd09b1d606901b30ddd",
+        "bun.lock": "5ef73cc491625fd4309bfdf22931c5ab61c1416d0c5a3118b974e034f2169995",
+        "node_modules/@bloxwap/smart-hyperevm/dist/chunk-htm8ngjg.js": "299fd4a8e8c73b876386b138bfb07094f9baf2cb2f78df48ae10a7017d9326df"
+      },
+      "sourceFingerprintsAtEnd": {
+        "src/config/rpc.ts": "f57d3f685075cd2724fc9dfc3867261a8a843a477e2b0cdd57fd3dd9ef8c3c1c",
+        "src/config/rpc-policies.ts": "c96b6d3f9d53b69a0609303619860bcba9581da313c21aa4c1fc0543cc96a497",
+        "src/config/rpc-endpoints.generated.ts": "4af6d54f1adf401433d643071a6857d24546a6be7f5c3c82156fdabfd85f2a08",
+        "scripts/benchmark-rpcs.ts": "2058a143694a92d1ac5b2a0653d45993b8cefda008db133949a543f5e8e7e5b2",
+        "scripts/rpc-benchmark/statistics.ts": "14acddd6cde37e3fde08b10c5f6dbf67da64c77fa119d138b1bece41283811b4",
+        "package.json": "3cf5745b4dfe321ab8b8873d4692cfd441a5d9ba1b231cd09b1d606901b30ddd",
+        "bun.lock": "5ef73cc491625fd4309bfdf22931c5ab61c1416d0c5a3118b974e034f2169995",
+        "node_modules/@bloxwap/smart-hyperevm/dist/chunk-htm8ngjg.js": "299fd4a8e8c73b876386b138bfb07094f9baf2cb2f78df48ae10a7017d9326df"
+      },
+      "sourceFilesChangedDuringRun": [],
+      "productionPolicy": {
+        "routing": "best",
+        "raceWidth": 2,
+        "hedge": {
+          "minDelay": 250,
+          "multiplier": 2
+        },
+        "timeoutMs": 10000,
+        "retryCount": 2,
+        "batchWaitMs": 0
+      },
+      "policyMatchesCurrentSource": true,
+      "configurationMatchesCurrentSource": true,
+      "endpointsMatchCurrentSource": true,
+      "rpcSourceMatchesCurrentSource": true,
+      "dependencyMatchesCurrentSource": true,
+      "staleReasons": [],
+      "expectedSamplesPerWorkload": 100,
+      "concurrency": 4,
+      "configuredEndpointCount": 10,
+      "chainIdVerifiedEndpointCount": 9,
+      "untestedEndpoints": [
+        {
+          "url": "https://rpc.hairylabs.io",
+          "chainIdValid": false,
+          "reportedChainId": null,
+          "reason": "HTTP 520"
+        }
+      ],
+      "cors": {
+        "browserPerformanceVerified": false,
+        "preflightPassedEndpoints": 9,
+        "postHeaderPassedEndpoints": 9,
+        "bothPassedEndpoints": 9,
+        "endpointIssues": [
+          {
+            "url": "https://rpc.hairylabs.io",
+            "preflightPassed": false,
+            "postHeaderPassed": false,
+            "error": "HTTP 520"
+          }
+        ],
+        "productionResponsesWithoutAllowedOrigin": 1,
+        "baselineResponsesWithoutAllowedOrigin": null,
+        "note": "Bun/Node does not enforce CORS; these are diagnostics and the latency gate is runtime-only."
+      },
+      "sampleCounts": {
+        "measured": 1911,
+        "warmup": 100,
+        "cold": 20,
+        "production": {
+          "measured": 200,
+          "warmup": 10,
+          "cold": 2
+        },
+        "baseline": {
+          "measured": 0,
+          "warmup": 0,
+          "cold": 0
+        }
+      },
+      "amplification": {
+        "production": {
+          "phases": "cold + warmup + measured",
+          "logicalRequests": 212,
+          "upstreamHttpRequests": 430,
+          "upstreamReadCalls": 424,
+          "upstreamChainChecks": 6,
+          "httpRequestsPerLogicalRequest": 2.0283018867924527,
+          "readCallsPerLogicalRequest": 2,
+          "measuredOnlyAmplification": null,
+          "note": "Source telemetry spans all phases; measured-only amplification cannot be recovered.",
+          "events": {
+            "request": 424,
+            "hedge": 1,
+            "head": 211,
+            "success": 422,
+            "race": 211,
+            "error": 1
+          }
+        },
+        "baseline": null
+      },
+      "workloads": [
+        {
+          "method": "eth_blockNumber",
+          "status": "pass",
+          "smart": {
+            "attempts": 100,
+            "successes": 100,
+            "errors": 0,
+            "successRate": 1,
+            "p50Ms": 108.72449999999662,
+            "p99Ms": 191.6389160000108,
+            "maxMs": 315.67041600000084,
+            "failureP50Ms": null
+          },
+          "baseline": null,
+          "p50": {
+            "pass": true,
+            "smartMs": 108.72449999999662,
+            "limitMs": 112.92712500000198,
+            "directId": "direct:2",
+            "directUrl": "https://pulsechain-rpc.publicnode.com"
+          },
+          "p99": {
+            "pass": true,
+            "smartMs": 191.6389160000108,
+            "limitMs": 339.47879100000137,
+            "directId": "direct:9",
+            "directUrl": "https://rpc.pulseheartbeat.com"
+          },
+          "allSmartRequestsSucceeded": true,
+          "healthyDirectCount": 8,
+          "fullSampleDirectCount": 8,
+          "configuredEndpointCount": 10,
+          "measuredDirectAttempts": 811,
+          "measuredDirectSuccesses": 804,
+          "measuredDirectErrors": 7,
+          "excludedDirect": [
+            {
+              "id": "direct:0",
+              "url": "https://369.rpc.thirdweb.com",
+              "summary": {
+                "attempts": 11,
+                "successes": 4,
+                "errors": 7,
+                "successRate": 0.36363636363636365,
+                "p50Ms": 46.848041999997804,
+                "p99Ms": 314.9338749999988,
+                "maxMs": 314.9338749999988,
+                "failureP50Ms": 18.521999999997206
+              },
+              "stopped": "Five consecutive measured failures; remaining samples not collected"
+            }
+          ]
+        },
+        {
+          "method": "eth_call",
+          "status": "fail",
+          "smart": {
+            "attempts": 100,
+            "successes": 100,
+            "errors": 0,
+            "successRate": 1,
+            "p50Ms": 171.3047499999957,
+            "p99Ms": 301.3020000000033,
+            "maxMs": 588.646624999994,
+            "failureP50Ms": null
+          },
+          "baseline": null,
+          "p50": {
+            "pass": false,
+            "smartMs": 171.3047499999957,
+            "limitMs": 111.8527080000058,
+            "directId": "direct:2",
+            "directUrl": "https://pulsechain-rpc.publicnode.com"
+          },
+          "p99": {
+            "pass": true,
+            "smartMs": 301.3020000000033,
+            "limitMs": 403.11454199999935,
+            "directId": "direct:6",
+            "directUrl": "https://one.valve.city/rpc/vk_demo/evm/369"
+          },
+          "allSmartRequestsSucceeded": true,
+          "healthyDirectCount": 8,
+          "fullSampleDirectCount": 9,
+          "configuredEndpointCount": 10,
+          "measuredDirectAttempts": 900,
+          "measuredDirectSuccesses": 880,
+          "measuredDirectErrors": 20,
+          "excludedDirect": [
+            {
+              "id": "direct:0",
+              "url": "https://369.rpc.thirdweb.com",
+              "summary": {
+                "attempts": 100,
+                "successes": 80,
+                "errors": 20,
+                "successRate": 0.8,
+                "p50Ms": 83.98337499999616,
+                "p99Ms": 626.5970000000088,
+                "maxMs": 626.5970000000088,
+                "failureP50Ms": 16.603666000002704
+              },
+              "stopped": null
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

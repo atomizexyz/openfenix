@@ -2,6 +2,8 @@ import { setRequestLocale, getTranslations } from "next-intl/server";
 import { DashboardOverview } from "@/components/dashboard/dashboard-overview";
 import type { Metadata } from "next";
 import { buildPageMetadata } from "@/lib/metadata";
+import { Suspense } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export async function generateMetadata({
   params,
@@ -30,7 +32,18 @@ export default async function DashboardPage({
         </p>
       </div>
 
-      <DashboardOverview />
+      <Suspense fallback={
+        <div className="space-y-4" aria-busy="true" aria-label={t("title")}>
+          <Skeleton className="h-10 w-44 rounded-xl" />
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {Array.from({ length: 6 }, (_, index) => (
+              <Skeleton key={index} className="h-40 rounded-2xl" />
+            ))}
+          </div>
+        </div>
+      }>
+        <DashboardOverview />
+      </Suspense>
     </div>
   );
 }

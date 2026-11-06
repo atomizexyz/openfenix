@@ -1,0 +1,34 @@
+diff --git a/dist/chunk-htm8ngjg.js b/dist/chunk-htm8ngjg.js
+index adbb79f6c5da55dd209a7307f7271c3eba61d2c4..49b017f6ffb4e3a72f52ff9ab82447b9e958f7c2 100644
+--- a/dist/chunk-htm8ngjg.js
++++ b/dist/chunk-htm8ngjg.js
+@@ -767,7 +767,7 @@ class Scoreboard {
+     return endpoint.inflight.size;
+   }
+   #lag(endpoint, view) {
+-    if (endpoint.head === null || view.best === null || view.liars.has(endpoint))
++    if (endpoint.head === null || this.#options.now() - endpoint.headAt > this.#options.staleMs || view.best === null || view.liars.has(endpoint))
+       return null;
+     return Math.max(0, view.best - endpoint.head);
+   }
+diff --git a/src/transport/_scoreboard.ts b/src/transport/_scoreboard.ts
+index 4e81cbe5ee9e6b4b859151dc26aad69af19b2751..2ab268fbfafa5e7feaf1324aade794376a8df91e 100644
+--- a/src/transport/_scoreboard.ts
++++ b/src/transport/_scoreboard.ts
+@@ -279,9 +279,14 @@ export class Scoreboard {
+     return endpoint.inflight.size;
+   }
+ 
+-  /** Null when there is no head, no believed reference, or this endpoint's head is ignored. */
++  /** Null when there is no fresh head, no believed reference, or this endpoint's head is ignored. */
+   #lag(endpoint: EndpointState, view: HeadView): number | null {
+-    if (endpoint.head === null || view.best === null || view.liars.has(endpoint)) return null;
++    if (
++      endpoint.head === null ||
++      this.#options.now() - endpoint.headAt > this.#options.staleMs ||
++      view.best === null ||
++      view.liars.has(endpoint)
++    ) return null;
+     return Math.max(0, view.best - endpoint.head);
+   }
+ 

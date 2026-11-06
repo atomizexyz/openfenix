@@ -1,0 +1,404 @@
+{
+  "chainId": 1,
+  "origin": "https://fenix.fyi",
+  "observedAt": "2026-11-05T23:52:55.816Z",
+  "note": "OPTIONS browser usability check only, not latency benchmark",
+  "rows": [
+    {
+      "url": "https://eth.drpc.org",
+      "status": 204,
+      "origin": "https://fenix.fyi",
+      "methods": "POST",
+      "headers": "content-type",
+      "ok": true,
+      "ms": 72
+    },
+    {
+      "url": "https://eth-mainnet.g.alchemy.com/public",
+      "status": 200,
+      "origin": "https://fenix.fyi",
+      "methods": "POST,GET,PUT,DELETE,PATCH",
+      "headers": "content-type",
+      "ok": true,
+      "ms": 121
+    },
+    {
+      "url": "https://mainnet.rpc.sentio.xyz",
+      "status": 200,
+      "origin": "https://fenix.fyi",
+      "methods": "GET, PUT, DELETE, POST, PATCH, OPTIONS",
+      "headers": "content-type",
+      "ok": true,
+      "ms": 105
+    },
+    {
+      "url": "https://rpc.sentio.xyz/mainnet",
+      "status": 200,
+      "origin": "https://fenix.fyi",
+      "methods": "GET, PUT, DELETE, POST, PATCH, OPTIONS",
+      "headers": "content-type",
+      "ok": true,
+      "ms": 153
+    },
+    {
+      "url": "https://1.rpc.thirdweb.com",
+      "status": 204,
+      "origin": "*",
+      "methods": "GET, POST, OPTIONS",
+      "headers": "content-type",
+      "ok": true,
+      "ms": 192
+    },
+    {
+      "url": "https://ethereum.drpc.org",
+      "status": 204,
+      "origin": "https://fenix.fyi",
+      "methods": "POST",
+      "headers": "content-type",
+      "ok": true,
+      "ms": 105
+    },
+    {
+      "url": "https://rpc.flashbots.net",
+      "status": 204,
+      "origin": "*",
+      "methods": "POST",
+      "headers": "content-type",
+      "ok": true,
+      "ms": 239
+    },
+    {
+      "url": "https://rpc.flashbots.net/fast",
+      "status": 204,
+      "origin": "*",
+      "methods": "POST",
+      "headers": "content-type",
+      "ok": true,
+      "ms": 250
+    },
+    {
+      "url": "https://singapore.rpc.blxrbdn.com",
+      "status": 200,
+      "origin": "*",
+      "methods": "POST",
+      "headers": "Content-Type",
+      "ok": true,
+      "ms": 324
+    },
+    {
+      "url": "https://virginia.rpc.blxrbdn.com",
+      "status": 200,
+      "origin": "*",
+      "methods": "POST",
+      "headers": "Content-Type",
+      "ok": true,
+      "ms": 330
+    },
+    {
+      "url": "https://uk.rpc.blxrbdn.com",
+      "status": 200,
+      "origin": "*",
+      "methods": "POST",
+      "headers": "Content-Type",
+      "ok": true,
+      "ms": 243
+    },
+    {
+      "url": "https://eth.rpc.blxrbdn.com",
+      "status": 200,
+      "origin": "*",
+      "methods": "POST",
+      "headers": "Content-Type",
+      "ok": true,
+      "ms": 240
+    },
+    {
+      "url": "https://public.1rpc.io/eth",
+      "status": 200,
+      "origin": "*",
+      "methods": "GET,POST,PUT,DELETE,OPTIONS",
+      "headers": "content-type",
+      "ok": true,
+      "ms": 228
+    },
+    {
+      "url": "https://eth-protect.rpc.blxrbdn.com",
+      "status": 200,
+      "origin": "*",
+      "methods": "POST",
+      "headers": "Content-Type",
+      "ok": true,
+      "ms": 293
+    },
+    {
+      "url": "https://eth.blockrazor.xyz/maxbackrun",
+      "status": 200,
+      "origin": "*",
+      "methods": "POST",
+      "headers": "Content-Type",
+      "ok": true,
+      "ms": 166
+    },
+    {
+      "url": "https://us-ethscutum.blockrazor.xyz",
+      "status": 200,
+      "origin": "*",
+      "methods": "POST",
+      "headers": "Content-Type",
+      "ok": true,
+      "ms": 252
+    },
+    {
+      "url": "https://eth.blockrazor.xyz/fullprivacy",
+      "status": 200,
+      "origin": "*",
+      "methods": "POST",
+      "headers": "Content-Type",
+      "ok": true,
+      "ms": 105
+    },
+    {
+      "url": "https://eth.blockrazor.xyz",
+      "status": 200,
+      "origin": "*",
+      "methods": "POST",
+      "headers": "Content-Type",
+      "ok": true,
+      "ms": 179
+    },
+    {
+      "url": "https://gateway.tenderly.co/public/mainnet",
+      "status": 204,
+      "origin": "*",
+      "methods": "POST",
+      "headers": "content-type",
+      "ok": true,
+      "ms": 212
+    },
+    {
+      "url": "https://mainnet.gateway.tenderly.co",
+      "status": 204,
+      "origin": "*",
+      "methods": "POST",
+      "headers": "content-type",
+      "ok": true,
+      "ms": 197
+    },
+    {
+      "url": "https://ethereum.publicnode.com",
+      "status": 204,
+      "origin": "*",
+      "methods": "GET,HEAD,OPTIONS,POST",
+      "headers": "content-type",
+      "ok": true,
+      "ms": 157
+    },
+    {
+      "url": "https://ethereum-rpc.publicnode.com",
+      "status": 204,
+      "origin": "*",
+      "methods": "GET,HEAD,OPTIONS,POST",
+      "headers": "content-type",
+      "ok": true,
+      "ms": 160
+    },
+    {
+      "url": "https://api.tatum.io/v3/blockchain/node/ethereum-mainnet",
+      "status": 204,
+      "origin": "https://fenix.fyi",
+      "methods": "POST,PUT,GET,DELETE",
+      "headers": "X-API-Key,solana-client,DNT,x-ttm-sdk-retry,Authorization,x-ttm-sdk-version,x-ttm-sdk-product,Content-Type,tron-client,x-ttm-sdk-debug,Cache-Control,x-ttm-session",
+      "ok": true,
+      "ms": 122
+    },
+    {
+      "url": "https://1rpc.io/eth",
+      "status": 200,
+      "origin": "*",
+      "methods": "GET,POST,PUT,DELETE,OPTIONS",
+      "headers": "content-type",
+      "ok": true,
+      "ms": 217
+    },
+    {
+      "url": "https://eth-mainnet.public.blastapi.io",
+      "status": 200,
+      "origin": "https://fenix.fyi",
+      "methods": "GET,POST,PUT,PATCH,DELETE,OPTIONS",
+      "headers": "content-type",
+      "ok": true,
+      "ms": 235
+    },
+    {
+      "url": "https://ethereum.web3cdn.rest",
+      "status": 200,
+      "origin": "https://fenix.fyi",
+      "methods": "GET, POST, OPTIONS",
+      "headers": "content-type, accept, origin, authorization, x-api-key, x-requested-with, sec-websocket-key, sec-websocket-version, sec-websocket-protocol, sec-websocket-extensions, upgrade, connection",
+      "ok": true,
+      "ms": 594
+    },
+    {
+      "url": "https://eth.blocktailor.com",
+      "status": 204,
+      "origin": "*",
+      "methods": "POST, OPTIONS",
+      "headers": "content-type",
+      "ok": true,
+      "ms": 693
+    },
+    {
+      "url": "https://rpc-eth.blockmachine.io",
+      "status": 200,
+      "origin": "*",
+      "methods": "GET,POST,OPTIONS",
+      "headers": "*",
+      "ok": true,
+      "ms": 354
+    },
+    {
+      "url": "https://jp-ethscutum.blockrazor.xyz",
+      "status": 200,
+      "origin": "*",
+      "methods": "POST",
+      "headers": "Content-Type",
+      "ok": true,
+      "ms": 510
+    },
+    {
+      "url": "https://rpc.mevblocker.io/fullprivacy",
+      "status": 200,
+      "origin": "https://fenix.fyi",
+      "methods": "POST",
+      "headers": "Content-Type",
+      "ok": true,
+      "ms": 364
+    },
+    {
+      "url": "https://0xrpc.io/eth",
+      "status": 204,
+      "origin": "*",
+      "methods": "GET, POST, OPTIONS",
+      "headers": "DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type",
+      "ok": true,
+      "ms": 711
+    },
+    {
+      "url": "https://api.zan.top/eth-mainnet",
+      "status": 200,
+      "origin": "https://fenix.fyi",
+      "methods": "POST,GET,OPTIONS",
+      "headers": "*",
+      "ok": true,
+      "ms": 746
+    },
+    {
+      "url": "https://eth.api.pocket.network",
+      "status": 204,
+      "origin": "https://fenix.fyi",
+      "methods": "GET, POST, PUT, PATCH, DELETE, OPTIONS",
+      "headers": "content-type",
+      "ok": true,
+      "ms": 697
+    },
+    {
+      "url": "https://rpc.mevblocker.io",
+      "status": 200,
+      "origin": "https://fenix.fyi",
+      "methods": "POST",
+      "headers": "Content-Type",
+      "ok": true,
+      "ms": 168
+    },
+    {
+      "url": "https://api.blockvectra.com/v1/eth_mainnet/public",
+      "status": 204,
+      "origin": "*",
+      "methods": "GET, POST, OPTIONS",
+      "headers": "content-type, x-api-key, authorization, x-bv-meter",
+      "ok": true,
+      "ms": 239
+    },
+    {
+      "url": "https://rpc.mevblocker.io/fast",
+      "status": 200,
+      "origin": "https://fenix.fyi",
+      "methods": "POST",
+      "headers": "Content-Type",
+      "ok": true,
+      "ms": 283
+    },
+    {
+      "url": "https://ethereum.public.blockpi.network/v1/rpc/public",
+      "status": 200,
+      "origin": "*",
+      "methods": "GET,POST,OPTIONS",
+      "headers": "authorization, content-type, server",
+      "ok": true,
+      "ms": 337
+    },
+    {
+      "url": "https://xrpc.cl/eth",
+      "status": 204,
+      "origin": "*",
+      "methods": "POST, OPTIONS, GET",
+      "headers": "Content-Type, X-API-Key",
+      "ok": true,
+      "ms": 334
+    },
+    {
+      "url": "https://rpc.mevblocker.io/noreverts",
+      "status": 200,
+      "origin": "https://fenix.fyi",
+      "methods": "POST",
+      "headers": "Content-Type",
+      "ok": true,
+      "ms": 189
+    },
+    {
+      "url": "https://eth.senseinode.com",
+      "status": 200,
+      "origin": "*",
+      "methods": "POST",
+      "headers": "Content-Type",
+      "ok": true,
+      "ms": 381
+    },
+    {
+      "url": "https://public-eth.nownodes.io",
+      "status": 204,
+      "origin": "*",
+      "methods": "GET, POST, OPTIONS",
+      "headers": "Authorization,DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,api-key",
+      "ok": true,
+      "ms": 332
+    },
+    {
+      "url": "https://one.valve.city/rpc/vk_demo/evm/1",
+      "status": 204,
+      "origin": "https://fenix.fyi",
+      "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
+      "headers": "content-type",
+      "ok": true,
+      "ms": 313
+    },
+    {
+      "url": "https://ethereum.reth.rs/rpc",
+      "status": 200,
+      "origin": "*",
+      "methods": "GET, POST, OPTIONS",
+      "headers": "Content-Type, Authorization",
+      "ok": true,
+      "ms": 285
+    },
+    {
+      "url": "https://ethereum-json-rpc.stakely.io",
+      "status": 200,
+      "origin": "*",
+      "methods": "*",
+      "headers": "*",
+      "ok": true,
+      "ms": 306
+    }
+  ]
+}

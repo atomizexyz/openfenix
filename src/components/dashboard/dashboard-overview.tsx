@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { useConnection } from "wagmi";
 import { mainnet } from "wagmi/chains";
 import { DashboardChainSelector } from "@/components/dashboard/dashboard-chain-selector";
@@ -12,19 +12,28 @@ import { getChainConfig } from "@/config/chains";
 
 export function DashboardOverview() {
   const { chain: walletChain } = useConnection();
-  const [selectedChainId, setSelectedChainId] = useState<number>();
+  const searchParams = useSearchParams();
+  const requestedChain = getChainConfig(Number(searchParams.get("chain")));
 
-  const walletChainId = walletChain && getChainConfig(walletChain.id)
+  const walletChainId = walletChain && getChainConfig(walletChain.id)?.enabled
     ? walletChain.id
     : undefined;
-  const chainId = selectedChainId ?? walletChainId ?? mainnet.id;
+  const chainId = (requestedChain?.enabled ? requestedChain.chain.id : undefined)
+    ?? walletChainId
+    ?? mainnet.id;
+
+  function selectChain(nextChainId: number) {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("chain", String(nextChainId));
+    window.history.pushState(null, "", `?${params.toString()}${window.location.hash}`);
+  }
 
   return (
     <div className="space-y-8">
       <div className="space-y-4">
         <DashboardChainSelector
           chainId={chainId}
-          onChainChange={setSelectedChainId}
+          onChainChange={selectChain}
         />
         <StatsGrid chainId={chainId} />
       </div>
