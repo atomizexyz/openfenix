@@ -3,6 +3,7 @@ import { http } from "viem";
 import type { Transport } from "viem";
 import { GENERATED_RPC_ENDPOINTS } from "./rpc-endpoints.generated";
 import { FENIX_CHAINS } from "./chains";
+import { RPC_POLICIES } from "./rpc-policies";
 
 /**
  * JSON-RPC methods that broadcast a signed transaction. These are the only ones
@@ -63,7 +64,7 @@ function readUrls(chainId: number): string[] {
 }
 
 /**
- * Adaptive RPC routing with the default 10s attempt budget. Caching and
+ * Adaptive RPC routing with independent rules and learned state per chain. Caching and
  * latest-block pinning stay off to preserve vanilla reads on reorg-capable
  * chains. Background head probes are disabled so large multi-chain registries
  * do not create an N-endpoint request storm; scoring uses actual calls and
@@ -73,9 +74,14 @@ export function createChainTransport(chainId: number): Transport {
   const readTransportUrls = readUrls(chainId);
   const mevUrl = blinkUrl(chainId);
   const config = GENERATED_RPC_ENDPOINTS[chainId];
+  const policy = RPC_POLICIES[chainId];
+  if (!policy) throw new Error(`No RPC policy for chain ${chainId}`);
 
   // Batch only when the scan confirmed support at every kept endpoint.
-  const batch = config?.batch ? ({ wait: 16 } as const) : false;
+  const batch =
+    config?.batch && policy.batchWaitMs !== false
+      ? { wait: policy.batchWaitMs }
+      : false;
 
   const endpoints = mevUrl
     ? [
@@ -93,6 +99,11 @@ export function createChainTransport(chainId: number): Transport {
   return smartHyperevm({
     endpoints,
     batch: mevUrl ? undefined : batch,
+    routing: policy.routing,
+    race: policy.raceWidth === false ? false : { width: policy.raceWidth },
+    hedge: policy.hedge,
+    timeout: policy.timeoutMs,
+    retryCount: policy.retryCount,
     cache: false,
     pinLatest: false,
     headLag: { probeInterval: false },

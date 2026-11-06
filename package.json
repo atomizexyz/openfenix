@@ -12,6 +12,9 @@
     "test:run": "vitest run",
     "flush": "rm -rf node_modules && bun install",
     "scan:rpcs": "bun run scripts/scan-rpcs.ts",
+    "bench:rpcs": "bun run scripts/benchmark-rpcs.ts",
+    "bench:rpcs:summary": "bun run scripts/summarize-rpc-benchmarks.ts",
+    "verify:reads": "bun run scripts/verify-reads.ts",
     "gen:llms": "bun run scripts/generate-llms-txt.ts",
     "gen:og": "bun run scripts/generate-og-image.ts"
   },
@@ -65,5 +68,8 @@
     "uuid": "^11.1.1",
     "viem": "2.57.16",
     "@wagmi/connectors": "8.2.4"
+  },
+  "patchedDependencies": {
+    "@bloxwap/smart-hyperevm@0.1.0": "patches/@bloxwap%2Fsmart-hyperevm@0.1.0.patch"
   }
 }

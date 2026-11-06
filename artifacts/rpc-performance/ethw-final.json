@@ -1,0 +1,3325 @@
+{
+  "schemaVersion": 1,
+  "startedAt": "2026-11-06T00:08:26.793Z",
+  "finishedAt": "2026-11-06T00:12:17.592Z",
+  "status": "not-passed",
+  "options": {
+    "chainIds": [
+      10001
+    ],
+    "samples": 100,
+    "warmup": 5,
+    "concurrency": 1,
+    "intervalMs": 2000,
+    "seed": 20261105,
+    "variants": [
+      "production"
+    ],
+    "acceptanceVariant": "production",
+    "output": "/Users/joeblau/Developer/archive/openxen/src/fenix/artifacts/rpc-performance/ethw-final.json"
+  },
+  "metadata": {
+    "runtime": "v26.3.0",
+    "versions": {
+      "node": "26.3.0",
+      "bun": "1.4.4",
+      "boringssl": "41bf9b59c2ebf277a7aa427e1ecad5cc80dd4d4f",
+      "openssl": "1.1.0",
+      "llhttp": "9.4.2",
+      "libarchive": "27cbc7827172698143e440801fc0ba39ccb4f1f5",
+      "mimalloc": "92ef6587c57b262f6e6abf513f7776a2f8d12aeb",
+      "picohttpparser": "f4d94b48b31e0abae029ebeafcfd9ca0680ede58",
+      "uwebsockets": "38afee6c84fcf48c0edb2466aa4b27d287a59c30",
+      "webkit": "d6375c72affe0f70222cdcb45012b10f0bf3a9d5",
+      "zig": "04e7f6ac1e009525bc00934f20199c68f04e0a24",
+      "zlib": "12731092979c6d07f42da27da673a9f6c7b13586",
+      "tinycc": "05f0fafaa3be31e31d7b4b5c17dc60f62c991171",
+      "lolhtml": "725ce499aa9b71e38b7a2d0a9fbb6d7294a4079e",
+      "ares": "c7a3138dcfe3bb0eaaf10c0c24c36dc66dc790ab",
+      "libdeflate": "92e6a0db9fa848d742f9eb286c92afc60f2c3dda",
+      "usockets": "38afee6c84fcf48c0edb2466aa4b27d287a59c30",
+      "lshpack": "cf0f70dd10b352194c97448eb5d00b4aa484f531",
+      "zstd": "f8745da6ff1ad1e7bab384bd1f9d742439278e99",
+      "v8": "14.6.202.34-node.20",
+      "uv": "1.48.0",
+      "napi": "10",
+      "icu": "78.1",
+      "unicode": "17.0",
+      "sqlite": "3.54.0",
+      "typescript": "7.0.2",
+      "modules": "147"
+    },
+    "platform": "darwin",
+    "arch": "arm64",
+    "hostname": "mac",
+    "gitHead": "1e6cbbfa56b0af234cc8560ec3efd0606c8d81a7",
+    "origin": "https://fenix.fyi",
+    "sourceFingerprints": {
+      "src/config/rpc.ts": "f57d3f685075cd2724fc9dfc3867261a8a843a477e2b0cdd57fd3dd9ef8c3c1c",
+      "src/config/rpc-policies.ts": "c96b6d3f9d53b69a0609303619860bcba9581da313c21aa4c1fc0543cc96a497",
+      "src/config/rpc-endpoints.generated.ts": "4af6d54f1adf401433d643071a6857d24546a6be7f5c3c82156fdabfd85f2a08",
+      "scripts/benchmark-rpcs.ts": "2058a143694a92d1ac5b2a0653d45993b8cefda008db133949a543f5e8e7e5b2",
+      "scripts/rpc-benchmark/statistics.ts": "14acddd6cde37e3fde08b10c5f6dbf67da64c77fa119d138b1bece41283811b4",
+      "package.json": "3cf5745b4dfe321ab8b8873d4692cfd441a5d9ba1b231cd09b1d606901b30ddd",
+      "bun.lock": "5ef73cc491625fd4309bfdf22931c5ab61c1416d0c5a3118b974e034f2169995",
+      "node_modules/@bloxwap/smart-hyperevm/dist/chunk-htm8ngjg.js": "299fd4a8e8c73b876386b138bfb07094f9baf2cb2f78df48ae10a7017d9326df"
+    },
+    "sourceFingerprintsAtEnd": {
+      "src/config/rpc.ts": "f57d3f685075cd2724fc9dfc3867261a8a843a477e2b0cdd57fd3dd9ef8c3c1c",
+      "src/config/rpc-policies.ts": "c96b6d3f9d53b69a0609303619860bcba9581da313c21aa4c1fc0543cc96a497",
+      "src/config/rpc-endpoints.generated.ts": "4af6d54f1adf401433d643071a6857d24546a6be7f5c3c82156fdabfd85f2a08",
+      "scripts/benchmark-rpcs.ts": "2058a143694a92d1ac5b2a0653d45993b8cefda008db133949a543f5e8e7e5b2",
+      "scripts/rpc-benchmark/statistics.ts": "14acddd6cde37e3fde08b10c5f6dbf67da64c77fa119d138b1bece41283811b4",
+      "package.json": "3cf5745b4dfe321ab8b8873d4692cfd441a5d9ba1b231cd09b1d606901b30ddd",
+      "bun.lock": "5ef73cc491625fd4309bfdf22931c5ab61c1416d0c5a3118b974e034f2169995",
+      "node_modules/@bloxwap/smart-hyperevm/dist/chunk-htm8ngjg.js": "299fd4a8e8c73b876386b138bfb07094f9baf2cb2f78df48ae10a7017d9326df"
+    },
+    "baseline": {
+      "routing": "p2c (raced reads select best)",
+      "raceWidth": 2,
+      "hedge": false,
+      "timeoutMs": 10000,
+      "retryCount": 2,
+      "batchWaitMs": 16
+    },
+    "methodology": {
+      "workloads": {
+        "eth_blockNumber": [],
+        "eth_call": "FENIX totalSupply() at latest"
+      },
+      "samplesPerWorkload": 100,
+      "minimumSamplesForGate": 100,
+      "quantile": "nearest rank: sorted[ceil(p*n)-1] over successful complete responses",
+      "comparison": "smart P50 <= minimum healthy direct P50 AND smart P99 <= maximum healthy direct P99, with zero smart failures; no tolerance",
+      "acceptanceVariant": "production",
+      "healthy": "chain-ID preflight passed, every requested measured sample succeeded for that workload",
+      "cold": "first call per method on a fresh transport; chain-ID preflight warms DNS/TLS/socket pools, and the second method follows the first",
+      "interleaving": "seeded shuffled transport and method order each round; one user request per transport in flight",
+      "cohortIsolation": "distinct stable AbortSignal per transport isolates viem's global URL/signal batch scheduler; cold calls are serial because internal chain checks do not forward caller signals",
+      "pacing": "At least 2000ms pause between cold method rounds and warmup/measured iterations; smart upstream racing can add requests within each round",
+      "preflightRetries": "Up to three chain-ID checks, with 500ms then 1000ms backoff after transient failures; wrong-chain results are never retried; every attempt retained",
+      "retry": "direct HTTP retryCount=0 and timeout=10000ms; smart uses actual variant settings",
+      "failureHandling": "raw error timings retained; failed responses excluded from successful latency quantiles; unhealthy endpoints not accepted as a successful baseline",
+      "availabilityCutoff": "stop a workload after all first three cold/warmup attempts fail or five consecutive measured failures; incomplete series cannot pass",
+      "limitations": [
+        "Single-machine Bun/Node network measurements are not browser performance guarantees. CORS preflight and response headers are reported, but CORS is not enforced by this runtime.",
+        "100 samples give an empirical P99, not strong tail confidence or an SLA guarantee; use 1000+ and repeat across times/regions for stronger evidence.",
+        "Concurrent chain workers share this host and public provider rate limits; benchmark load and smart racing may affect measured latency.",
+        "Writes and wallet interaction are not benchmarked; no transactions are sent.",
+        "Baseline freezes the original public-read options; Blink write-only endpoints are omitted because no benchmark method can use them.",
+        "Block responses are checked for valid nonzero quantities and retained for review; this latency experiment does not certify canonicality or head freshness across providers."
+      ]
+    }
+  },
+  "chains": [
+    {
+      "chainId": 10001,
+      "name": "EthereumPoW",
+      "enabled": true,
+      "productionPolicy": {
+        "routing": "best",
+        "raceWidth": false,
+        "hedge": false,
+        "timeoutMs": 10000,
+        "retryCount": 2,
+        "batchWaitMs": false
+      },
+      "startedAt": "2026-11-06T00:08:26.800Z",
+      "finishedAt": "2026-11-06T00:12:17.590Z",
+      "configuredEndpoints": [
+        "https://mainnet.ethereumpow.org"
+      ],
+      "preflight": [
+        {
+          "url": "https://mainnet.ethereumpow.org",
+          "chainIdValid": true,
+          "chainId": "0x2711",
+          "corsPreflight": true,
+          "corsPost": true,
+          "latencyMs": 79.417875,
+          "error": null,
+          "attempt": 1,
+          "attempts": [
+            {
+              "url": "https://mainnet.ethereumpow.org",
+              "chainIdValid": true,
+              "chainId": "0x2711",
+              "corsPreflight": true,
+              "corsPost": true,
+              "latencyMs": 79.417875,
+              "error": null,
+              "attempt": 1
+            }
+          ],
+          "totalElapsedMs": 116.485917
+        }
+      ],
+      "transports": [
+        {
+          "id": "direct:0",
+          "kind": "direct",
+          "url": "https://mainnet.ethereumpow.org",
+          "cold": {
+            "eth_blockNumber": {
+              "iteration": -1,
+              "startedAt": "2026-11-06T00:08:26.919Z",
+              "latencyMs": 27.602209000000016,
+              "success": true,
+              "result": "0x183a321"
+            },
+            "eth_call": {
+              "iteration": -1,
+              "startedAt": "2026-11-06T00:08:29.118Z",
+              "latencyMs": 98.5461250000003,
+              "success": true,
+              "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+            }
+          },
+          "warmup": {
+            "eth_blockNumber": [
+              {
+                "iteration": 0,
+                "startedAt": "2026-11-06T00:08:31.398Z",
+                "latencyMs": 37.41412500000024,
+                "success": true,
+                "result": "0x183a322"
+              },
+              {
+                "iteration": 1,
+                "startedAt": "2026-11-06T00:08:33.437Z",
+                "latencyMs": 24.754084000000148,
+                "success": true,
+                "result": "0x183a322"
+              },
+              {
+                "iteration": 2,
+                "startedAt": "2026-11-06T00:08:35.574Z",
+                "latencyMs": 25.92749999999978,
+                "success": true,
+                "result": "0x183a322"
+              },
+              {
+                "iteration": 3,
+                "startedAt": "2026-11-06T00:08:37.724Z",
+                "latencyMs": 23.331208000001425,
+                "success": true,
+                "result": "0x183a322"
+              },
+              {
+                "iteration": 4,
+                "startedAt": "2026-11-06T00:08:39.810Z",
+                "latencyMs": 29.77904099999978,
+                "success": true,
+                "result": "0x183a322"
+              }
+            ],
+            "eth_call": [
+              {
+                "iteration": 0,
+                "startedAt": "2026-11-06T00:08:31.267Z",
+                "latencyMs": 67.85266700000011,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 1,
+                "startedAt": "2026-11-06T00:08:33.543Z",
+                "latencyMs": 29.383208000000195,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 2,
+                "startedAt": "2026-11-06T00:08:35.658Z",
+                "latencyMs": 33.39862499999981,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 3,
+                "startedAt": "2026-11-06T00:08:37.748Z",
+                "latencyMs": 29.944832999999562,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 4,
+                "startedAt": "2026-11-06T00:08:39.926Z",
+                "latencyMs": 35.147415999999794,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              }
+            ]
+          },
+          "samples": {
+            "eth_blockNumber": [
+              {
+                "iteration": 0,
+                "startedAt": "2026-11-06T00:08:41.989Z",
+                "latencyMs": 54.33366699999897,
+                "success": true,
+                "result": "0x183a322"
+              },
+              {
+                "iteration": 1,
+                "startedAt": "2026-11-06T00:08:44.156Z",
+                "latencyMs": 32.311499999999796,
+                "success": true,
+                "result": "0x183a322"
+              },
+              {
+                "iteration": 2,
+                "startedAt": "2026-11-06T00:08:46.387Z",
+                "latencyMs": 30.3648749999993,
+                "success": true,
+                "result": "0x183a322"
+              },
+              {
+                "iteration": 3,
+                "startedAt": "2026-11-06T00:08:48.644Z",
+                "latencyMs": 33.48699999999735,
+                "success": true,
+                "result": "0x183a322"
+              },
+              {
+                "iteration": 4,
+                "startedAt": "2026-11-06T00:08:50.800Z",
+                "latencyMs": 28.121499999997468,
+                "success": true,
+                "result": "0x183a322"
+              },
+              {
+                "iteration": 5,
+                "startedAt": "2026-11-06T00:08:52.921Z",
+                "latencyMs": 30.447250000001077,
+                "success": true,
+                "result": "0x183a322"
+              },
+              {
+                "iteration": 6,
+                "startedAt": "2026-11-06T00:08:55.008Z",
+                "latencyMs": 27.26587500000096,
+                "success": true,
+                "result": "0x183a322"
+              },
+              {
+                "iteration": 7,
+                "startedAt": "2026-11-06T00:08:57.228Z",
+                "latencyMs": 28.699499999998807,
+                "success": true,
+                "result": "0x183a322"
+              },
+              {
+                "iteration": 8,
+                "startedAt": "2026-11-06T00:08:59.345Z",
+                "latencyMs": 30.452124999999796,
+                "success": true,
+                "result": "0x183a322"
+              },
+              {
+                "iteration": 9,
+                "startedAt": "2026-11-06T00:09:01.532Z",
+                "latencyMs": 28.393167000001995,
+                "success": true,
+                "result": "0x183a322"
+              },
+              {
+                "iteration": 10,
+                "startedAt": "2026-11-06T00:09:03.641Z",
+                "latencyMs": 27.317917000000307,
+                "success": true,
+                "result": "0x183a322"
+              },
+              {
+                "iteration": 11,
+                "startedAt": "2026-11-06T00:09:05.709Z",
+                "latencyMs": 28.261124999997264,
+                "success": true,
+                "result": "0x183a322"
+              },
+              {
+                "iteration": 12,
+                "startedAt": "2026-11-06T00:09:08.039Z",
+                "latencyMs": 47.7644169999985,
+                "success": true,
+                "result": "0x183a322"
+              },
+              {
+                "iteration": 13,
+                "startedAt": "2026-11-06T00:09:10.180Z",
+                "latencyMs": 22.966749999999593,
+                "success": true,
+                "result": "0x183a322"
+              },
+              {
+                "iteration": 14,
+                "startedAt": "2026-11-06T00:09:12.300Z",
+                "latencyMs": 35.55795900000521,
+                "success": true,
+                "result": "0x183a322"
+              },
+              {
+                "iteration": 15,
+                "startedAt": "2026-11-06T00:09:14.550Z",
+                "latencyMs": 28.28741599999921,
+                "success": true,
+                "result": "0x183a322"
+              },
+              {
+                "iteration": 16,
+                "startedAt": "2026-11-06T00:09:16.636Z",
+                "latencyMs": 26.105624999996508,
+                "success": true,
+                "result": "0x183a322"
+              },
+              {
+                "iteration": 17,
+                "startedAt": "2026-11-06T00:09:18.724Z",
+                "latencyMs": 30.96829200000502,
+                "success": true,
+                "result": "0x183a323"
+              },
+              {
+                "iteration": 18,
+                "startedAt": "2026-11-06T00:09:20.936Z",
+                "latencyMs": 33.66083399999479,
+                "success": true,
+                "result": "0x183a323"
+              },
+              {
+                "iteration": 19,
+                "startedAt": "2026-11-06T00:09:23.063Z",
+                "latencyMs": 25.7690419999999,
+                "success": true,
+                "result": "0x183a323"
+              },
+              {
+                "iteration": 20,
+                "startedAt": "2026-11-06T00:09:25.147Z",
+                "latencyMs": 29.2554999999993,
+                "success": true,
+                "result": "0x183a323"
+              },
+              {
+                "iteration": 21,
+                "startedAt": "2026-11-06T00:09:27.242Z",
+                "latencyMs": 26.587459000002127,
+                "success": true,
+                "result": "0x183a323"
+              },
+              {
+                "iteration": 22,
+                "startedAt": "2026-11-06T00:09:29.609Z",
+                "latencyMs": 90.2677079999994,
+                "success": true,
+                "result": "0x183a323"
+              },
+              {
+                "iteration": 23,
+                "startedAt": "2026-11-06T00:09:31.871Z",
+                "latencyMs": 32.47695800000656,
+                "success": true,
+                "result": "0x183a323"
+              },
+              {
+                "iteration": 24,
+                "startedAt": "2026-11-06T00:09:33.963Z",
+                "latencyMs": 33.31937499999185,
+                "success": true,
+                "result": "0x183a323"
+              },
+              {
+                "iteration": 25,
+                "startedAt": "2026-11-06T00:09:36.053Z",
+                "latencyMs": 26.720707999993465,
+                "success": true,
+                "result": "0x183a324"
+              },
+              {
+                "iteration": 26,
+                "startedAt": "2026-11-06T00:09:38.138Z",
+                "latencyMs": 34.05016699999396,
+                "success": true,
+                "result": "0x183a325"
+              },
+              {
+                "iteration": 27,
+                "startedAt": "2026-11-06T00:09:40.349Z",
+                "latencyMs": 40.380292000001646,
+                "success": true,
+                "result": "0x183a325"
+              },
+              {
+                "iteration": 28,
+                "startedAt": "2026-11-06T00:09:42.422Z",
+                "latencyMs": 23.080125000007683,
+                "success": true,
+                "result": "0x183a325"
+              },
+              {
+                "iteration": 29,
+                "startedAt": "2026-11-06T00:09:44.569Z",
+                "latencyMs": 28.38879199999792,
+                "success": true,
+                "result": "0x183a325"
+              },
+              {
+                "iteration": 30,
+                "startedAt": "2026-11-06T00:09:46.827Z",
+                "latencyMs": 30.637375000005704,
+                "success": true,
+                "result": "0x183a325"
+              },
+              {
+                "iteration": 31,
+                "startedAt": "2026-11-06T00:09:48.993Z",
+                "latencyMs": 105.78970799999661,
+                "success": true,
+                "result": "0x183a325"
+              },
+              {
+                "iteration": 32,
+                "startedAt": "2026-11-06T00:09:51.196Z",
+                "latencyMs": 26.52066600001126,
+                "success": true,
+                "result": "0x183a326"
+              },
+              {
+                "iteration": 33,
+                "startedAt": "2026-11-06T00:09:54.672Z",
+                "latencyMs": 23.922583999999915,
+                "success": true,
+                "result": "0x183a327"
+              },
+              {
+                "iteration": 34,
+                "startedAt": "2026-11-06T00:09:56.827Z",
+                "latencyMs": 26.134833999996772,
+                "success": true,
+                "result": "0x183a327"
+              },
+              {
+                "iteration": 35,
+                "startedAt": "2026-11-06T00:09:59.059Z",
+                "latencyMs": 24.88124999999127,
+                "success": true,
+                "result": "0x183a327"
+              },
+              {
+                "iteration": 36,
+                "startedAt": "2026-11-06T00:10:01.215Z",
+                "latencyMs": 26.763584000000264,
+                "success": true,
+                "result": "0x183a327"
+              },
+              {
+                "iteration": 37,
+                "startedAt": "2026-11-06T00:10:03.326Z",
+                "latencyMs": 83.14666700000816,
+                "success": true,
+                "result": "0x183a327"
+              },
+              {
+                "iteration": 38,
+                "startedAt": "2026-11-06T00:10:05.479Z",
+                "latencyMs": 43.02462499999092,
+                "success": true,
+                "result": "0x183a327"
+              },
+              {
+                "iteration": 39,
+                "startedAt": "2026-11-06T00:10:08.001Z",
+                "latencyMs": 26.375708000006853,
+                "success": true,
+                "result": "0x183a327"
+              },
+              {
+                "iteration": 40,
+                "startedAt": "2026-11-06T00:10:10.157Z",
+                "latencyMs": 32.29191699999501,
+                "success": true,
+                "result": "0x183a327"
+              },
+              {
+                "iteration": 41,
+                "startedAt": "2026-11-06T00:10:12.239Z",
+                "latencyMs": 23.129999999990105,
+                "success": true,
+                "result": "0x183a327"
+              },
+              {
+                "iteration": 42,
+                "startedAt": "2026-11-06T00:10:14.325Z",
+                "latencyMs": 39.88658299999952,
+                "success": true,
+                "result": "0x183a327"
+              },
+              {
+                "iteration": 43,
+                "startedAt": "2026-11-06T00:10:16.533Z",
+                "latencyMs": 32.484124999988126,
+                "success": true,
+                "result": "0x183a327"
+              },
+              {
+                "iteration": 44,
+                "startedAt": "2026-11-06T00:10:18.643Z",
+                "latencyMs": 39.823417000006884,
+                "success": true,
+                "result": "0x183a328"
+              },
+              {
+                "iteration": 45,
+                "startedAt": "2026-11-06T00:10:20.927Z",
+                "latencyMs": 44.47608300000138,
+                "success": true,
+                "result": "0x183a329"
+              },
+              {
+                "iteration": 46,
+                "startedAt": "2026-11-06T00:10:23.231Z",
+                "latencyMs": 49.069917000000714,
+                "success": true,
+                "result": "0x183a329"
+              },
+              {
+                "iteration": 47,
+                "startedAt": "2026-11-06T00:10:25.645Z",
+                "latencyMs": 27.111917000001995,
+                "success": true,
+                "result": "0x183a329"
+              },
+              {
+                "iteration": 48,
+                "startedAt": "2026-11-06T00:10:27.673Z",
+                "latencyMs": 54.67337499999849,
+                "success": true,
+                "result": "0x183a329"
+              },
+              {
+                "iteration": 49,
+                "startedAt": "2026-11-06T00:10:30.042Z",
+                "latencyMs": 23.385375000012573,
+                "success": true,
+                "result": "0x183a329"
+              },
+              {
+                "iteration": 50,
+                "startedAt": "2026-11-06T00:10:32.099Z",
+                "latencyMs": 21.998832999990555,
+                "success": true,
+                "result": "0x183a329"
+              },
+              {
+                "iteration": 51,
+                "startedAt": "2026-11-06T00:10:34.287Z",
+                "latencyMs": 26.04633399999875,
+                "success": true,
+                "result": "0x183a329"
+              },
+              {
+                "iteration": 52,
+                "startedAt": "2026-11-06T00:10:36.411Z",
+                "latencyMs": 26.51204200000211,
+                "success": true,
+                "result": "0x183a329"
+              },
+              {
+                "iteration": 53,
+                "startedAt": "2026-11-06T00:10:38.474Z",
+                "latencyMs": 34.92724999997881,
+                "success": true,
+                "result": "0x183a32a"
+              },
+              {
+                "iteration": 54,
+                "startedAt": "2026-11-06T00:10:40.661Z",
+                "latencyMs": 28.391499999997905,
+                "success": true,
+                "result": "0x183a32a"
+              },
+              {
+                "iteration": 55,
+                "startedAt": "2026-11-06T00:10:42.773Z",
+                "latencyMs": 26.191374999994878,
+                "success": true,
+                "result": "0x183a32b"
+              },
+              {
+                "iteration": 56,
+                "startedAt": "2026-11-06T00:10:45.007Z",
+                "latencyMs": 36.53512500002398,
+                "success": true,
+                "result": "0x183a32b"
+              },
+              {
+                "iteration": 57,
+                "startedAt": "2026-11-06T00:10:47.198Z",
+                "latencyMs": 95.63800000000629,
+                "success": true,
+                "result": "0x183a32b"
+              },
+              {
+                "iteration": 58,
+                "startedAt": "2026-11-06T00:10:49.393Z",
+                "latencyMs": 29.765791999991052,
+                "success": true,
+                "result": "0x183a32c"
+              },
+              {
+                "iteration": 59,
+                "startedAt": "2026-11-06T00:10:51.485Z",
+                "latencyMs": 25.116542000003392,
+                "success": true,
+                "result": "0x183a32c"
+              },
+              {
+                "iteration": 60,
+                "startedAt": "2026-11-06T00:10:53.692Z",
+                "latencyMs": 29.349666000023717,
+                "success": true,
+                "result": "0x183a32c"
+              },
+              {
+                "iteration": 61,
+                "startedAt": "2026-11-06T00:10:55.810Z",
+                "latencyMs": 27.841374999989057,
+                "success": true,
+                "result": "0x183a32c"
+              },
+              {
+                "iteration": 62,
+                "startedAt": "2026-11-06T00:10:57.910Z",
+                "latencyMs": 38.15491700000712,
+                "success": true,
+                "result": "0x183a32c"
+              },
+              {
+                "iteration": 63,
+                "startedAt": "2026-11-06T00:10:59.976Z",
+                "latencyMs": 40.09824999998091,
+                "success": true,
+                "result": "0x183a32c"
+              },
+              {
+                "iteration": 64,
+                "startedAt": "2026-11-06T00:11:02.122Z",
+                "latencyMs": 30.57712500001071,
+                "success": true,
+                "result": "0x183a32c"
+              },
+              {
+                "iteration": 65,
+                "startedAt": "2026-11-06T00:11:04.254Z",
+                "latencyMs": 29.166082999989158,
+                "success": true,
+                "result": "0x183a32c"
+              },
+              {
+                "iteration": 66,
+                "startedAt": "2026-11-06T00:11:06.505Z",
+                "latencyMs": 26.968791000021156,
+                "success": true,
+                "result": "0x183a32c"
+              },
+              {
+                "iteration": 67,
+                "startedAt": "2026-11-06T00:11:08.652Z",
+                "latencyMs": 27.061625000002095,
+                "success": true,
+                "result": "0x183a32c"
+              },
+              {
+                "iteration": 68,
+                "startedAt": "2026-11-06T00:11:10.793Z",
+                "latencyMs": 96.6706669999985,
+                "success": true,
+                "result": "0x183a32d"
+              },
+              {
+                "iteration": 69,
+                "startedAt": "2026-11-06T00:11:13.014Z",
+                "latencyMs": 31.90387500001816,
+                "success": true,
+                "result": "0x183a32e"
+              },
+              {
+                "iteration": 70,
+                "startedAt": "2026-11-06T00:11:15.211Z",
+                "latencyMs": 41.66866600001231,
+                "success": true,
+                "result": "0x183a32e"
+              },
+              {
+                "iteration": 71,
+                "startedAt": "2026-11-06T00:11:17.254Z",
+                "latencyMs": 29.644415999995545,
+                "success": true,
+                "result": "0x183a32e"
+              },
+              {
+                "iteration": 72,
+                "startedAt": "2026-11-06T00:11:19.431Z",
+                "latencyMs": 28.168000000005122,
+                "success": true,
+                "result": "0x183a32e"
+              },
+              {
+                "iteration": 73,
+                "startedAt": "2026-11-06T00:11:21.582Z",
+                "latencyMs": 34.732583000004524,
+                "success": true,
+                "result": "0x183a32e"
+              },
+              {
+                "iteration": 74,
+                "startedAt": "2026-11-06T00:11:23.673Z",
+                "latencyMs": 29.223792000004323,
+                "success": true,
+                "result": "0x183a32f"
+              },
+              {
+                "iteration": 75,
+                "startedAt": "2026-11-06T00:11:25.923Z",
+                "latencyMs": 28.668708000011975,
+                "success": true,
+                "result": "0x183a32f"
+              },
+              {
+                "iteration": 76,
+                "startedAt": "2026-11-06T00:11:28.035Z",
+                "latencyMs": 24.910000000003492,
+                "success": true,
+                "result": "0x183a32f"
+              },
+              {
+                "iteration": 77,
+                "startedAt": "2026-11-06T00:11:30.191Z",
+                "latencyMs": 97.07904199999757,
+                "success": true,
+                "result": "0x183a32f"
+              },
+              {
+                "iteration": 78,
+                "startedAt": "2026-11-06T00:11:32.382Z",
+                "latencyMs": 24.085000000020955,
+                "success": true,
+                "result": "0x183a32f"
+              },
+              {
+                "iteration": 79,
+                "startedAt": "2026-11-06T00:11:34.571Z",
+                "latencyMs": 24.36258300000918,
+                "success": true,
+                "result": "0x183a330"
+              },
+              {
+                "iteration": 80,
+                "startedAt": "2026-11-06T00:11:36.622Z",
+                "latencyMs": 27.088000000017928,
+                "success": true,
+                "result": "0x183a330"
+              },
+              {
+                "iteration": 81,
+                "startedAt": "2026-11-06T00:11:38.792Z",
+                "latencyMs": 29.172291999973822,
+                "success": true,
+                "result": "0x183a331"
+              },
+              {
+                "iteration": 82,
+                "startedAt": "2026-11-06T00:11:40.877Z",
+                "latencyMs": 32.83808300000965,
+                "success": true,
+                "result": "0x183a332"
+              },
+              {
+                "iteration": 83,
+                "startedAt": "2026-11-06T00:11:43.021Z",
+                "latencyMs": 25.408792000001995,
+                "success": true,
+                "result": "0x183a332"
+              },
+              {
+                "iteration": 84,
+                "startedAt": "2026-11-06T00:11:45.126Z",
+                "latencyMs": 25.803625000000466,
+                "success": true,
+                "result": "0x183a333"
+              },
+              {
+                "iteration": 85,
+                "startedAt": "2026-11-06T00:11:47.222Z",
+                "latencyMs": 23.367333000001963,
+                "success": true,
+                "result": "0x183a333"
+              },
+              {
+                "iteration": 86,
+                "startedAt": "2026-11-06T00:11:49.276Z",
+                "latencyMs": 31.1528330000001,
+                "success": true,
+                "result": "0x183a333"
+              },
+              {
+                "iteration": 87,
+                "startedAt": "2026-11-06T00:11:51.474Z",
+                "latencyMs": 26.351040999987163,
+                "success": true,
+                "result": "0x183a333"
+              },
+              {
+                "iteration": 88,
+                "startedAt": "2026-11-06T00:11:53.582Z",
+                "latencyMs": 108.02495799999451,
+                "success": true,
+                "result": "0x183a334"
+              },
+              {
+                "iteration": 89,
+                "startedAt": "2026-11-06T00:11:55.691Z",
+                "latencyMs": 96.10129200000665,
+                "success": true,
+                "result": "0x183a334"
+              },
+              {
+                "iteration": 90,
+                "startedAt": "2026-11-06T00:11:57.869Z",
+                "latencyMs": 37.748334000003524,
+                "success": true,
+                "result": "0x183a334"
+              },
+              {
+                "iteration": 91,
+                "startedAt": "2026-11-06T00:12:00.202Z",
+                "latencyMs": 27.089374999981374,
+                "success": true,
+                "result": "0x183a334"
+              },
+              {
+                "iteration": 92,
+                "startedAt": "2026-11-06T00:12:02.354Z",
+                "latencyMs": 32.06233400001656,
+                "success": true,
+                "result": "0x183a334"
+              },
+              {
+                "iteration": 93,
+                "startedAt": "2026-11-06T00:12:04.444Z",
+                "latencyMs": 23.62387499999022,
+                "success": true,
+                "result": "0x183a334"
+              },
+              {
+                "iteration": 94,
+                "startedAt": "2026-11-06T00:12:06.494Z",
+                "latencyMs": 29.066084000020055,
+                "success": true,
+                "result": "0x183a334"
+              },
+              {
+                "iteration": 95,
+                "startedAt": "2026-11-06T00:12:08.687Z",
+                "latencyMs": 27.35466699997778,
+                "success": true,
+                "result": "0x183a334"
+              },
+              {
+                "iteration": 96,
+                "startedAt": "2026-11-06T00:12:10.797Z",
+                "latencyMs": 68.54079199998523,
+                "success": true,
+                "result": "0x183a334"
+              },
+              {
+                "iteration": 97,
+                "startedAt": "2026-11-06T00:12:12.866Z",
+                "latencyMs": 24.74833399997442,
+                "success": true,
+                "result": "0x183a336"
+              },
+              {
+                "iteration": 98,
+                "startedAt": "2026-11-06T00:12:14.970Z",
+                "latencyMs": 314.3609170000127,
+                "success": true,
+                "result": "0x183a336"
+              },
+              {
+                "iteration": 99,
+                "startedAt": "2026-11-06T00:12:17.466Z",
+                "latencyMs": 29.645625000004657,
+                "success": true,
+                "result": "0x183a336"
+              }
+            ],
+            "eth_call": [
+              {
+                "iteration": 0,
+                "startedAt": "2026-11-06T00:08:42.044Z",
+                "latencyMs": 28.788417000001573,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 1,
+                "startedAt": "2026-11-06T00:08:44.255Z",
+                "latencyMs": 53.68445900000006,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 2,
+                "startedAt": "2026-11-06T00:08:46.339Z",
+                "latencyMs": 47.74358299999949,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 3,
+                "startedAt": "2026-11-06T00:08:48.613Z",
+                "latencyMs": 30.71374999999898,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 4,
+                "startedAt": "2026-11-06T00:08:50.743Z",
+                "latencyMs": 31.025540999999066,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 5,
+                "startedAt": "2026-11-06T00:08:52.951Z",
+                "latencyMs": 27.655791999997746,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 6,
+                "startedAt": "2026-11-06T00:08:55.141Z",
+                "latencyMs": 27.193499999997584,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 7,
+                "startedAt": "2026-11-06T00:08:57.199Z",
+                "latencyMs": 28.854208000000654,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 8,
+                "startedAt": "2026-11-06T00:08:59.402Z",
+                "latencyMs": 44.94874999999956,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 9,
+                "startedAt": "2026-11-06T00:09:01.480Z",
+                "latencyMs": 25.790500000002794,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 10,
+                "startedAt": "2026-11-06T00:09:03.565Z",
+                "latencyMs": 44.992792000004556,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 11,
+                "startedAt": "2026-11-06T00:09:05.766Z",
+                "latencyMs": 151.15854099999706,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 12,
+                "startedAt": "2026-11-06T00:09:08.117Z",
+                "latencyMs": 34.05920799999876,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 13,
+                "startedAt": "2026-11-06T00:09:10.241Z",
+                "latencyMs": 28.11070800000016,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 14,
+                "startedAt": "2026-11-06T00:09:12.336Z",
+                "latencyMs": 39.26320800000394,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 15,
+                "startedAt": "2026-11-06T00:09:14.524Z",
+                "latencyMs": 25.847208999999566,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 16,
+                "startedAt": "2026-11-06T00:09:16.691Z",
+                "latencyMs": 28.961749999994936,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 17,
+                "startedAt": "2026-11-06T00:09:18.792Z",
+                "latencyMs": 25.35083300000406,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 18,
+                "startedAt": "2026-11-06T00:09:20.875Z",
+                "latencyMs": 29.629165999998804,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 19,
+                "startedAt": "2026-11-06T00:09:23.001Z",
+                "latencyMs": 29.40675000000192,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 20,
+                "startedAt": "2026-11-06T00:09:25.092Z",
+                "latencyMs": 28.018666000003577,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 21,
+                "startedAt": "2026-11-06T00:09:27.303Z",
+                "latencyMs": 108.86283299999923,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 22,
+                "startedAt": "2026-11-06T00:09:29.415Z",
+                "latencyMs": 119.16779099999985,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 23,
+                "startedAt": "2026-11-06T00:09:31.797Z",
+                "latencyMs": 39.56920900000114,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 24,
+                "startedAt": "2026-11-06T00:09:33.904Z",
+                "latencyMs": 31.37070900000981,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 25,
+                "startedAt": "2026-11-06T00:09:36.112Z",
+                "latencyMs": 25.359375,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 26,
+                "startedAt": "2026-11-06T00:09:38.200Z",
+                "latencyMs": 27.523792000007234,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 27,
+                "startedAt": "2026-11-06T00:09:40.270Z",
+                "latencyMs": 28.71495799999684,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 28,
+                "startedAt": "2026-11-06T00:09:42.445Z",
+                "latencyMs": 30.33270800000173,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 29,
+                "startedAt": "2026-11-06T00:09:44.506Z",
+                "latencyMs": 25.612000000008265,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 30,
+                "startedAt": "2026-11-06T00:09:46.858Z",
+                "latencyMs": 23.887375000005704,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 31,
+                "startedAt": "2026-11-06T00:09:48.935Z",
+                "latencyMs": 26.79299999999057,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 32,
+                "startedAt": "2026-11-06T00:09:51.257Z",
+                "latencyMs": 1414.8945419999945,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 33,
+                "startedAt": "2026-11-06T00:09:54.747Z",
+                "latencyMs": 25.36666700000933,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 34,
+                "startedAt": "2026-11-06T00:09:56.801Z",
+                "latencyMs": 25.446166000008816,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 35,
+                "startedAt": "2026-11-06T00:09:59.084Z",
+                "latencyMs": 23.556709000011324,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 36,
+                "startedAt": "2026-11-06T00:10:01.135Z",
+                "latencyMs": 52.06958300000406,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 37,
+                "startedAt": "2026-11-06T00:10:03.410Z",
+                "latencyMs": 35.754790999999386,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 38,
+                "startedAt": "2026-11-06T00:10:05.557Z",
+                "latencyMs": 29.910541999997804,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 39,
+                "startedAt": "2026-11-06T00:10:07.688Z",
+                "latencyMs": 286.06804199999897,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 40,
+                "startedAt": "2026-11-06T00:10:10.091Z",
+                "latencyMs": 33.09741699999722,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 41,
+                "startedAt": "2026-11-06T00:10:12.190Z",
+                "latencyMs": 24.3804999999993,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 42,
+                "startedAt": "2026-11-06T00:10:14.365Z",
+                "latencyMs": 31.226332999998704,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 43,
+                "startedAt": "2026-11-06T00:10:16.455Z",
+                "latencyMs": 50.848666999998386,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 44,
+                "startedAt": "2026-11-06T00:10:18.567Z",
+                "latencyMs": 41.129291999997804,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 45,
+                "startedAt": "2026-11-06T00:10:20.894Z",
+                "latencyMs": 33.0163329999923,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 46,
+                "startedAt": "2026-11-06T00:10:23.280Z",
+                "latencyMs": 32.1085410000087,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 47,
+                "startedAt": "2026-11-06T00:10:25.344Z",
+                "latencyMs": 84.0824169999978,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 48,
+                "startedAt": "2026-11-06T00:10:27.906Z",
+                "latencyMs": 37.21645799999533,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 49,
+                "startedAt": "2026-11-06T00:10:29.944Z",
+                "latencyMs": 73.75745800000732,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 50,
+                "startedAt": "2026-11-06T00:10:32.153Z",
+                "latencyMs": 27.524499999999534,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 51,
+                "startedAt": "2026-11-06T00:10:34.250Z",
+                "latencyMs": 37.37795799999731,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 52,
+                "startedAt": "2026-11-06T00:10:36.387Z",
+                "latencyMs": 24.371125000005122,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 53,
+                "startedAt": "2026-11-06T00:10:38.540Z",
+                "latencyMs": 30.078708999993978,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 54,
+                "startedAt": "2026-11-06T00:10:40.639Z",
+                "latencyMs": 21.957791000022553,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 55,
+                "startedAt": "2026-11-06T00:10:42.720Z",
+                "latencyMs": 25.732167000009213,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 56,
+                "startedAt": "2026-11-06T00:10:45.073Z",
+                "latencyMs": 29.74979100000928,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 57,
+                "startedAt": "2026-11-06T00:10:47.136Z",
+                "latencyMs": 37.326209000020754,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 58,
+                "startedAt": "2026-11-06T00:10:49.423Z",
+                "latencyMs": 25.98362499999348,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 59,
+                "startedAt": "2026-11-06T00:10:51.539Z",
+                "latencyMs": 24.046708000008948,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 60,
+                "startedAt": "2026-11-06T00:10:53.596Z",
+                "latencyMs": 30.863584000006085,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 61,
+                "startedAt": "2026-11-06T00:10:55.722Z",
+                "latencyMs": 33.11183299997356,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 62,
+                "startedAt": "2026-11-06T00:10:57.866Z",
+                "latencyMs": 43.88675000000512,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 63,
+                "startedAt": "2026-11-06T00:11:00.042Z",
+                "latencyMs": 25.5257500000007,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 64,
+                "startedAt": "2026-11-06T00:11:02.153Z",
+                "latencyMs": 27.519040999992285,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 65,
+                "startedAt": "2026-11-06T00:11:04.310Z",
+                "latencyMs": 96.24587499999325,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 66,
+                "startedAt": "2026-11-06T00:11:06.563Z",
+                "latencyMs": 28.774124999996275,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 67,
+                "startedAt": "2026-11-06T00:11:08.592Z",
+                "latencyMs": 31.99483300000429,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 68,
+                "startedAt": "2026-11-06T00:11:10.915Z",
+                "latencyMs": 25.978833000001032,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 69,
+                "startedAt": "2026-11-06T00:11:13.046Z",
+                "latencyMs": 32.15033299999777,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 70,
+                "startedAt": "2026-11-06T00:11:15.158Z",
+                "latencyMs": 25.06212499999674,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 71,
+                "startedAt": "2026-11-06T00:11:17.309Z",
+                "latencyMs": 26.84341700002551,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 72,
+                "startedAt": "2026-11-06T00:11:19.363Z",
+                "latencyMs": 32.925583000003826,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 73,
+                "startedAt": "2026-11-06T00:11:21.518Z",
+                "latencyMs": 33.52249999999185,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 74,
+                "startedAt": "2026-11-06T00:11:23.644Z",
+                "latencyMs": 28.951417000003858,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 75,
+                "startedAt": "2026-11-06T00:11:25.952Z",
+                "latencyMs": 26.13437499999418,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 76,
+                "startedAt": "2026-11-06T00:11:28.060Z",
+                "latencyMs": 22.910249999986263,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 77,
+                "startedAt": "2026-11-06T00:11:30.321Z",
+                "latencyMs": 33.487708000000566,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 78,
+                "startedAt": "2026-11-06T00:11:32.433Z",
+                "latencyMs": 27.219000000011874,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 79,
+                "startedAt": "2026-11-06T00:11:34.517Z",
+                "latencyMs": 25.626875000016298,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 80,
+                "startedAt": "2026-11-06T00:11:36.649Z",
+                "latencyMs": 25.864749999978812,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 81,
+                "startedAt": "2026-11-06T00:11:38.734Z",
+                "latencyMs": 33.301834000012605,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 82,
+                "startedAt": "2026-11-06T00:11:40.851Z",
+                "latencyMs": 25.372124999994412,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 83,
+                "startedAt": "2026-11-06T00:11:42.941Z",
+                "latencyMs": 23.20512499997858,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 84,
+                "startedAt": "2026-11-06T00:11:45.076Z",
+                "latencyMs": 26.402499999996508,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 85,
+                "startedAt": "2026-11-06T00:11:47.186Z",
+                "latencyMs": 36.24679100001231,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 86,
+                "startedAt": "2026-11-06T00:11:49.370Z",
+                "latencyMs": 23.180540999979712,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 87,
+                "startedAt": "2026-11-06T00:11:51.394Z",
+                "latencyMs": 26.841667000000598,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 88,
+                "startedAt": "2026-11-06T00:11:53.526Z",
+                "latencyMs": 27.53975000002538,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 89,
+                "startedAt": "2026-11-06T00:11:55.817Z",
+                "latencyMs": 22.833958000002895,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 90,
+                "startedAt": "2026-11-06T00:11:57.968Z",
+                "latencyMs": 107.15625,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 91,
+                "startedAt": "2026-11-06T00:12:00.174Z",
+                "latencyMs": 27.627250000019558,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 92,
+                "startedAt": "2026-11-06T00:12:02.261Z",
+                "latencyMs": 33.681291999993846,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 93,
+                "startedAt": "2026-11-06T00:12:04.415Z",
+                "latencyMs": 28.743707999994513,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 94,
+                "startedAt": "2026-11-06T00:12:06.581Z",
+                "latencyMs": 26.610375000018394,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 95,
+                "startedAt": "2026-11-06T00:12:08.634Z",
+                "latencyMs": 29.29124999998021,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 96,
+                "startedAt": "2026-11-06T00:12:10.744Z",
+                "latencyMs": 30.520250000001397,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 97,
+                "startedAt": "2026-11-06T00:12:12.921Z",
+                "latencyMs": 24.956792000011774,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 98,
+                "startedAt": "2026-11-06T00:12:15.378Z",
+                "latencyMs": 41.35579100000905,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 99,
+                "startedAt": "2026-11-06T00:12:17.528Z",
+                "latencyMs": 27.614457999996375,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              }
+            ]
+          },
+          "stopped": {},
+          "summary": {
+            "eth_blockNumber": {
+              "attempts": 100,
+              "successes": 100,
+              "errors": 0,
+              "successRate": 1,
+              "p50Ms": 29.223792000004323,
+              "p99Ms": 108.02495799999451,
+              "maxMs": 314.3609170000127,
+              "failureP50Ms": null
+            },
+            "eth_call": {
+              "attempts": 100,
+              "successes": 100,
+              "errors": 0,
+              "successRate": 1,
+              "p50Ms": 28.961749999994936,
+              "p99Ms": 286.06804199999897,
+              "maxMs": 1414.8945419999945,
+              "failureP50Ms": null
+            }
+          },
+          "telemetry": {
+            "upstreamRequests": 212,
+            "upstreamByMethod": {
+              "eth_blockNumber": 106,
+              "eth_call": 106
+            },
+            "upstreamByOrigin": {
+              "https://mainnet.ethereumpow.org": 212
+            },
+            "corsRejectedResponses": 0,
+            "events": {}
+          }
+        },
+        {
+          "id": "production",
+          "kind": "production",
+          "cold": {
+            "eth_blockNumber": {
+              "iteration": -1,
+              "startedAt": "2026-11-06T00:08:26.946Z",
+              "latencyMs": 171.06716600000001,
+              "success": true,
+              "result": "0x183a321"
+            },
+            "eth_call": {
+              "iteration": -1,
+              "startedAt": "2026-11-06T00:08:29.217Z",
+              "latencyMs": 46.9227079999996,
+              "success": true,
+              "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+            }
+          },
+          "warmup": {
+            "eth_blockNumber": [
+              {
+                "iteration": 0,
+                "startedAt": "2026-11-06T00:08:31.367Z",
+                "latencyMs": 30.999291999999514,
+                "success": true,
+                "result": "0x183a322"
+              },
+              {
+                "iteration": 1,
+                "startedAt": "2026-11-06T00:08:33.462Z",
+                "latencyMs": 51.50029100000029,
+                "success": true,
+                "result": "0x183a322"
+              },
+              {
+                "iteration": 2,
+                "startedAt": "2026-11-06T00:08:35.600Z",
+                "latencyMs": 32.03050000000076,
+                "success": true,
+                "result": "0x183a322"
+              },
+              {
+                "iteration": 3,
+                "startedAt": "2026-11-06T00:08:37.693Z",
+                "latencyMs": 31.335666000000856,
+                "success": true,
+                "result": "0x183a322"
+              },
+              {
+                "iteration": 4,
+                "startedAt": "2026-11-06T00:08:39.840Z",
+                "latencyMs": 39.29437500000131,
+                "success": true,
+                "result": "0x183a322"
+              }
+            ],
+            "eth_call": [
+              {
+                "iteration": 0,
+                "startedAt": "2026-11-06T00:08:31.334Z",
+                "latencyMs": 32.17912500000057,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 1,
+                "startedAt": "2026-11-06T00:08:33.513Z",
+                "latencyMs": 29.888999999999214,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 2,
+                "startedAt": "2026-11-06T00:08:35.632Z",
+                "latencyMs": 25.679207999999562,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 3,
+                "startedAt": "2026-11-06T00:08:37.778Z",
+                "latencyMs": 30.432208000000173,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 4,
+                "startedAt": "2026-11-06T00:08:39.879Z",
+                "latencyMs": 47.1122919999998,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              }
+            ]
+          },
+          "samples": {
+            "eth_blockNumber": [
+              {
+                "iteration": 0,
+                "startedAt": "2026-11-06T00:08:41.964Z",
+                "latencyMs": 25.88079199999993,
+                "success": true,
+                "result": "0x183a322"
+              },
+              {
+                "iteration": 1,
+                "startedAt": "2026-11-06T00:08:44.124Z",
+                "latencyMs": 31.712792000002082,
+                "success": true,
+                "result": "0x183a322"
+              },
+              {
+                "iteration": 2,
+                "startedAt": "2026-11-06T00:08:46.418Z",
+                "latencyMs": 99.34387499999866,
+                "success": true,
+                "result": "0x183a322"
+              },
+              {
+                "iteration": 3,
+                "startedAt": "2026-11-06T00:08:48.677Z",
+                "latencyMs": 27.03916599999866,
+                "success": true,
+                "result": "0x183a322"
+              },
+              {
+                "iteration": 4,
+                "startedAt": "2026-11-06T00:08:50.775Z",
+                "latencyMs": 25.716292000000976,
+                "success": true,
+                "result": "0x183a322"
+              },
+              {
+                "iteration": 5,
+                "startedAt": "2026-11-06T00:08:52.830Z",
+                "latencyMs": 90.8792910000011,
+                "success": true,
+                "result": "0x183a322"
+              },
+              {
+                "iteration": 6,
+                "startedAt": "2026-11-06T00:08:55.036Z",
+                "latencyMs": 24.127959000001283,
+                "success": true,
+                "result": "0x183a322"
+              },
+              {
+                "iteration": 7,
+                "startedAt": "2026-11-06T00:08:57.256Z",
+                "latencyMs": 50.839749999999185,
+                "success": true,
+                "result": "0x183a322"
+              },
+              {
+                "iteration": 8,
+                "startedAt": "2026-11-06T00:08:59.310Z",
+                "latencyMs": 35.29079199999978,
+                "success": true,
+                "result": "0x183a322"
+              },
+              {
+                "iteration": 9,
+                "startedAt": "2026-11-06T00:09:01.506Z",
+                "latencyMs": 26.45908299999428,
+                "success": true,
+                "result": "0x183a322"
+              },
+              {
+                "iteration": 10,
+                "startedAt": "2026-11-06T00:09:03.669Z",
+                "latencyMs": 39.22837499999878,
+                "success": true,
+                "result": "0x183a322"
+              },
+              {
+                "iteration": 11,
+                "startedAt": "2026-11-06T00:09:05.738Z",
+                "latencyMs": 28.07800000000134,
+                "success": true,
+                "result": "0x183a322"
+              },
+              {
+                "iteration": 12,
+                "startedAt": "2026-11-06T00:09:07.950Z",
+                "latencyMs": 89.51024999999936,
+                "success": true,
+                "result": "0x183a322"
+              },
+              {
+                "iteration": 13,
+                "startedAt": "2026-11-06T00:09:10.152Z",
+                "latencyMs": 28.24695800000336,
+                "success": true,
+                "result": "0x183a322"
+              },
+              {
+                "iteration": 14,
+                "startedAt": "2026-11-06T00:09:12.270Z",
+                "latencyMs": 30.263167000004614,
+                "success": true,
+                "result": "0x183a322"
+              },
+              {
+                "iteration": 15,
+                "startedAt": "2026-11-06T00:09:14.579Z",
+                "latencyMs": 27.668084000004455,
+                "success": true,
+                "result": "0x183a322"
+              },
+              {
+                "iteration": 16,
+                "startedAt": "2026-11-06T00:09:16.607Z",
+                "latencyMs": 28.98112499999843,
+                "success": true,
+                "result": "0x183a322"
+              },
+              {
+                "iteration": 17,
+                "startedAt": "2026-11-06T00:09:18.755Z",
+                "latencyMs": 36.558124999995925,
+                "success": true,
+                "result": "0x183a323"
+              },
+              {
+                "iteration": 18,
+                "startedAt": "2026-11-06T00:09:20.905Z",
+                "latencyMs": 31.09475000000384,
+                "success": true,
+                "result": "0x183a323"
+              },
+              {
+                "iteration": 19,
+                "startedAt": "2026-11-06T00:09:23.030Z",
+                "latencyMs": 32.91841700000077,
+                "success": true,
+                "result": "0x183a323"
+              },
+              {
+                "iteration": 20,
+                "startedAt": "2026-11-06T00:09:25.177Z",
+                "latencyMs": 33.71679199999926,
+                "success": true,
+                "result": "0x183a323"
+              },
+              {
+                "iteration": 21,
+                "startedAt": "2026-11-06T00:09:27.212Z",
+                "latencyMs": 30.059916999998677,
+                "success": true,
+                "result": "0x183a323"
+              },
+              {
+                "iteration": 22,
+                "startedAt": "2026-11-06T00:09:29.568Z",
+                "latencyMs": 40.811459000004106,
+                "success": true,
+                "result": "0x183a323"
+              },
+              {
+                "iteration": 23,
+                "startedAt": "2026-11-06T00:09:31.837Z",
+                "latencyMs": 33.80041699999856,
+                "success": true,
+                "result": "0x183a323"
+              },
+              {
+                "iteration": 24,
+                "startedAt": "2026-11-06T00:09:33.997Z",
+                "latencyMs": 27.430917000005138,
+                "success": true,
+                "result": "0x183a323"
+              },
+              {
+                "iteration": 25,
+                "startedAt": "2026-11-06T00:09:36.025Z",
+                "latencyMs": 27.720374999989872,
+                "success": true,
+                "result": "0x183a323"
+              },
+              {
+                "iteration": 26,
+                "startedAt": "2026-11-06T00:09:38.172Z",
+                "latencyMs": 27.18720800000301,
+                "success": true,
+                "result": "0x183a325"
+              },
+              {
+                "iteration": 27,
+                "startedAt": "2026-11-06T00:09:40.325Z",
+                "latencyMs": 24.611457999999402,
+                "success": true,
+                "result": "0x183a325"
+              },
+              {
+                "iteration": 28,
+                "startedAt": "2026-11-06T00:09:42.391Z",
+                "latencyMs": 30.63025000000198,
+                "success": true,
+                "result": "0x183a325"
+              },
+              {
+                "iteration": 29,
+                "startedAt": "2026-11-06T00:09:44.598Z",
+                "latencyMs": 116.93920799999614,
+                "success": true,
+                "result": "0x183a325"
+              },
+              {
+                "iteration": 30,
+                "startedAt": "2026-11-06T00:09:46.718Z",
+                "latencyMs": 109.34070899999642,
+                "success": true,
+                "result": "0x183a325"
+              },
+              {
+                "iteration": 31,
+                "startedAt": "2026-11-06T00:09:48.962Z",
+                "latencyMs": 30.6304999999993,
+                "success": true,
+                "result": "0x183a325"
+              },
+              {
+                "iteration": 32,
+                "startedAt": "2026-11-06T00:09:51.100Z",
+                "latencyMs": 96.31787499999336,
+                "success": true,
+                "result": "0x183a326"
+              },
+              {
+                "iteration": 33,
+                "startedAt": "2026-11-06T00:09:54.696Z",
+                "latencyMs": 25.81229099999473,
+                "success": true,
+                "result": "0x183a327"
+              },
+              {
+                "iteration": 34,
+                "startedAt": "2026-11-06T00:09:56.853Z",
+                "latencyMs": 109.05808299999626,
+                "success": true,
+                "result": "0x183a327"
+              },
+              {
+                "iteration": 35,
+                "startedAt": "2026-11-06T00:09:58.965Z",
+                "latencyMs": 93.77570800000103,
+                "success": true,
+                "result": "0x183a327"
+              },
+              {
+                "iteration": 36,
+                "startedAt": "2026-11-06T00:10:01.242Z",
+                "latencyMs": 38.850124999997206,
+                "success": true,
+                "result": "0x183a327"
+              },
+              {
+                "iteration": 37,
+                "startedAt": "2026-11-06T00:10:03.282Z",
+                "latencyMs": 44.327957999994396,
+                "success": true,
+                "result": "0x183a327"
+              },
+              {
+                "iteration": 38,
+                "startedAt": "2026-11-06T00:10:05.522Z",
+                "latencyMs": 34.63095899998734,
+                "success": true,
+                "result": "0x183a327"
+              },
+              {
+                "iteration": 39,
+                "startedAt": "2026-11-06T00:10:08.028Z",
+                "latencyMs": 23.58216700000048,
+                "success": true,
+                "result": "0x183a327"
+              },
+              {
+                "iteration": 40,
+                "startedAt": "2026-11-06T00:10:10.124Z",
+                "latencyMs": 32.568249999996624,
+                "success": true,
+                "result": "0x183a327"
+              },
+              {
+                "iteration": 41,
+                "startedAt": "2026-11-06T00:10:12.262Z",
+                "latencyMs": 27.94483300000138,
+                "success": true,
+                "result": "0x183a327"
+              },
+              {
+                "iteration": 42,
+                "startedAt": "2026-11-06T00:10:14.291Z",
+                "latencyMs": 33.84079200000269,
+                "success": true,
+                "result": "0x183a327"
+              },
+              {
+                "iteration": 43,
+                "startedAt": "2026-11-06T00:10:16.506Z",
+                "latencyMs": 27.30833299999358,
+                "success": true,
+                "result": "0x183a327"
+              },
+              {
+                "iteration": 44,
+                "startedAt": "2026-11-06T00:10:18.683Z",
+                "latencyMs": 111.00029199999699,
+                "success": true,
+                "result": "0x183a329"
+              },
+              {
+                "iteration": 45,
+                "startedAt": "2026-11-06T00:10:20.972Z",
+                "latencyMs": 123.54812500000116,
+                "success": true,
+                "result": "0x183a329"
+              },
+              {
+                "iteration": 46,
+                "startedAt": "2026-11-06T00:10:23.096Z",
+                "latencyMs": 134.90504100000544,
+                "success": true,
+                "result": "0x183a329"
+              },
+              {
+                "iteration": 47,
+                "startedAt": "2026-11-06T00:10:25.515Z",
+                "latencyMs": 130.1112090000097,
+                "success": true,
+                "result": "0x183a329"
+              },
+              {
+                "iteration": 48,
+                "startedAt": "2026-11-06T00:10:27.728Z",
+                "latencyMs": 43.62487499999406,
+                "success": true,
+                "result": "0x183a329"
+              },
+              {
+                "iteration": 49,
+                "startedAt": "2026-11-06T00:10:30.065Z",
+                "latencyMs": 31.96854100000928,
+                "success": true,
+                "result": "0x183a329"
+              },
+              {
+                "iteration": 50,
+                "startedAt": "2026-11-06T00:10:32.121Z",
+                "latencyMs": 31.686999999990803,
+                "success": true,
+                "result": "0x183a329"
+              },
+              {
+                "iteration": 51,
+                "startedAt": "2026-11-06T00:10:34.313Z",
+                "latencyMs": 41.63420899999619,
+                "success": true,
+                "result": "0x183a329"
+              },
+              {
+                "iteration": 52,
+                "startedAt": "2026-11-06T00:10:36.438Z",
+                "latencyMs": 34.598416000008,
+                "success": true,
+                "result": "0x183a329"
+              },
+              {
+                "iteration": 53,
+                "startedAt": "2026-11-06T00:10:38.509Z",
+                "latencyMs": 31.23383300000569,
+                "success": true,
+                "result": "0x183a32a"
+              },
+              {
+                "iteration": 54,
+                "startedAt": "2026-11-06T00:10:40.689Z",
+                "latencyMs": 29.991666999994777,
+                "success": true,
+                "result": "0x183a32a"
+              },
+              {
+                "iteration": 55,
+                "startedAt": "2026-11-06T00:10:42.800Z",
+                "latencyMs": 108.2045409999846,
+                "success": true,
+                "result": "0x183a32b"
+              },
+              {
+                "iteration": 56,
+                "startedAt": "2026-11-06T00:10:44.908Z",
+                "latencyMs": 98.65958400000818,
+                "success": true,
+                "result": "0x183a32b"
+              },
+              {
+                "iteration": 57,
+                "startedAt": "2026-11-06T00:10:47.174Z",
+                "latencyMs": 24.748166000004858,
+                "success": true,
+                "result": "0x183a32b"
+              },
+              {
+                "iteration": 58,
+                "startedAt": "2026-11-06T00:10:49.295Z",
+                "latencyMs": 97.90195900000981,
+                "success": true,
+                "result": "0x183a32c"
+              },
+              {
+                "iteration": 59,
+                "startedAt": "2026-11-06T00:10:51.510Z",
+                "latencyMs": 29.08629199999268,
+                "success": true,
+                "result": "0x183a32c"
+              },
+              {
+                "iteration": 60,
+                "startedAt": "2026-11-06T00:10:53.655Z",
+                "latencyMs": 36.50295900000492,
+                "success": true,
+                "result": "0x183a32c"
+              },
+              {
+                "iteration": 61,
+                "startedAt": "2026-11-06T00:10:55.784Z",
+                "latencyMs": 26.136458000022685,
+                "success": true,
+                "result": "0x183a32c"
+              },
+              {
+                "iteration": 62,
+                "startedAt": "2026-11-06T00:10:57.948Z",
+                "latencyMs": 24.65208299999358,
+                "success": true,
+                "result": "0x183a32c"
+              },
+              {
+                "iteration": 63,
+                "startedAt": "2026-11-06T00:11:00.016Z",
+                "latencyMs": 26.720125000021653,
+                "success": true,
+                "result": "0x183a32c"
+              },
+              {
+                "iteration": 64,
+                "startedAt": "2026-11-06T00:11:02.095Z",
+                "latencyMs": 27.63604199999827,
+                "success": true,
+                "result": "0x183a32c"
+              },
+              {
+                "iteration": 65,
+                "startedAt": "2026-11-06T00:11:04.213Z",
+                "latencyMs": 40.61458299998776,
+                "success": true,
+                "result": "0x183a32c"
+              },
+              {
+                "iteration": 66,
+                "startedAt": "2026-11-06T00:11:06.407Z",
+                "latencyMs": 97.66858299999149,
+                "success": true,
+                "result": "0x183a32c"
+              },
+              {
+                "iteration": 67,
+                "startedAt": "2026-11-06T00:11:08.679Z",
+                "latencyMs": 113.17749999999069,
+                "success": true,
+                "result": "0x183a32c"
+              },
+              {
+                "iteration": 68,
+                "startedAt": "2026-11-06T00:11:10.889Z",
+                "latencyMs": 25.932958999997936,
+                "success": true,
+                "result": "0x183a32d"
+              },
+              {
+                "iteration": 69,
+                "startedAt": "2026-11-06T00:11:12.976Z",
+                "latencyMs": 38.31533300000592,
+                "success": true,
+                "result": "0x183a32e"
+              },
+              {
+                "iteration": 70,
+                "startedAt": "2026-11-06T00:11:15.184Z",
+                "latencyMs": 27.179000000003725,
+                "success": true,
+                "result": "0x183a32e"
+              },
+              {
+                "iteration": 71,
+                "startedAt": "2026-11-06T00:11:17.283Z",
+                "latencyMs": 25.30716600001324,
+                "success": true,
+                "result": "0x183a32e"
+              },
+              {
+                "iteration": 72,
+                "startedAt": "2026-11-06T00:11:19.459Z",
+                "latencyMs": 28.229500000015832,
+                "success": true,
+                "result": "0x183a32e"
+              },
+              {
+                "iteration": 73,
+                "startedAt": "2026-11-06T00:11:21.551Z",
+                "latencyMs": 30.221374999993714,
+                "success": true,
+                "result": "0x183a32e"
+              },
+              {
+                "iteration": 74,
+                "startedAt": "2026-11-06T00:11:23.703Z",
+                "latencyMs": 104.74279099999694,
+                "success": true,
+                "result": "0x183a32f"
+              },
+              {
+                "iteration": 75,
+                "startedAt": "2026-11-06T00:11:25.808Z",
+                "latencyMs": 114.39662500002305,
+                "success": true,
+                "result": "0x183a32f"
+              },
+              {
+                "iteration": 76,
+                "startedAt": "2026-11-06T00:11:28.011Z",
+                "latencyMs": 24.004083000007086,
+                "success": true,
+                "result": "0x183a32f"
+              },
+              {
+                "iteration": 77,
+                "startedAt": "2026-11-06T00:11:30.288Z",
+                "latencyMs": 32.326625000016065,
+                "success": true,
+                "result": "0x183a32f"
+              },
+              {
+                "iteration": 78,
+                "startedAt": "2026-11-06T00:11:32.406Z",
+                "latencyMs": 27.421916999999667,
+                "success": true,
+                "result": "0x183a32f"
+              },
+              {
+                "iteration": 79,
+                "startedAt": "2026-11-06T00:11:34.543Z",
+                "latencyMs": 28.578165999992052,
+                "success": true,
+                "result": "0x183a330"
+              },
+              {
+                "iteration": 80,
+                "startedAt": "2026-11-06T00:11:36.598Z",
+                "latencyMs": 23.854541000007885,
+                "success": true,
+                "result": "0x183a330"
+              },
+              {
+                "iteration": 81,
+                "startedAt": "2026-11-06T00:11:38.767Z",
+                "latencyMs": 24.879083999985596,
+                "success": true,
+                "result": "0x183a331"
+              },
+              {
+                "iteration": 82,
+                "startedAt": "2026-11-06T00:11:40.910Z",
+                "latencyMs": 29.81295799999498,
+                "success": true,
+                "result": "0x183a332"
+              },
+              {
+                "iteration": 83,
+                "startedAt": "2026-11-06T00:11:42.989Z",
+                "latencyMs": 32.34983400002238,
+                "success": true,
+                "result": "0x183a332"
+              },
+              {
+                "iteration": 84,
+                "startedAt": "2026-11-06T00:11:45.102Z",
+                "latencyMs": 24.060166000010213,
+                "success": true,
+                "result": "0x183a333"
+              },
+              {
+                "iteration": 85,
+                "startedAt": "2026-11-06T00:11:47.245Z",
+                "latencyMs": 27.960332999995444,
+                "success": true,
+                "result": "0x183a333"
+              },
+              {
+                "iteration": 86,
+                "startedAt": "2026-11-06T00:11:49.307Z",
+                "latencyMs": 32.83708399999887,
+                "success": true,
+                "result": "0x183a333"
+              },
+              {
+                "iteration": 87,
+                "startedAt": "2026-11-06T00:11:51.446Z",
+                "latencyMs": 27.405541000014637,
+                "success": true,
+                "result": "0x183a333"
+              },
+              {
+                "iteration": 88,
+                "startedAt": "2026-11-06T00:11:53.553Z",
+                "latencyMs": 28.38145899999654,
+                "success": true,
+                "result": "0x183a334"
+              },
+              {
+                "iteration": 89,
+                "startedAt": "2026-11-06T00:11:55.787Z",
+                "latencyMs": 30.533874999993714,
+                "success": true,
+                "result": "0x183a334"
+              },
+              {
+                "iteration": 90,
+                "startedAt": "2026-11-06T00:11:57.907Z",
+                "latencyMs": 29.401791000011144,
+                "success": true,
+                "result": "0x183a334"
+              },
+              {
+                "iteration": 91,
+                "startedAt": "2026-11-06T00:12:00.229Z",
+                "latencyMs": 31.235707999992883,
+                "success": true,
+                "result": "0x183a334"
+              },
+              {
+                "iteration": 92,
+                "startedAt": "2026-11-06T00:12:02.327Z",
+                "latencyMs": 27.42720800000825,
+                "success": true,
+                "result": "0x183a334"
+              },
+              {
+                "iteration": 93,
+                "startedAt": "2026-11-06T00:12:04.468Z",
+                "latencyMs": 25.03020799998194,
+                "success": true,
+                "result": "0x183a334"
+              },
+              {
+                "iteration": 94,
+                "startedAt": "2026-11-06T00:12:06.523Z",
+                "latencyMs": 27.698666999989655,
+                "success": true,
+                "result": "0x183a334"
+              },
+              {
+                "iteration": 95,
+                "startedAt": "2026-11-06T00:12:08.663Z",
+                "latencyMs": 23.556291999993846,
+                "success": true,
+                "result": "0x183a334"
+              },
+              {
+                "iteration": 96,
+                "startedAt": "2026-11-06T00:12:10.774Z",
+                "latencyMs": 22.532459000009112,
+                "success": true,
+                "result": "0x183a334"
+              },
+              {
+                "iteration": 97,
+                "startedAt": "2026-11-06T00:12:12.891Z",
+                "latencyMs": 29.973291999980574,
+                "success": true,
+                "result": "0x183a336"
+              },
+              {
+                "iteration": 98,
+                "startedAt": "2026-11-06T00:12:15.284Z",
+                "latencyMs": 93.37745800000266,
+                "success": true,
+                "result": "0x183a336"
+              },
+              {
+                "iteration": 99,
+                "startedAt": "2026-11-06T00:12:17.496Z",
+                "latencyMs": 32.79550000000745,
+                "success": true,
+                "result": "0x183a336"
+              }
+            ],
+            "eth_call": [
+              {
+                "iteration": 0,
+                "startedAt": "2026-11-06T00:08:42.073Z",
+                "latencyMs": 49.39770899999894,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 1,
+                "startedAt": "2026-11-06T00:08:44.188Z",
+                "latencyMs": 66.96454199999789,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 2,
+                "startedAt": "2026-11-06T00:08:46.310Z",
+                "latencyMs": 28.99499999999898,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 3,
+                "startedAt": "2026-11-06T00:08:48.519Z",
+                "latencyMs": 94.38966699999946,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 4,
+                "startedAt": "2026-11-06T00:08:50.706Z",
+                "latencyMs": 37.06187499999942,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 5,
+                "startedAt": "2026-11-06T00:08:52.979Z",
+                "latencyMs": 27.231457999998383,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 6,
+                "startedAt": "2026-11-06T00:08:55.060Z",
+                "latencyMs": 81.5192500000012,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 7,
+                "startedAt": "2026-11-06T00:08:57.170Z",
+                "latencyMs": 28.463166000001365,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 8,
+                "startedAt": "2026-11-06T00:08:59.376Z",
+                "latencyMs": 25.854166999997688,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 9,
+                "startedAt": "2026-11-06T00:09:01.448Z",
+                "latencyMs": 32.00408400000015,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 10,
+                "startedAt": "2026-11-06T00:09:03.610Z",
+                "latencyMs": 31.332916999999725,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 11,
+                "startedAt": "2026-11-06T00:09:05.917Z",
+                "latencyMs": 31.430625000000873,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 12,
+                "startedAt": "2026-11-06T00:09:08.087Z",
+                "latencyMs": 29.622125000001688,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 13,
+                "startedAt": "2026-11-06T00:09:10.203Z",
+                "latencyMs": 37.566624999999476,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 14,
+                "startedAt": "2026-11-06T00:09:12.375Z",
+                "latencyMs": 38.64958399999887,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 15,
+                "startedAt": "2026-11-06T00:09:14.415Z",
+                "latencyMs": 109.35250000000087,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 16,
+                "startedAt": "2026-11-06T00:09:16.662Z",
+                "latencyMs": 29.263584000000264,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 17,
+                "startedAt": "2026-11-06T00:09:18.817Z",
+                "latencyMs": 29.608249999997497,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 18,
+                "startedAt": "2026-11-06T00:09:20.848Z",
+                "latencyMs": 27.743374999998196,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 19,
+                "startedAt": "2026-11-06T00:09:22.971Z",
+                "latencyMs": 29.624000000003434,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 20,
+                "startedAt": "2026-11-06T00:09:25.120Z",
+                "latencyMs": 27.76133299999492,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 21,
+                "startedAt": "2026-11-06T00:09:27.268Z",
+                "latencyMs": 34.792166000006546,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 22,
+                "startedAt": "2026-11-06T00:09:29.534Z",
+                "latencyMs": 33.84150000000227,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 23,
+                "startedAt": "2026-11-06T00:09:31.700Z",
+                "latencyMs": 97.20804199999839,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 24,
+                "startedAt": "2026-11-06T00:09:33.936Z",
+                "latencyMs": 27.59733299999789,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 25,
+                "startedAt": "2026-11-06T00:09:36.080Z",
+                "latencyMs": 31.981375000003027,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 26,
+                "startedAt": "2026-11-06T00:09:38.227Z",
+                "latencyMs": 42.191500000000815,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 27,
+                "startedAt": "2026-11-06T00:09:40.299Z",
+                "latencyMs": 25.815082999994047,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 28,
+                "startedAt": "2026-11-06T00:09:42.475Z",
+                "latencyMs": 29.832832999993116,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 29,
+                "startedAt": "2026-11-06T00:09:44.532Z",
+                "latencyMs": 36.75837499999034,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 30,
+                "startedAt": "2026-11-06T00:09:46.882Z",
+                "latencyMs": 23.102708000005805,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 31,
+                "startedAt": "2026-11-06T00:09:48.905Z",
+                "latencyMs": 30.493708000009065,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 32,
+                "startedAt": "2026-11-06T00:09:51.223Z",
+                "latencyMs": 33.48183399999107,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 33,
+                "startedAt": "2026-11-06T00:09:54.722Z",
+                "latencyMs": 25.383625000002212,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 34,
+                "startedAt": "2026-11-06T00:09:56.774Z",
+                "latencyMs": 27.279916999992565,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 35,
+                "startedAt": "2026-11-06T00:09:59.107Z",
+                "latencyMs": 26.691500000000815,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 36,
+                "startedAt": "2026-11-06T00:10:01.187Z",
+                "latencyMs": 28.333917000010842,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 37,
+                "startedAt": "2026-11-06T00:10:03.445Z",
+                "latencyMs": 32.361917000001995,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 38,
+                "startedAt": "2026-11-06T00:10:05.587Z",
+                "latencyMs": 99.93041699999594,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 39,
+                "startedAt": "2026-11-06T00:10:07.974Z",
+                "latencyMs": 27.51629200000025,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 40,
+                "startedAt": "2026-11-06T00:10:10.054Z",
+                "latencyMs": 36.98145900000236,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 41,
+                "startedAt": "2026-11-06T00:10:12.215Z",
+                "latencyMs": 24.497624999989057,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 42,
+                "startedAt": "2026-11-06T00:10:14.396Z",
+                "latencyMs": 30.17362500001036,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 43,
+                "startedAt": "2026-11-06T00:10:16.427Z",
+                "latencyMs": 27.501417000006768,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 44,
+                "startedAt": "2026-11-06T00:10:18.608Z",
+                "latencyMs": 35.19054100000358,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 45,
+                "startedAt": "2026-11-06T00:10:20.795Z",
+                "latencyMs": 99.17120799999975,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 46,
+                "startedAt": "2026-11-06T00:10:23.312Z",
+                "latencyMs": 30.43491599999834,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 47,
+                "startedAt": "2026-11-06T00:10:25.428Z",
+                "latencyMs": 86.64183400000911,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 48,
+                "startedAt": "2026-11-06T00:10:27.772Z",
+                "latencyMs": 134.39533300000767,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 49,
+                "startedAt": "2026-11-06T00:10:30.018Z",
+                "latencyMs": 23.492917000010493,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 50,
+                "startedAt": "2026-11-06T00:10:32.181Z",
+                "latencyMs": 30.18441599998914,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 51,
+                "startedAt": "2026-11-06T00:10:34.211Z",
+                "latencyMs": 38.78908399998909,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 52,
+                "startedAt": "2026-11-06T00:10:36.356Z",
+                "latencyMs": 30.6507500000007,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 53,
+                "startedAt": "2026-11-06T00:10:38.570Z",
+                "latencyMs": 33.958208999974886,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 54,
+                "startedAt": "2026-11-06T00:10:40.605Z",
+                "latencyMs": 33.682832999998936,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 55,
+                "startedAt": "2026-11-06T00:10:42.745Z",
+                "latencyMs": 28.027541999996174,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 56,
+                "startedAt": "2026-11-06T00:10:45.044Z",
+                "latencyMs": 29.48475000000326,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 57,
+                "startedAt": "2026-11-06T00:10:47.104Z",
+                "latencyMs": 32.34712500000023,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 58,
+                "startedAt": "2026-11-06T00:10:49.449Z",
+                "latencyMs": 34.8147089999984,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 59,
+                "startedAt": "2026-11-06T00:10:51.563Z",
+                "latencyMs": 28.38537499998347,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 60,
+                "startedAt": "2026-11-06T00:10:53.627Z",
+                "latencyMs": 28.072083999984898,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 61,
+                "startedAt": "2026-11-06T00:10:55.755Z",
+                "latencyMs": 28.635791999986395,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 62,
+                "startedAt": "2026-11-06T00:10:57.841Z",
+                "latencyMs": 25.06541599999764,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 63,
+                "startedAt": "2026-11-06T00:11:00.068Z",
+                "latencyMs": 25.649416999978712,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 64,
+                "startedAt": "2026-11-06T00:11:02.181Z",
+                "latencyMs": 31.633749999979045,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 65,
+                "startedAt": "2026-11-06T00:11:04.283Z",
+                "latencyMs": 26.867417000001296,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 66,
+                "startedAt": "2026-11-06T00:11:06.532Z",
+                "latencyMs": 30.37458400000469,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 67,
+                "startedAt": "2026-11-06T00:11:08.624Z",
+                "latencyMs": 27.071999999985565,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 68,
+                "startedAt": "2026-11-06T00:11:10.941Z",
+                "latencyMs": 33.38562499999534,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 69,
+                "startedAt": "2026-11-06T00:11:13.078Z",
+                "latencyMs": 40.14562500000466,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 70,
+                "startedAt": "2026-11-06T00:11:15.122Z",
+                "latencyMs": 36.82079099997645,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 71,
+                "startedAt": "2026-11-06T00:11:17.335Z",
+                "latencyMs": 26.17037499998696,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 72,
+                "startedAt": "2026-11-06T00:11:19.396Z",
+                "latencyMs": 34.94458300000406,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 73,
+                "startedAt": "2026-11-06T00:11:21.488Z",
+                "latencyMs": 29.670040999975754,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 74,
+                "startedAt": "2026-11-06T00:11:23.617Z",
+                "latencyMs": 26.815207999985432,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 75,
+                "startedAt": "2026-11-06T00:11:25.978Z",
+                "latencyMs": 29.79595800000243,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 76,
+                "startedAt": "2026-11-06T00:11:28.083Z",
+                "latencyMs": 107.26637499997742,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 77,
+                "startedAt": "2026-11-06T00:11:30.354Z",
+                "latencyMs": 26.514290999999503,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 78,
+                "startedAt": "2026-11-06T00:11:32.461Z",
+                "latencyMs": 27.487207999976818,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 79,
+                "startedAt": "2026-11-06T00:11:34.489Z",
+                "latencyMs": 27.739375000004657,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 80,
+                "startedAt": "2026-11-06T00:11:36.675Z",
+                "latencyMs": 21.311167000007117,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 81,
+                "startedAt": "2026-11-06T00:11:38.697Z",
+                "latencyMs": 36.49483300000429,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 82,
+                "startedAt": "2026-11-06T00:11:40.822Z",
+                "latencyMs": 29.144000000000233,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 83,
+                "startedAt": "2026-11-06T00:11:42.964Z",
+                "latencyMs": 24.87612500000978,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 84,
+                "startedAt": "2026-11-06T00:11:45.048Z",
+                "latencyMs": 27.96645899998839,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 85,
+                "startedAt": "2026-11-06T00:11:47.153Z",
+                "latencyMs": 32.52470800001174,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 86,
+                "startedAt": "2026-11-06T00:11:49.340Z",
+                "latencyMs": 29.683958999987226,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 87,
+                "startedAt": "2026-11-06T00:11:51.421Z",
+                "latencyMs": 25.383291000005556,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 88,
+                "startedAt": "2026-11-06T00:11:53.501Z",
+                "latencyMs": 24.557417000003625,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 89,
+                "startedAt": "2026-11-06T00:11:55.840Z",
+                "latencyMs": 25.460707999998704,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 90,
+                "startedAt": "2026-11-06T00:11:57.936Z",
+                "latencyMs": 31.27583300002152,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 91,
+                "startedAt": "2026-11-06T00:12:00.076Z",
+                "latencyMs": 98.24958299999707,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 92,
+                "startedAt": "2026-11-06T00:12:02.295Z",
+                "latencyMs": 31.683625000005122,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 93,
+                "startedAt": "2026-11-06T00:12:04.387Z",
+                "latencyMs": 27.640458000008948,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 94,
+                "startedAt": "2026-11-06T00:12:06.551Z",
+                "latencyMs": 30.218874999991385,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 95,
+                "startedAt": "2026-11-06T00:12:08.608Z",
+                "latencyMs": 25.508957999991253,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 96,
+                "startedAt": "2026-11-06T00:12:10.715Z",
+                "latencyMs": 28.146542000002228,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 97,
+                "startedAt": "2026-11-06T00:12:12.946Z",
+                "latencyMs": 23.06845799999428,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 98,
+                "startedAt": "2026-11-06T00:12:15.419Z",
+                "latencyMs": 45.57270799999242,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              },
+              {
+                "iteration": 99,
+                "startedAt": "2026-11-06T00:12:17.556Z",
+                "latencyMs": 31.769375000003492,
+                "success": true,
+                "result": "0x0000000000000000000000000000000000000000331a6269f2c78ffb6a3bd640"
+              }
+            ]
+          },
+          "stopped": {},
+          "summary": {
+            "eth_blockNumber": {
+              "attempts": 100,
+              "successes": 100,
+              "errors": 0,
+              "successRate": 1,
+              "p50Ms": 30.63025000000198,
+              "p99Ms": 130.1112090000097,
+              "maxMs": 134.90504100000544,
+              "failureP50Ms": null
+            },
+            "eth_call": {
+              "attempts": 100,
+              "successes": 100,
+              "errors": 0,
+              "successRate": 1,
+              "p50Ms": 29.832832999993116,
+              "p99Ms": 109.35250000000087,
+              "maxMs": 134.39533300000767,
+              "failureP50Ms": null
+            }
+          },
+          "telemetry": {
+            "upstreamRequests": 213,
+            "upstreamByMethod": {
+              "eth_chainId": 1,
+              "eth_blockNumber": 106,
+              "eth_call": 106
+            },
+            "upstreamByOrigin": {
+              "https://mainnet.ethereumpow.org": 213
+            },
+            "corsRejectedResponses": 0,
+            "events": {
+              "request": 212,
+              "head": 106,
+              "success": 212
+            }
+          },
+          "snapshot": [
+            {
+              "id": "https://mainnet.ethereumpow.org",
+              "url": "https://mainnet.ethereumpow.org",
+              "weight": 1,
+              "inflight": 0,
+              "head": 25404214,
+              "lag": 0,
+              "score": 46.485519583234264,
+              "methods": {
+                "*": {
+                  "ewma": 45.094827139365975,
+                  "tail": 66.75518507046567,
+                  "error": 0,
+                  "n": 212
+                },
+                "eth_blockNumber": {
+                  "ewma": 49.91903731437548,
+                  "tail": 70.94803513934289,
+                  "error": 0,
+                  "n": 106
+                },
+                "eth_call": {
+                  "ewma": 37.35012553295908,
+                  "tail": 60.18861065864705,
+                  "error": 0,
+                  "n": 106
+                }
+              },
+              "quarantined": false,
+              "tokens": null
+            }
+          ],
+          "cacheStats": {
+            "hits": 0,
+            "misses": 0,
+            "refreshes": 0,
+            "entries": 0,
+            "bytes": 0,
+            "hotKeys": 0
+          }
+        }
+      ],
+      "comparisons": [
+        {
+          "variant": "production",
+          "method": "eth_blockNumber",
+          "status": "fail",
+          "healthyDirectCount": 1,
+          "excludedDirectIds": [],
+          "p50": {
+            "pass": false,
+            "smartMs": 30.63025000000198,
+            "limitMs": 29.223792000004323,
+            "directId": "direct:0"
+          },
+          "p99": {
+            "pass": false,
+            "smartMs": 130.1112090000097,
+            "limitMs": 108.02495799999451,
+            "directId": "direct:0"
+          },
+          "allSmartRequestsSucceeded": true
+        },
+        {
+          "variant": "production",
+          "method": "eth_call",
+          "status": "fail",
+          "healthyDirectCount": 1,
+          "excludedDirectIds": [],
+          "p50": {
+            "pass": false,
+            "smartMs": 29.832832999993116,
+            "limitMs": 28.961749999994936,
+            "directId": "direct:0"
+          },
+          "p99": {
+            "pass": true,
+            "smartMs": 109.35250000000087,
+            "limitMs": 286.06804199999897,
+            "directId": "direct:0"
+          },
+          "allSmartRequestsSucceeded": true
+        }
+      ],
+      "status": "fail"
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+| Chain | Read | Smart P50 / fastest ms | Smart P99 / worst ms | Baseline P50 / P99 ms | Healthy / full / all | Result |
+|---|---|---:|---:|---:|---:|---|
+| Ethereum (1) | eth_blockNumber | 33.63 / 34.01 | 121.07 / 6957.22 | — / — | 34 / 41 / 44 | pass |
+| Ethereum (1) | eth_call | 34.88 / 34.84 | 120.26 / 595.69 | — / — | 29 / 37 / 44 | fail |
+| Polygon (137) | eth_blockNumber | 36.79 / 35.88 | 117.42 / 1813.76 | — / — | 14 / 18 / 20 | fail |
+| Polygon (137) | eth_call | 46.26 / 46.84 | 133.74 / 2060.28 | — / — | 13 / 18 / 20 | pass |
+| BNB Smart Chain (56) | eth_blockNumber | 31.82 / 31.70 | 153.12 / 814.57 | — / — | 42 / 46 / 49 | fail |
+| BNB Smart Chain (56) | eth_call | 32.92 / 32.29 | 120.58 / 709.29 | — / — | 42 / 46 / 49 | fail |
+| Avalanche (43114) | eth_blockNumber | 37.18 / 36.00 | 124.94 / 812.42 | — / — | 12 / 12 / 14 | fail |
+| Avalanche (43114) | eth_call | 47.81 / 48.19 | 153.20 / 421.18 | — / — | 12 / 12 / 14 | pass |
+| Moonbeam (1284) | eth_blockNumber | 39.45 / 38.22 | 123.31 / 405.77 | — / — | 3 / 3 / 3 | fail |
+| Moonbeam (1284) | eth_call | 97.07 / 85.28 | 417.54 / 2419.91 | — / — | 2 / 3 / 3 | fail |
+| Evmos (9001) | eth_blockNumber | — / — | — / — | — / — | 0 / 0 / 1 | unavailable |
+| Evmos (9001) | eth_call | — / — | — / — | — / — | 0 / 0 / 1 | unavailable |
+| Fantom (250) | eth_blockNumber | 39.09 / 37.06 | 116.42 / 305.55 | — / — | 2 / 6 / 10 | fail |
+| Fantom (250) | eth_call | 104.66 / 102.82 | 200.65 / 441.89 | — / — | 2 / 8 / 10 | fail |
+| Dogechain (2000) | eth_blockNumber | — / — | — / — | — / — | 0 / 0 / 1 | unavailable |
+| Dogechain (2000) | eth_call | — / — | — / — | — / — | 0 / 0 / 1 | unavailable |
+| OKC (66) | eth_blockNumber | 191.84 / 177.87 | 277.30 / 520.76 | — / — | 2 / 2 / 5 | fail |
+| OKC (66) | eth_call | 186.12 / 185.41 | 286.17 / 515.74 | — / — | 2 / 2 / 5 | fail |
+| EthereumPoW (10001) | eth_blockNumber | 30.63 / 29.22 | 130.11 / 108.02 | — / — | 1 / 1 / 1 | fail |
+| EthereumPoW (10001) | eth_call | 29.83 / 28.96 | 109.35 / 286.07 | — / — | 1 / 1 / 1 | fail |
+| Base (8453) | eth_blockNumber | 32.86 / 31.85 | 121.94 / 1645.85 | — / — | 15 / 16 / 18 | fail |
+| Base (8453) | eth_call | 32.45 / 32.80 | 117.44 / 1828.16 | — / — | 14 / 15 / 18 | pass |
+| PulseChain (369) | eth_blockNumber | 108.72 / 112.93 | 191.64 / 339.48 | — / — | 8 / 8 / 10 | pass |
+| PulseChain (369) | eth_call | 171.30 / 111.85 | 301.30 / 403.11 | — / — | 8 / 9 / 10 | fail |
+
+12/12 chains complete; 12 match current configuration; 0 pass both read workloads. Production P50 passes 5/24; P99 19/24.
+Saved artifacts/rpc-performance/summary.json (not-passed)

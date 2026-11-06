@@ -1,0 +1,453 @@
+{
+  "chainId": 56,
+  "measuredAt": "2026-11-05T23:52:55.142Z",
+  "origin": "https://fenix.fyi",
+  "requestType": "OPTIONS only; not latency measurement",
+  "results": [
+    {
+      "index": 0,
+      "url": "https://bnb-mainnet.g.alchemy.com/public",
+      "status": 200,
+      "cors": true,
+      "allowOrigin": "https://fenix.fyi",
+      "methods": "POST,GET,PUT,DELETE,PATCH",
+      "headers": "content-type"
+    },
+    {
+      "index": 1,
+      "url": "https://56.rpc.thirdweb.com",
+      "status": 204,
+      "cors": true,
+      "allowOrigin": "*",
+      "methods": "GET, POST, OPTIONS",
+      "headers": "content-type"
+    },
+    {
+      "index": 2,
+      "url": "https://rpc.sentio.xyz/bsc",
+      "status": 200,
+      "cors": true,
+      "allowOrigin": "https://fenix.fyi",
+      "methods": "GET, PUT, DELETE, POST, PATCH, OPTIONS",
+      "headers": "content-type"
+    },
+    {
+      "index": 3,
+      "url": "https://bsc-dataseed1.defibit.io",
+      "status": 204,
+      "cors": true,
+      "allowOrigin": "*",
+      "methods": "POST, GET, OPTIONS",
+      "headers": "*"
+    },
+    {
+      "index": 4,
+      "url": "https://bsc-dataseed2.binance.org",
+      "cors": false,
+      "error": "The operation timed out.",
+      "retry": {
+        "status": 204,
+        "allowOrigin": "*",
+        "methods": "POST, GET, OPTIONS",
+        "headers": "*",
+        "cors": true
+      }
+    },
+    {
+      "index": 5,
+      "url": "https://bsc-dataseed1.bnbchain.org",
+      "status": 204,
+      "cors": true,
+      "allowOrigin": "*",
+      "methods": "POST, GET, OPTIONS",
+      "headers": "*"
+    },
+    {
+      "index": 6,
+      "url": "https://bsc-dataseed.bnbchain.org",
+      "status": 204,
+      "cors": true,
+      "allowOrigin": "*",
+      "methods": "POST, GET, OPTIONS",
+      "headers": "*"
+    },
+    {
+      "index": 7,
+      "url": "https://binance.nodereal.io",
+      "status": 204,
+      "cors": true,
+      "allowOrigin": "*",
+      "methods": "POST, GET, OPTIONS",
+      "headers": "*"
+    },
+    {
+      "index": 8,
+      "url": "https://bsc-dataseed3.bnbchain.org",
+      "status": 204,
+      "cors": true,
+      "allowOrigin": "*",
+      "methods": "POST, GET, OPTIONS",
+      "headers": "*"
+    },
+    {
+      "index": 9,
+      "url": "https://bsc-dataseed2.defibit.io",
+      "status": 204,
+      "cors": true,
+      "allowOrigin": "*",
+      "methods": "POST, GET, OPTIONS",
+      "headers": "*"
+    },
+    {
+      "index": 10,
+      "url": "https://bsc-dataseed3.binance.org",
+      "status": 204,
+      "cors": true,
+      "allowOrigin": "*",
+      "methods": "POST, GET, OPTIONS",
+      "headers": "*"
+    },
+    {
+      "index": 11,
+      "url": "https://bsc-dataseed2.bnbchain.org",
+      "status": 204,
+      "cors": true,
+      "allowOrigin": "*",
+      "methods": "POST, GET, OPTIONS",
+      "headers": "*"
+    },
+    {
+      "index": 12,
+      "url": "https://bsc-dataseed1.binance.org",
+      "status": 204,
+      "cors": true,
+      "allowOrigin": "*",
+      "methods": "POST, GET, OPTIONS",
+      "headers": "*"
+    },
+    {
+      "index": 13,
+      "url": "https://bsc-dataseed.binance.org",
+      "status": 204,
+      "cors": true,
+      "allowOrigin": "*",
+      "methods": "POST, GET, OPTIONS",
+      "headers": "*"
+    },
+    {
+      "index": 14,
+      "url": "https://bsc-dataseed-public.bnbchain.org",
+      "status": 204,
+      "cors": true,
+      "allowOrigin": "*",
+      "methods": "POST, GET, OPTIONS",
+      "headers": "*"
+    },
+    {
+      "index": 15,
+      "url": "https://bsc-dataseed.ninicoin.io",
+      "status": 204,
+      "cors": true,
+      "allowOrigin": "*",
+      "methods": "POST, GET, OPTIONS",
+      "headers": "*"
+    },
+    {
+      "index": 16,
+      "url": "https://bsc-dataseed1.ninicoin.io",
+      "status": 204,
+      "cors": true,
+      "allowOrigin": "*",
+      "methods": "POST, GET, OPTIONS",
+      "headers": "*"
+    },
+    {
+      "index": 17,
+      "url": "https://bsc-dataseed2.ninicoin.io",
+      "status": 204,
+      "cors": true,
+      "allowOrigin": "*",
+      "methods": "POST, GET, OPTIONS",
+      "headers": "*"
+    },
+    {
+      "index": 18,
+      "url": "https://bsc-dataseed.nariox.org",
+      "status": 204,
+      "cors": true,
+      "allowOrigin": "*",
+      "methods": "POST, GET, OPTIONS",
+      "headers": "*"
+    },
+    {
+      "index": 19,
+      "url": "https://bsc-dataseed3.defibit.io",
+      "status": 204,
+      "cors": true,
+      "allowOrigin": "*",
+      "methods": "POST, GET, OPTIONS",
+      "headers": "*"
+    },
+    {
+      "index": 20,
+      "url": "https://bsc-dataseed4.binance.org",
+      "status": 204,
+      "cors": true,
+      "allowOrigin": "*",
+      "methods": "POST, GET, OPTIONS",
+      "headers": "*"
+    },
+    {
+      "index": 21,
+      "url": "https://bsc-dataseed4.defibit.io",
+      "status": 204,
+      "cors": true,
+      "allowOrigin": "*",
+      "methods": "POST, GET, OPTIONS",
+      "headers": "*"
+    },
+    {
+      "index": 22,
+      "url": "https://bsc.rpc.sentio.xyz",
+      "status": 200,
+      "cors": true,
+      "allowOrigin": "https://fenix.fyi",
+      "methods": "GET, PUT, DELETE, POST, PATCH, OPTIONS",
+      "headers": "content-type"
+    },
+    {
+      "index": 23,
+      "url": "https://bsc.rpc.blxrbdn.com",
+      "status": 204,
+      "cors": true,
+      "allowOrigin": "*",
+      "methods": "POST",
+      "headers": "content-type"
+    },
+    {
+      "index": 24,
+      "url": "https://bsc.nodereal.io",
+      "status": 204,
+      "cors": true,
+      "allowOrigin": "*",
+      "methods": "POST, GET, OPTIONS",
+      "headers": "*"
+    },
+    {
+      "index": 25,
+      "url": "https://bsc-dataseed4.bnbchain.org",
+      "status": 204,
+      "cors": true,
+      "allowOrigin": "*",
+      "methods": "POST, GET, OPTIONS",
+      "headers": "*"
+    },
+    {
+      "index": 26,
+      "url": "https://us-bscscutum.blockrazor.xyz",
+      "status": 204,
+      "cors": true,
+      "allowOrigin": "*",
+      "methods": "POST",
+      "headers": "content-type"
+    },
+    {
+      "index": 27,
+      "url": "https://bsc-dataseed.defibit.io",
+      "status": 204,
+      "cors": true,
+      "allowOrigin": "*",
+      "methods": "POST, GET, OPTIONS",
+      "headers": "*"
+    },
+    {
+      "index": 28,
+      "url": "https://0.48.club",
+      "status": 204,
+      "cors": true,
+      "allowOrigin": "*",
+      "methods": "GET,POST,PUT,DELETE,OPTIONS",
+      "headers": "accept,authorization,cache-control,content-type,dnt,if-modified-since,keep-alive,origin,user-agent,x-requested-with"
+    },
+    {
+      "index": 29,
+      "url": "https://rpc-bsc.48.club",
+      "status": 204,
+      "cors": true,
+      "allowOrigin": "*",
+      "methods": "GET,POST,PUT,DELETE,OPTIONS",
+      "headers": "accept,authorization,cache-control,content-type,dnt,if-modified-since,keep-alive,origin,user-agent,x-requested-with"
+    },
+    {
+      "index": 30,
+      "url": "https://bsc.blockrazor.xyz/maxbackrun",
+      "status": 204,
+      "cors": true,
+      "allowOrigin": "*",
+      "methods": "POST",
+      "headers": "content-type"
+    },
+    {
+      "index": 31,
+      "url": "https://bsc.blockrazor.xyz/fullprivacy",
+      "status": 204,
+      "cors": true,
+      "allowOrigin": "*",
+      "methods": "POST",
+      "headers": "content-type"
+    },
+    {
+      "index": 32,
+      "url": "https://bsc.blockrazor.xyz",
+      "status": 204,
+      "cors": true,
+      "allowOrigin": "*",
+      "methods": "POST",
+      "headers": "content-type"
+    },
+    {
+      "index": 33,
+      "url": "https://bsc.publicnode.com",
+      "status": 204,
+      "cors": true,
+      "allowOrigin": "*",
+      "methods": "GET,HEAD,OPTIONS,POST",
+      "headers": "content-type"
+    },
+    {
+      "index": 34,
+      "url": "https://bsc-dataseed3.ninicoin.io",
+      "status": 204,
+      "cors": true,
+      "allowOrigin": "*",
+      "methods": "POST, GET, OPTIONS",
+      "headers": "*"
+    },
+    {
+      "index": 35,
+      "url": "https://rpc.backrunshield.com",
+      "status": 204,
+      "cors": true,
+      "allowOrigin": "*",
+      "methods": "GET,POST,OPTIONS",
+      "headers": "content-type"
+    },
+    {
+      "index": 36,
+      "url": "https://bsc-mainnet.public.blastapi.io",
+      "status": 200,
+      "cors": true,
+      "allowOrigin": "https://fenix.fyi",
+      "methods": "GET,POST,PUT,PATCH,DELETE,OPTIONS",
+      "headers": "content-type"
+    },
+    {
+      "index": 37,
+      "url": "https://jp-bscscutum.blockrazor.xyz",
+      "status": 204,
+      "cors": true,
+      "allowOrigin": "*",
+      "methods": "POST",
+      "headers": "content-type"
+    },
+    {
+      "index": 38,
+      "url": "https://bsc-dataseed4.ninicoin.io",
+      "status": 204,
+      "cors": true,
+      "allowOrigin": "*",
+      "methods": "POST, GET, OPTIONS",
+      "headers": "*"
+    },
+    {
+      "index": 39,
+      "url": "https://api.zan.top/bsc-mainnet",
+      "status": 200,
+      "cors": true,
+      "allowOrigin": "https://fenix.fyi",
+      "methods": "POST,GET,OPTIONS",
+      "headers": "*"
+    },
+    {
+      "index": 40,
+      "url": "https://rpc-bnb.blockmachine.io",
+      "status": 200,
+      "cors": true,
+      "allowOrigin": "*",
+      "methods": "GET,POST,OPTIONS",
+      "headers": "*"
+    },
+    {
+      "index": 41,
+      "url": "https://api.blockvectra.com/v1/bsc_mainnet/public",
+      "status": 204,
+      "cors": true,
+      "allowOrigin": "*",
+      "methods": "GET, POST, OPTIONS",
+      "headers": "content-type, x-api-key, authorization, x-bv-meter"
+    },
+    {
+      "index": 42,
+      "url": "https://ger-bscscutum.blockrazor.xyz",
+      "status": 204,
+      "cors": true,
+      "allowOrigin": "*",
+      "methods": "POST",
+      "headers": "content-type"
+    },
+    {
+      "index": 43,
+      "url": "https://ire-bscscutum.blockrazor.xyz",
+      "status": 204,
+      "cors": true,
+      "allowOrigin": "*",
+      "methods": "POST",
+      "headers": "content-type"
+    },
+    {
+      "index": 44,
+      "url": "https://bsc.api.pocket.network",
+      "status": 204,
+      "cors": true,
+      "allowOrigin": "https://fenix.fyi",
+      "methods": "GET, POST, PUT, PATCH, DELETE, OPTIONS",
+      "headers": "content-type"
+    },
+    {
+      "index": 45,
+      "url": "https://bsc.web3cdn.rest",
+      "status": 200,
+      "cors": true,
+      "allowOrigin": "https://fenix.fyi",
+      "methods": "GET, POST, OPTIONS",
+      "headers": "content-type, accept, origin, authorization, x-api-key, x-requested-with, sec-websocket-key, sec-websocket-version, sec-websocket-protocol, sec-websocket-extensions, upgrade, connection"
+    },
+    {
+      "index": 46,
+      "url": "https://rpc-bsc.blockmachine.io",
+      "status": 200,
+      "cors": true,
+      "allowOrigin": "*",
+      "methods": "GET,POST,OPTIONS",
+      "headers": "*"
+    },
+    {
+      "index": 47,
+      "url": "https://public-bsc.nownodes.io",
+      "status": 204,
+      "cors": true,
+      "allowOrigin": "*",
+      "methods": "GET, POST, OPTIONS",
+      "headers": "authorization,dnt,user-agent,x-requested-with,if-modified-since,cache-control,content-type,range,api-key"
+    },
+    {
+      "index": 48,
+      "url": "https://bsc-rpc.publicnode.com",
+      "status": 204,
+      "cors": true,
+      "allowOrigin": "*",
+      "methods": "GET,HEAD,OPTIONS,POST",
+      "headers": "content-type"
+    }
+  ]
+}

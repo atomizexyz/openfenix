@@ -51,6 +51,9 @@
       },
     },
   },
+  "patchedDependencies": {
+    "@bloxwap/smart-hyperevm@0.1.0": "patches/@bloxwap%2Fsmart-hyperevm@0.1.0.patch",
+  },
   "overrides": {
     "@wagmi/connectors": "8.2.4",
     "axios": "^1.20.0",
