@@ -2,55 +2,55 @@
  * Rising-ash scene for the hero, modelled on a long-exposure photograph of a
  * fire rather than on a particle demo.
  *
- * Three passes, three draw calls, no per-particle CPU work -- every particle
- * is a pure function of time evaluated on the GPU, and the CPU only advances a
- * clock uniform each frame:
+ * Three layers, four draw calls, no per-particle CPU work -- every particle
+ * is a pure function of time evaluated on the GPU. The CPU advances the clock
+ * and flickers the two shared fire lights each frame:
  *
- *  1. Smoke: domain-warped noise rising through the frame, lit orange from the
- *     unseen fire below. Rendered at quarter resolution into a render target
- *     (smoke is low-frequency, so this costs ~1/16th of a full-res pass) and
- *     upsampled as the backdrop.
- *  2. Flakes: torn ash fragments with mipmapped mineral grain, crumpled surface
- *     normals, and patchy glowing fissures. Sixteen procedurally baked surfaces
- *     catch the firelight as they tumble and cool.
- *  3. Embers and sparks, drawn as *ribbons* along their actual trajectory over
- *     a shutter interval. This is what makes ember photos look the way they
- *     do: trails curve with the turbulence that carries them, and because an
- *     ember flickers while the shutter is open, its trail is beaded -- brighter
- *     and dimmer along its length -- instead of a uniform pill. Per-pixel
- *     brightness falls as an ember outruns its own width (exposure is spread
- *     along the trail), cores are HDR so they bleach toward white under a film
- *     curve, and a pixel-space glow stands in for lens bloom.
+ *  1. Smoke: a quarter-resolution ray march through a rising 3D density field.
+ *     Light scatters from the same flickering fire sources that light the ash.
+ *  2. Fragments: folded 3D surfaces with a standard PBR material, mineral grain,
+ *     and glowing charcoal fissures. Two point lights and a cool sky fill light
+ *     the faces as they tumble and cool.
+ *  3. Embers and sparks: thin ribbons following their actual trajectory, with
+ *     a bright leading tip, a flickering orange streak, and a widening smoke
+ *     wake. The wake curls and dissipates behind the hot fragment in the same
+ *     instanced draw. HDR cores bleach toward white under a film curve; a
+ *     narrow pixel-space glow stands in for lens bloom.
  *
  * Embers cool along a blackbody ramp as they rise and leave a faint grey speck
- * once dark. Depth of field is a thin-lens circle of confusion, so embers off
- * the focal plane open into soft bokeh. Instances are sorted far-to-near once
- * (depth is fixed per instance), so premultiplied "over" blending stays
- * ordered without a per-frame sort.
+ * once dark. Ember defocus is restrained to preserve the fine glowing lines.
+ * Instances are sorted far-to-near once (depth is fixed per instance), so
+ * premultiplied "over" blending stays ordered without a per-frame sort.
  *
  * Imported dynamically by rising-ash.tsx, which keeps three.js out of the
  * initial bundle.
  */
 import {
+  ACESFilmicToneMapping,
   AddEquation,
   BufferAttribute,
   CustomBlending,
+  DoubleSide,
+  HemisphereLight,
   InstancedBufferAttribute,
   InstancedBufferGeometry,
   LinearFilter,
   Mesh,
+  MeshStandardMaterial,
   NoBlending,
   OneFactor,
   OneMinusSrcAlphaFactor,
   OrthographicCamera,
   PerspectiveCamera,
   PlaneGeometry,
+  PointLight,
   Scene,
   ShaderMaterial,
   WebGLRenderer,
   WebGLRenderTarget,
 } from "three";
 import { createAshMaterialAtlas } from "./ash-material-atlas";
+import { createAshNoiseVolume } from "./ash-noise-volume";
 
 export interface AshScene {
   setLight(light: boolean): void;
@@ -222,6 +222,12 @@ vec3 simulate(float age,float lifeT,float cycle,float type){
   p.x=(fract(aSeed.w+h1)*2.0-1.0)*halfW*1.08;
   p.y=-halfH-0.15-h2*0.5;
 
+  // Neighboring births share shifting updrafts, creating uneven bursts.
+  float birthTime=cycle*aParams.y-aParams.z;
+  float lane=step(0.5,aSeed.w)*2.0-1.0;
+  float source=lane*halfW*0.62+sin(birthTime*0.43+lane)*halfW*0.17;
+  p.x=mix(p.x,source+(h1-0.5)*halfW*0.55,0.45);
+
   // Noise space is per particle *and* per cycle, so a respawn never retraces
   // the path it took last time.
   vec3 n0=vec3(aSeed.xy*37.0+h1*13.0,0.0);
@@ -287,7 +293,7 @@ bool culled(float type){
 const EMBER_VERTEX = /* glsl */ `
 precision highp float;
 
-// x: position along the trail, 0 = now (head) .. 1 = shutter open (tail)
+// x: position along the trail, 0 = burning tip .. 1 = dissipating smoke
 // y: side of the ribbon, -1 or 1
 // z: end cap, -1 head cap, 1 tail cap, 0 body
 attribute vec3 aStrip;
@@ -304,6 +310,8 @@ varying float vT;
 varying float vSpeck;
 varying vec4 vSeed;
 varying float vTrail;
+varying float vAlong;
+varying float vSmokePx;
 
 void main(){
   float type=aParams.x;
@@ -319,10 +327,11 @@ void main(){
   float cycle=floor(clock/life);
   float age=clock-cycle*life;
 
-  // Shutter interval. Sparks move fast enough to want a longer one.
-  float span=type<0.5?mix(0.07,0.13,aSeed.w):mix(0.1,0.17,aSeed.w);
+  // Keep a longer history for the smoke; only the leading portion emits.
+  float span=type<0.5?mix(0.18,0.4,aSeed.w):mix(0.15,0.3,aSeed.w);
   float s=aStrip.x;
   vSeed=aSeed;
+  vAlong=s;
   float rawAge=age-s*span;
   float ageS=max(rawAge,0.0);
   float tS=ageS/life;
@@ -340,14 +349,14 @@ void main(){
   float pxPerUnit=uViewportH/(2.0*uTanHalfFov*dist);
   float speedPx=tl/0.024*pxPerUnit;
 
-  // Thin-lens defocus, capped so deep embers soften rather than balloon.
-  float rPx=radius*pxPerUnit;
-  float cocPx=min(uAperture*abs(dist-uFocus)*uFocus/dist*pxPerUnit,rPx*2.5+2.0*uPixelRatio);
+  // Screen-space limits keep even the nearest fragments fine and linear.
+  float rPx=clamp(radius*pxPerUnit,0.3*uPixelRatio,0.85*uPixelRatio);
+  float cocPx=min(uAperture*abs(dist-uFocus)*uFocus/dist*pxPerUnit,0.55*uPixelRatio);
   float corePx=sqrt(rPx*rPx+cocPx*cocPx);
   // A defocused ember spreads its light, but it is far brighter than the
   // display, so it keeps more apparent brightness than strict r^2 would give.
   float energy=pow(rPx/corePx,1.7);
-  float minPx=0.8*uPixelRatio;
+  float minPx=0.5*uPixelRatio;
   if(corePx<minPx){
     energy*=(corePx*corePx)/(minPx*minPx);
     corePx=minPx;
@@ -356,18 +365,18 @@ void main(){
 
   // Exposure is spread along the trail: each pixel only sees the ember for
   // the moment it passes, so fast trails are dimmer per pixel.
-  energy*=pow(corePx/(corePx+speedPx*span),0.4);
+  energy*=pow(corePx/(corePx+speedPx*span*0.4),0.3);
 
   // Cooling along a blackbody ramp; sparks start hotter and die faster.
-  float hot=type<0.5?mix(1450.0,2050.0,aSeed.y):mix(2100.0,2800.0,aSeed.y);
-  float kelvin=mix(hot,620.0,pow(tS,mix(0.55,1.1,aSeed.z)));
+  float hot=type<0.5?mix(1800.0,2450.0,aSeed.y):mix(2300.0,2900.0,aSeed.y);
+  float kelvin=mix(hot,750.0,pow(tS,mix(0.9,1.4,aSeed.z)));
   // Oxygen flicker sampled at each point's own moment of exposure, which is
   // what beads the trail.
   float flicker=0.66+0.34*snoise(vec3(aSeed.x*53.0,aSeed.y*17.0,(uTime-s*span)*(9.0+aSeed.w*14.0)));
   kelvin*=mix(0.92,1.04,flicker);
   float radiance=pow(kelvin/1500.0,4.0)*(type<0.5?5.5:10.0);
   float born=smoothstep(-0.015,0.0,rawAge);
-  vEmit=blackbody(kelvin)*radiance*energy*flicker*mix(1.0,0.6,s)*born;
+  vEmit=blackbody(kelvin)*radiance*energy*flicker*born;
   // The grey speck a cooled ember leaves is a point, not a streak.
   vSpeck=type<0.5?born*(1.0-s):0.0;
 
@@ -375,8 +384,12 @@ void main(){
   // ember's size, so it is sized in px rather than in world units.
   vTrail=s*speedPx*span/corePx;
   vCorePx=corePx;
-  vHaloPx=mix(6.5,2.5,uLight)*uPixelRatio+corePx*0.6;
-  float halfW=corePx*2.2+vHaloPx*3.0;
+  vHaloPx=mix(2.1,1.2,uLight)*uPixelRatio+corePx*0.4;
+  vSmokePx=mix(0.8,4.5,pow(s,0.8))*uPixelRatio;
+  float halfW=max(corePx*2.2+vHaloPx*3.0,vSmokePx*3.5);
+
+  // The wake drifts after the ember has passed, with no separate particles.
+  c.xy+=normal*sin(s*8.0+uTime*0.7+aSeed.x*23.0)*s*s*2.0*uPixelRatio/pxPerUnit;
 
   vec2 offsetPx=normal*aStrip.y*halfW-tangent*aStrip.z*halfW;
   vPx=vec2(aStrip.z*halfW,aStrip.y*halfW);
@@ -388,6 +401,7 @@ const EMBER_FRAGMENT = /* glsl */ `
 precision highp float;
 
 uniform float uLight;
+uniform float uTime;
 uniform sampler2D uSurface;
 
 varying vec2 vPx;
@@ -399,19 +413,18 @@ varying float vT;
 varying float vSpeck;
 varying vec4 vSeed;
 varying float vTrail;
+varying float vAlong;
+varying float vSmokePx;
 
 ${FILM}
 ${SURFACE}
+${SIMPLEX}
 
 void main(){
   float d=length(vPx);
   float dn=d/vCorePx;
 
-  // Sharp: gaussian core. Defocused: a flat disc with a faint bright rim,
-  // which is what an out-of-focus point light looks like through a lens.
-  float sharp=exp(-dn*dn*1.6);
-  float disc=(1.0-smoothstep(0.62,1.2,dn))*(0.9+0.1*dn);
-  float core=mix(sharp,disc,smoothstep(0.2,0.85,vBlur));
+  float core=exp(-dn*dn*2.0);
   // Material grain and exposed fissures break up the hot trail as the
   // fragment turns. Defocus averages this detail back into a soft light.
   vec2 materialUv=vec2(fract(vTrail*0.37+vSeed.y)*1.6-0.8,clamp(vPx.y/vCorePx,-1.0,1.0));
@@ -420,143 +433,102 @@ void main(){
   core*=mix(fuel,1.0,smoothstep(0.2,0.8,vBlur));
   // Decay to black before the ribbon boundary, including after the display
   // transfer lifts low intensities. An exponential tail exposes the quad.
-  float halo=exp(-1.5*d*d/(vHaloPx*vHaloPx))*mix(0.045,0.012,uLight)*(1.0-0.7*vBlur);
+  float halo=exp(-1.5*d*d/(vHaloPx*vHaloPx))*mix(0.025,0.008,uLight);
+
+  // A tiny white-hot leading point pulls a tapering orange line behind it.
+  // Cap distance extends that point past the first row without a hard seam.
+  vec2 headPx=vec2(vTrail*vCorePx+vPx.x,vPx.y);
+  float tip=exp(-dot(headPx,headPx)/(vCorePx*vCorePx*0.85));
+  float streak=pow(1.0-vAlong,1.5)*(1.0-smoothstep(0.3,0.65,vAlong));
+  float heat=max(max(vEmit.r,vEmit.g),vEmit.b);
+  vec3 tipEmit=mix(vEmit,heat*vec3(1.0,0.65,0.24),0.55)*tip*4.0;
 
   float fade=smoothstep(0.0,0.04,vT)*(1.0-smoothstep(0.8,1.0,vT));
-  vec3 emit=film(vEmit*(core+halo),mix(1.8,1.05,uLight))*fade;
+  vec3 emit=film(vEmit*(core+halo)*streak+tipEmit,mix(1.8,1.05,uLight))*fade;
   // Defocused glow needs darkness around it to read; on a light page a
   // blurred ember is just a tinted smudge, so let it fall away.
   emit*=1.0-smoothstep(0.25,0.9,vBlur)*0.8*uLight;
 
-  // A cooled ember is a speck of grey ash. On a dark page it vanishes; on a
-  // light page it is what you actually see once the glow has gone.
-  float speck=(1.0-smoothstep(0.55,1.25,dn))*smoothstep(0.35,0.95,vT)*(1.0-vBlur)*fade*vSpeck;
+  // Smoke expands, curls, and breaks up as it cools along the same wake.
+  float wisp=snoise(vec3(vAlong*5.5+vSeed.x*31.0,vPx.y/vSmokePx*0.7,uTime*0.35+vSeed.y*17.0));
+  float across=(vPx.y-wisp*vSmokePx*0.45)/vSmokePx;
+  float smoke=exp(-across*across*1.8)*smoothstep(0.04,0.22,vAlong)*(1.0-smoothstep(0.35,1.0,vAlong));
+  float smokeCov=smoke*(0.55+0.45*wisp)*fade*mix(0.34,0.13,uLight);
+  vec3 smokeColor=mix(vec3(0.34,0.31,0.28),vec3(0.3,0.28,0.26),uLight);
+
+  // The cooled fragment stays at the tip rather than darkening its wake.
+  float speck=tip*smoothstep(0.35,0.95,vT)*(1.0-vBlur)*fade*vSpeck;
   float speckCov=speck*0.4*uLight;
 
-  float alpha=clamp(max(max(emit.r,emit.g),emit.b)+speckCov,0.0,1.0);
+  float glowAlpha=clamp(max(max(emit.r,emit.g),emit.b)+speckCov,0.0,1.0);
+  float alpha=glowAlpha+smokeCov*(1.0-glowAlpha);
   if(alpha<0.002)discard;
   // Premultiplied over: alpha tracks emission, so the glow is valid on any
   // background, light or dark.
-  gl_FragColor=vec4(emit+vec3(0.16,0.14,0.13)*speckCov,alpha);
+  gl_FragColor=vec4(emit+vec3(0.16,0.14,0.13)*speckCov+smokeColor*smokeCov*(1.0-glowAlpha),alpha);
 }
 `;
 
 /* --------------------------------- Flakes --------------------------------- */
 
-const FLAKE_VERTEX = /* glsl */ `
-precision highp float;
-
-${PARTICLE_COMMON}
-
-varying vec2 vUv;
-varying float vT;
-varying float vBlur;
-varying float vEnergy;
-varying vec4 vSeed;
-varying float vFlip;
-varying float vHeight;
-varying float vSpin;
-
-void main(){
-  float life=aParams.y;
-  float radius=aParams.w;
-  vSeed=aSeed;
-
-  if(culled(aParams.x)){
-    gl_Position=vec4(2.0,2.0,2.0,1.0);
-    return;
-  }
-
-  float clock=uTime+aParams.z;
-  float cycle=floor(clock/life);
-  float age=clock-cycle*life;
-  vT=age/life;
-
-  vec3 c=viewAt(age,life,cycle,aParams.x);
-  float dist=-c.z;
-  vHeight=clamp(c.y/(uTanHalfFov*dist)*0.5+0.5,0.0,1.0);
-
-  float coc=min(uAperture*abs(dist-uFocus)*uFocus/dist,0.11);
-  float r=sqrt(radius*radius+coc*coc);
-  vEnergy=pow(radius/r,1.7);
-  vBlur=clamp(coc/r,0.0,1.0);
-
-  // Tumble: in-plane spin plus an out-of-plane flip read as a width squash.
-  // Curled ash never goes knife-thin edge-on, so the squash bottoms out.
-  float ang=aSeed.x*6.2831+age*(aSeed.y-0.5)*2.4;
-  vSpin=ang;
-  vec2 dir=vec2(cos(ang),sin(ang));
-  vec2 perp=vec2(-dir.y,dir.x);
-  float flip=cos(age*(0.9+aSeed.w*1.8)+aSeed.z*6.2831);
-  vFlip=flip;
-  float ext=1.25+vBlur*0.6;
-  vUv=position.xy*ext;
-
-  vec2 offset=dir*position.x*r*ext+perp*position.y*r*ext*mix(0.38,1.0,aSeed.y)*max(abs(flip),0.32);
-  gl_Position=projectionMatrix*vec4(c+vec3(offset,0.0),1.0);
+// These hooks retain Three.js's standard PBR lighting, tone mapping, and
+// color management while moving every folded fragment on the GPU.
+const FLAKE_TRANSFORM = /* glsl */ `
+mat3 tumble(float age){
+  vec3 a=aSeed.xyz*6.2831+age*vec3(0.7+aSeed.w,0.5+aSeed.y,aSeed.z-0.5);
+  vec3 c=cos(a),s=sin(a);
+  mat3 rx=mat3(1,0,0,0,c.x,s.x,0,-s.x,c.x);
+  mat3 ry=mat3(c.y,0,-s.y,0,1,0,s.y,0,c.y);
+  mat3 rz=mat3(c.z,s.z,0,-s.z,c.z,0,0,0,1);
+  return rz*ry*rx;
 }
 `;
 
-const FLAKE_FRAGMENT = /* glsl */ `
-precision highp float;
-uniform float uLight;
-uniform sampler2D uSurface;
-varying vec2 vUv;
-varying float vT;
-varying float vBlur;
-varying float vEnergy;
-varying vec4 vSeed;
-varying float vFlip;
-varying float vHeight;
-varying float vSpin;
-${BLACKBODY}
-${FILM}
-${SURFACE}
+const FLAKE_NORMAL = /* glsl */ `
+float clock=uTime+aParams.z;
+float cycle=floor(clock/aParams.y);
+float age=clock-cycle*aParams.y;
+mat3 rotation=tumble(age);
+vec2 foldPhase=position.xy*vec2(3.0,4.0)+aSeed.xy*6.2831;
+vec2 slope=cos(foldPhase)*vec2(0.54,0.52);
+slope.y/=mix(0.4,1.0,aSeed.y);
+vec3 objectNormal=rotation*normalize(vec3(-slope,1.0));
+`;
 
-void main(){
-  float fade=smoothstep(0.0,0.045,vT)*(1.0-smoothstep(0.74,1.0,vT));
-  vec3 rgb;
-  float alpha;
-  vec2 p=vUv;
-  vec4 tex=surface(p);
-  float mask=silhouette(p,tex,vBlur*0.35);
-  if(mask<0.002)discard;
+const FLAKE_POSITION = /* glsl */ `
+vSeed=aSeed;
+vUv=position.xy;
+vT=age/aParams.y;
+vType=aParams.x;
+float r=aParams.w;
+// Burning grains remain small enough to anchor the narrow streaks.
+if(vType<1.5)r=min(r,0.013);
+vec3 folded=vec3(position.x,position.y*mix(0.4,1.0,aSeed.y),dot(sin(foldPhase),vec2(0.18,0.13)));
+vec3 transformed=rotation*folded*r+simulate(age,vT,cycle,vType);
+if(culled(vType))transformed=vec3(10000.0);
+`;
 
-  // Height-derived normals retain folds and ridges as the flake tumbles.
-  float hx=surface(p+vec2(0.022,0.0)).b;
-  float hy=surface(p+vec2(0.0,0.022)).b;
-  vec3 normal=normalize(vec3((tex.b-hx)*8.0,(tex.b-hy)*8.0,0.32));
-  vec2 lightXY=rotate(vec2(-0.2,-0.85),vSpin);
-  vec3 fireDirection=normalize(vec3(lightXY,0.35+0.35*abs(vFlip)));
-  float diffuse=max(dot(normal,fireDirection),0.0);
-  float face=0.3+0.7*abs(vFlip);
-  float fireFall=pow(1.0-vHeight,1.5);
+const FLAKE_COLOR = /* glsl */ `
+vec4 ashTex=surface(vUv);
+float mask=silhouette(vUv,ashTex,0.0);
+float fade=smoothstep(0.0,0.045,vT)*(1.0-smoothstep(0.75,1.0,vT));
+float mineral=smoothstep(0.2,0.8,ashTex.r);
+float whiteness=vType<1.5?smoothstep(0.4,1.0,vT)*0.5:mix(0.15,0.9,pow(vSeed.x,0.65));
+vec3 carbon=vec3(0.025,0.02,0.016);
+vec3 ash=vec3(0.48,0.46,0.42);
+diffuseColor.rgb*=mix(carbon,ash,whiteness*mineral)*(1.0-ashTex.g*0.6);
+diffuseColor.a*=mask*fade*mix(0.85,0.55,uLight);
+`;
 
-  float mineral=smoothstep(0.2,0.8,tex.r);
-  float whiteness=mix(0.15,0.9,pow(vSeed.x,0.65));
-  vec3 carbon=vec3(0.028,0.023,0.02);
-  vec3 ash=vec3(0.52,0.50,0.46);
-  vec3 albedo=mix(carbon,ash,whiteness*mineral);
-  albedo*=1.0-tex.g*0.55;
-  vec3 ambient=mix(vec3(0.27,0.31,0.37),vec3(0.8,0.84,0.9),uLight);
-  vec3 fire=vec3(1.0,0.29,0.065)*(0.15+fireFall*1.6)*diffuse*face;
-  vec3 lit=pow(albedo*(ambient+fire),vec3(1.0/2.2));
-
-  // A few flakes still smolder along broken edges and within cracks. There
-  // is no continuous neon outline around the entire silhouette.
-  float sd=(0.5-tex.a)*2.0;
-  float edgeBand=exp(-abs(sd+0.035)*26.0);
-  float hotPatch=smoothstep(0.42,0.75,tex.r)*tex.g;
-  float heat=(1.0-smoothstep(0.12,0.65,vT))*step(0.62,vSeed.z);
-  vec3 rim=blackbody(1250.0+hotPatch*400.0)*heat*(hotPatch*0.8+edgeBand*hotPatch*2.4)*vEnergy;
-  vec3 emit=film(rim,1.2)*mask;
-
-  float cov=mask*fade*mix(0.82,0.55,uLight)*mix(1.0,0.35,vBlur);
-  rgb=(lit+emit)*cov;
-  alpha=cov;
-  if(alpha<0.003)discard;
-  gl_FragColor=vec4(min(rgb,vec3(alpha)),alpha);
-}
+const FLAKE_EMISSION = /* glsl */ `
+float hotPatch=smoothstep(0.35,0.7,ashTex.r)*ashTex.g;
+float sd=(0.5-ashTex.a)*2.0;
+float edge=exp(-abs(sd+0.035)*26.0)*hotPatch;
+float burning=vType<1.5?1.0:step(0.6,vSeed.z);
+float heat=(1.0-smoothstep(0.1,0.75,vT))*burning;
+float flicker=0.75+0.25*sin(uTime*(9.0+vSeed.w*11.0)+vSeed.x*19.0);
+float kelvin=mix(750.0,vType<1.5?2200.0:1700.0,heat)*flicker;
+totalEmissiveRadiance=blackbody(kelvin)*pow(heat,1.4)*(hotPatch*1.5+edge*3.0);
 `;
 
 /* --------------------------------- Smoke ---------------------------------- */
@@ -574,48 +546,79 @@ precision highp float;
 
 uniform float uTime;
 uniform float uAspect;
+uniform float uTanHalfFov;
+uniform float uCameraZ;
 uniform float uSmoke;
 uniform float uGlow;
 uniform float uFlicker;
 uniform float uLight;
+uniform vec3 uFirePosition[2];
+uniform vec3 uFireColor[2];
+uniform vec2 uFirePower;
+uniform highp sampler3D uVolume;
 varying vec2 vUv;
 
-${SIMPLEX}
+${BLACKBODY}
+${FILM}
 
-float fbm(vec3 p){
-  float s=0.0;
-  float a=0.5;
-  for(int i=0;i<4;i++){
-    s+=a*snoise(p);
-    p=p*2.02+vec3(5.1,1.3,7.7);
-    a*=0.5;
-  }
-  return s;
+float volumeNoise(vec3 p){
+  // Smooth interpolation within each voxel, with trilinear hardware filtering.
+  vec3 cell=p*64.0-0.5;
+  vec3 f=fract(cell);
+  vec3 uv=(floor(cell)+f*f*(3.0-2.0*f)+0.5)/64.0;
+  return texture(uVolume,uv).r;
+}
+
+float smokeDensity(vec3 p){
+  vec3 q=p*vec3(0.016,0.012,0.016)-vec3(0.0,uTime*0.005,0.0);
+  float curl=volumeNoise(q*0.45+vec3(0.0,0.0,uTime*0.001))-0.5;
+  q.xz+=vec2(curl,sin(q.y*64.0+curl))*0.022;
+  float n=volumeNoise(q)*0.75+volumeNoise(q*2.08+0.27)*0.25;
+  return smoothstep(0.38,0.78,n);
 }
 
 void main(){
-  vec2 p=vec2((vUv.x-0.5)*uAspect,vUv.y);
-  float t=uTime;
+  vec2 screen=(vUv*2.0-1.0)*vec2(uAspect,1.0)*uTanHalfFov;
+  vec3 ray=normalize(vec3(screen,-1.0));
+  // Integrate through the same world-space depth occupied by the fragments.
+  // Static stratification removes slice bands without temporal grain.
+  float jitter=fract(sin(dot(gl_FragCoord.xy,vec2(12.9898,78.233)))*43758.5453);
+  vec3 scattered=vec3(0.0);
+  float transmittance=1.0;
+  float stepLength=0.5625/(-ray.z);
+  float heightFall=pow(1.0-vUv.y,1.7);
+  for(int stepIndex=0;stepIndex<16;stepIndex++){
+    float depth=7.0+(float(stepIndex)+jitter*0.3)*0.5625;
+    vec3 p=vec3(screen*depth,uCameraZ-depth);
+    float density=smokeDensity(p)*mix(0.18,1.0,heightFall);
+    float alpha=1.0-exp(-density*uSmoke*stepLength*0.5);
+    vec3 irradiance=mix(vec3(0.09,0.115,0.16),vec3(0.32),uLight);
+    for(int lightIndex=0;lightIndex<2;lightIndex++){
+      vec3 toLight=uFirePosition[lightIndex]-p;
+      float distance2=dot(toLight,toLight);
+      float cosine=dot(normalize(toLight),ray);
+      float phase=0.9375/pow(1.0625-0.5*cosine,1.5);
+      float attenuation=uFirePower[lightIndex]/max(distance2,1.0);
+      float absorption=exp(-density*sqrt(distance2)*0.16);
+      irradiance+=uFireColor[lightIndex]*attenuation*phase*absorption*0.22;
+    }
+    scattered+=transmittance*alpha*irradiance;
+    transmittance*=1.0-alpha;
+  }
+  float opacity=1.0-transmittance;
+  vec3 smokeColor=film(scattered/max(opacity,0.001),0.65)*opacity;
 
-  // Domain warp gives the curling, folding structure of real smoke; the
-  // second layer rises faster than the warp field, so wisps shear and stretch.
-  vec3 q=vec3(p*1.3-vec2(0.0,t*0.05),t*0.035);
-  vec2 warp=vec2(fbm(q),fbm(q+vec3(4.2,1.7,3.1)));
-  float n=fbm(vec3(p*2.2+warp*0.95-vec2(0.0,t*0.1),t*0.05));
-
-  float heat=pow(1.0-vUv.y,2.2);
-  float density=smoothstep(0.05,0.8,n*0.5+0.45+0.25*heat-0.25);
-  density*=mix(1.0,0.3,vUv.y);
-
-  // Lit from below by the fire, fading to cool grey as it climbs.
-  vec3 col=mix(vec3(0.3,0.28,0.27),vec3(1.0,0.5,0.2),heat*0.85*uFlicker);
-  col=mix(col,vec3(0.56,0.54,0.53),uLight*0.6);
-  float a=density*uSmoke;
-
-  float x=vUv.x*2.0-1.0;
-  float glow=pow(1.0-vUv.y,3.2)*(1.0-0.35*x*x)*uGlow*uFlicker;
-
-  gl_FragColor=vec4(col*a+vec3(1.0,0.36,0.08)*glow,clamp(a+glow*0.9,0.0,1.0));
+  // Low tongues of fire illuminate the foot of the plume, below the copy.
+  vec2 fireUv=vec2(vUv.x*uAspect*0.11,vUv.y*0.2-uTime*0.013);
+  float warp=volumeNoise(vec3(fireUv*0.4,uTime*0.001))*2.0-1.0;
+  float flameNoise=volumeNoise(vec3(fireUv+vec2(warp*0.012,0.0),uTime*0.002))*2.0-1.0;
+  float base=1.0-smoothstep(0.0,0.18+warp*0.045,vUv.y);
+  float flame=pow(base,2.0)*smoothstep(0.1,0.7,flameNoise*0.5+0.4)*uGlow;
+  vec3 fire=film(blackbody(1700.0+base*650.0)*flame*2.0,1.0)*0.32;
+  float glow=pow(1.0-vUv.y,3.2)*uGlow*uFlicker*0.42;
+  vec3 color=smokeColor+fire+vec3(1.0,0.32,0.06)*glow;
+  float alpha=max(opacity,max(max(color.r,color.g),color.b));
+  gl_FragColor=vec4(color,clamp(alpha,0.0,1.0));
 }
 `;
 
@@ -730,16 +733,15 @@ function createTrailGeometry(instances: Instance[]) {
   return geometry;
 }
 
-function createQuadGeometry(instances: Instance[]) {
+function createFragmentGeometry(instances: Instance[]) {
+  // A folded 4 × 4 surface, with real depth and normals on both faces.
+  const plane = new PlaneGeometry(2, 2, 4, 4);
   const geometry = new InstancedBufferGeometry();
-  geometry.setAttribute(
-    "position",
-    new BufferAttribute(
-      new Float32Array([-1, -1, 0, 1, -1, 0, 1, 1, 0, -1, 1, 0]),
-      3
-    )
-  );
-  geometry.setIndex([0, 1, 2, 0, 2, 3]);
+  geometry.setAttribute("position", plane.getAttribute("position").clone());
+  geometry.setAttribute("normal", plane.getAttribute("normal").clone());
+  geometry.setAttribute("uv", plane.getAttribute("uv").clone());
+  geometry.setIndex(plane.getIndex()!.clone());
+  plane.dispose();
   setInstanceAttributes(geometry, instances);
   return geometry;
 }
@@ -755,8 +757,8 @@ const premultipliedOver = {
   premultipliedAlpha: true,
 } as const;
 
-const SMOKE_STRENGTH = { dark: 0.4, light: 0.09 };
-const GLOW_STRENGTH = { dark: 0.3, light: 0 };
+const SMOKE_STRENGTH = { dark: 0.24, light: 0.09 };
+const GLOW_STRENGTH = { dark: 0.22, light: 0 };
 
 export function createAshScene(
   canvas: HTMLCanvasElement,
@@ -775,11 +777,19 @@ export function createAshScene(
     return null; // No WebGL: the hero still has its CSS glow.
   }
   renderer.setClearColor(0x000000, 0);
+  renderer.toneMapping = ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 0.9;
 
   const camera = new PerspectiveCamera(FOV, 1, 0.1, 100);
   camera.position.set(0, 0, CAMERA_Z);
   const screenCamera = new OrthographicCamera(-1, 1, 1, -1, 0, 1);
   const quad = new PlaneGeometry(2, 2);
+  const noiseVolume = createAshNoiseVolume();
+  const fireLights = [
+    new PointLight(0xff782d, 95, 0, 2),
+    new PointLight(0xffb65c, 65, 0, 2),
+  ];
+  const skyLight = new HemisphereLight(0x8799b8, 0x24130d, light ? 1.2 : 0.5);
 
   // --- Smoke, at quarter resolution ---------------------------------------
   const smokeTarget = new WebGLRenderTarget(1, 1, {
@@ -788,12 +798,18 @@ export function createAshScene(
     depthBuffer: false,
   });
   const smokeUniforms = {
+    uVolume: { value: noiseVolume },
     uTime: { value: 0 },
     uAspect: { value: 1 },
+    uTanHalfFov: { value: Math.tan(((FOV / 2) * Math.PI) / 180) },
+    uCameraZ: { value: CAMERA_Z },
     uSmoke: { value: light ? SMOKE_STRENGTH.light : SMOKE_STRENGTH.dark },
     uGlow: { value: light ? GLOW_STRENGTH.light : GLOW_STRENGTH.dark },
     uFlicker: { value: 1 },
     uLight: { value: light ? 1 : 0 },
+    uFirePosition: { value: fireLights.map((source) => source.position) },
+    uFireColor: { value: fireLights.map((source) => source.color) },
+    uFirePower: { value: [95, 65] },
   };
   const smokeMaterial = new ShaderMaterial({
     vertexShader: FULLSCREEN_VERTEX,
@@ -810,6 +826,7 @@ export function createAshScene(
 
   // --- Main scene: smoke backdrop, flakes, then embers --------------------
   const scene = new Scene();
+  scene.add(...fireLights, skyLight);
 
   const compositeMaterial = new ShaderMaterial({
     vertexShader: FULLSCREEN_VERTEX,
@@ -838,24 +855,45 @@ export function createAshScene(
   };
 
   const rand = mulberry32(0xf3e1);
-  const flakeGeometry = createQuadGeometry(
-    buildInstances(rand, TYPE_FLAKE, 180)
-  );
-  const flakeMaterial = new ShaderMaterial({
-    vertexShader: FLAKE_VERTEX,
-    fragmentShader: FLAKE_FRAGMENT,
-    uniforms,
+  const flakeInstances = buildInstances(rand, TYPE_FLAKE, 180);
+  const emberInstances = [
+    ...buildInstances(rand, TYPE_EMBER, 340),
+    ...buildInstances(rand, TYPE_SPARK, 60),
+  ];
+  const flakeGeometry = createFragmentGeometry([...flakeInstances, ...emberInstances]);
+  const flakeMaterial = new MeshStandardMaterial({
+    color: 0xffffff,
+    roughness: 0.96,
+    metalness: 0,
+    side: DoubleSide,
+    forceSinglePass: true,
+    alphaTest: 0.01,
     ...premultipliedOver,
   });
+  flakeMaterial.onBeforeCompile = (shader) => {
+    Object.assign(shader.uniforms, uniforms);
+    const varyings = /* glsl */ `
+      varying vec2 vUv;
+      varying vec4 vSeed;
+      varying float vT;
+      varying float vType;
+    `;
+    shader.vertexShader = shader.vertexShader
+      .replace("#include <common>", `#include <common>\n${PARTICLE_COMMON}\n${varyings}\n${FLAKE_TRANSFORM}`)
+      .replace("#include <beginnormal_vertex>", FLAKE_NORMAL)
+      .replace("#include <begin_vertex>", FLAKE_POSITION);
+    shader.fragmentShader = shader.fragmentShader
+      .replace("#include <common>", `#include <common>\nuniform sampler2D uSurface;\nuniform float uTime;\nuniform float uLight;\n${varyings}\n${SURFACE}\n${BLACKBODY}`)
+      .replace("#include <map_fragment>", FLAKE_COLOR)
+      .replace("#include <emissivemap_fragment>", FLAKE_EMISSION);
+  };
+  flakeMaterial.customProgramCacheKey = () => "folded-charcoal-pbr-v1";
   const flakes = new Mesh(flakeGeometry, flakeMaterial);
   flakes.frustumCulled = false; // positions are computed on the GPU
   flakes.renderOrder = 1;
   scene.add(flakes);
 
-  const emberGeometry = createTrailGeometry([
-    ...buildInstances(rand, TYPE_EMBER, 340),
-    ...buildInstances(rand, TYPE_SPARK, 60),
-  ]);
+  const emberGeometry = createTrailGeometry(emberInstances);
   const emberMaterial = new ShaderMaterial({
     vertexShader: EMBER_VERTEX,
     fragmentShader: EMBER_FRAGMENT,
@@ -875,6 +913,11 @@ export function createAshScene(
       0.08 * Math.sin(time * 7.3) +
       0.05 * Math.sin(time * 13.1 + 1.3) +
       0.04 * Math.sin(time * 2.1);
+    const themeStrength = uniforms.uLight.value ? 0.35 : 1;
+    fireLights[0].intensity = 95 * smokeUniforms.uFlicker.value * themeStrength;
+    fireLights[1].intensity = 65 * (0.87 + 0.13 * Math.sin(time * 9.7 + 2)) * themeStrength;
+    smokeUniforms.uFirePower.value[0] = fireLights[0].intensity;
+    smokeUniforms.uFirePower.value[1] = fireLights[1].intensity;
   };
   setTime(24);
 
@@ -893,6 +936,9 @@ export function createAshScene(
     );
     uniforms.uAspect.value = camera.aspect;
     smokeUniforms.uAspect.value = camera.aspect;
+    const halfHeight = uniforms.uTanHalfFov.value * CAMERA_Z;
+    fireLights[0].position.set(-halfHeight * camera.aspect * 0.45, -halfHeight * 1.05, 1);
+    fireLights[1].position.set(halfHeight * camera.aspect * 0.5, -halfHeight * 1.12, -1);
     uniforms.uViewportH.value = height * pixelRatio;
     uniforms.uPixelRatio.value = pixelRatio;
     uniforms.uDensity.value = Math.min(
@@ -902,7 +948,9 @@ export function createAshScene(
   };
 
   let firstFrameSent = false;
+  let contextLost = false;
   const render = () => {
+    if (contextLost) return;
     renderer.setRenderTarget(smokeTarget);
     renderer.render(smokeScene, screenCamera);
     renderer.setRenderTarget(null);
@@ -914,6 +962,7 @@ export function createAshScene(
   };
 
   let running = false;
+  let wantsToRun = false;
   let frame = 0;
   let last = 0;
 
@@ -934,12 +983,39 @@ export function createAshScene(
     render();
   };
 
+  const resources = [
+    surfaceAtlas,
+    noiseVolume,
+    quad,
+    flakeGeometry,
+    emberGeometry,
+    flakeMaterial,
+    emberMaterial,
+    smokeMaterial,
+    compositeMaterial,
+    smokeTarget,
+  ];
   const onContextLost = (event: Event) => {
     event.preventDefault();
+    contextLost = true;
     cancelAnimationFrame(frame);
     running = false;
+    // Drop handles and disposal listeners belonging to the old GL context.
+    // The CPU geometry and texture data remain available for re-upload.
+    for (const resource of resources) resource.dispose();
+  };
+  const onContextRestored = () => {
+    contextLost = false;
+    resize();
+    render();
+    if (wantsToRun && !still) {
+      running = true;
+      last = performance.now();
+      frame = requestAnimationFrame(tick);
+    }
   };
   canvas.addEventListener("webglcontextlost", onContextLost);
+  canvas.addEventListener("webglcontextrestored", onContextRestored);
 
   render();
 
@@ -951,10 +1027,13 @@ export function createAshScene(
         ? SMOKE_STRENGTH.light
         : SMOKE_STRENGTH.dark;
       smokeUniforms.uGlow.value = next ? GLOW_STRENGTH.light : GLOW_STRENGTH.dark;
+      skyLight.intensity = next ? 1.2 : 0.5;
+      setTime(uniforms.uTime.value);
       if (still || !running) render();
     },
     setRunning(next) {
-      if (still || next === running) return;
+      wantsToRun = next;
+      if (still || contextLost || next === running) return;
       running = next;
       if (running) {
         last = performance.now();
@@ -968,20 +1047,9 @@ export function createAshScene(
       running = false;
       resizeObserver.disconnect();
       canvas.removeEventListener("webglcontextlost", onContextLost);
-      for (const disposable of [
-        surfaceAtlas,
-        quad,
-        flakeGeometry,
-        emberGeometry,
-        flakeMaterial,
-        emberMaterial,
-        smokeMaterial,
-        compositeMaterial,
-        smokeTarget,
-        renderer,
-      ]) {
-        disposable.dispose();
-      }
+      canvas.removeEventListener("webglcontextrestored", onContextRestored);
+      for (const resource of resources) resource.dispose();
+      renderer.dispose();
     },
   };
 }
