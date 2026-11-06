@@ -55,6 +55,9 @@ jobs:
           # Without this, writes broadcast unprotected over the public RPCs.
           NEXT_PUBLIC_BLINK_API_KEY: ${{ secrets.NEXT_PUBLIC_BLINK_API_KEY }}
 
+      - name: Check landing page performance budget
+        run: bun run verify:performance
+
       # Jekyll would strip the _next/ directory. public/.nojekyll covers this
       # too; this is belt-and-braces in case the file is ever dropped.
       - name: Disable Jekyll processing

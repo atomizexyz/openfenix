@@ -2,7 +2,8 @@
 
 import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/routing";
-import { useAppKit } from "@reown/appkit/react";
+import dynamic from "next/dynamic";
+import { loadWallet, prepareWallet } from "@/lib/wallet";
 import { useConnection, useDisconnect, useEnsName } from "wagmi";
 import { mainnet } from "wagmi/chains";
 import { useTheme } from "next-themes";
@@ -21,7 +22,15 @@ import {
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { ChainSelector } from "@/components/wallet/chain-selector";
-import { WalletQR } from "@/components/wallet/wallet-qr";
+
+const WalletQR = dynamic(() =>
+  import("@/components/wallet/wallet-qr").then((module) => module.WalletQR)
+);
+
+function ConnectedWalletQR() {
+  const { isConnected } = useConnection();
+  return isConnected ? <WalletQR /> : null;
+}
 
 /**
  * The header wallet control. Deliberately NOT the `default` (brand gradient)
@@ -39,7 +48,9 @@ import { WalletQR } from "@/components/wallet/wallet-qr";
  */
 function WalletButton() {
   const t = useTranslations("nav");
-  const { open } = useAppKit();
+  const common = useTranslations("common");
+  const [opening, setOpening] = useState(false);
+  const [failed, setFailed] = useState(false);
   const { address, isConnected } = useConnection();
   // ENS lives on mainnet whatever chain the wallet is on.
   const { data: ensName } = useEnsName({ address, chainId: mainnet.id });
@@ -50,46 +61,78 @@ function WalletButton() {
     disconnect();
   }, [disconnect]);
 
+  async function open(view: "Connect" | "Account") {
+    setOpening(true);
+    setFailed(false);
+    try {
+      const wallet = await loadWallet();
+      await wallet.open({ view });
+    } catch {
+      setFailed(true);
+    } finally {
+      setOpening(false);
+    }
+  }
+
+  const error = failed && (
+    <span role="alert" className="absolute end-0 top-full mt-2 w-48 rounded-lg border border-border bg-card p-3 text-sm text-foreground">
+      {common("error")}. {common("retry")}.
+    </span>
+  );
+
   if (!isConnected || !address) {
     return (
-      <Button variant="brand" onClick={() => open({ view: "Connect" })}>
-        {t("connect")}
-      </Button>
+      <div className="relative">
+        <Button
+          variant="brand"
+          loading={opening}
+          aria-busy={opening}
+          onPointerEnter={prepareWallet}
+          onFocus={prepareWallet}
+          onClick={() => void open("Connect")}
+        >
+          {t("connect")}
+        </Button>
+        {error}
+      </div>
     );
   }
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="outline">{ensName || shortenAddress(address)}</Button>
-      </DropdownMenuTrigger>
+    <div className="relative">
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="outline" loading={opening}>{ensName || shortenAddress(address)}</Button>
+        </DropdownMenuTrigger>
 
-      <DropdownMenuContent align="end" className="w-52">
-        <DropdownMenuItem onClick={() => copy(address)}>
-          {copied ? (
-            <Check className="h-4 w-4 text-emerald-500" />
-          ) : (
-            <Copy className="h-4 w-4" />
-          )}
-          {copied ? t("copied") : t("copy_address")}
-        </DropdownMenuItem>
+        <DropdownMenuContent align="end" className="w-52">
+          <DropdownMenuItem onClick={() => copy(address)}>
+            {copied ? (
+              <Check className="h-4 w-4 text-emerald-500" />
+            ) : (
+              <Copy className="h-4 w-4" />
+            )}
+            {copied ? t("copied") : t("copy_address")}
+          </DropdownMenuItem>
 
-        <DropdownMenuItem onClick={() => open({ view: "Account" })}>
-          <ExternalLink className="h-4 w-4" />
-          {t("wallet_details")}
-        </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => void open("Account")}>
+            <ExternalLink className="h-4 w-4" />
+            {t("wallet_details")}
+          </DropdownMenuItem>
 
-        <DropdownMenuSeparator />
+          <DropdownMenuSeparator />
 
-        <DropdownMenuItem
-          onClick={handleDisconnect}
-          className="text-red-600 focus:bg-red-50 focus:text-red-600 dark:text-red-400 dark:focus:bg-red-950/30 dark:focus:text-red-400"
-        >
-          <LogOut className="h-4 w-4 text-red-600 dark:text-red-400" />
-          {t("disconnect")}
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+          <DropdownMenuItem
+            onClick={handleDisconnect}
+            className="text-red-600 focus:bg-red-50 focus:text-red-600 dark:text-red-400 dark:focus:bg-red-950/30 dark:focus:text-red-400"
+          >
+            <LogOut className="h-4 w-4 text-red-600 dark:text-red-400" />
+            {t("disconnect")}
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+      {error}
+    </div>
   );
 }
 
@@ -136,7 +179,7 @@ export function Header() {
         {/* Right side controls */}
         <div className="flex items-center gap-2">
           <ChainSelector />
-          <WalletQR />
+          <ConnectedWalletQR />
           <button
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
             className="rounded-lg p-2 text-foreground-secondary transition-colors hover:bg-accent"

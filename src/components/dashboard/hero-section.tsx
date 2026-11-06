@@ -1,17 +1,10 @@
-"use client";
-
-import { useMemo } from "react";
 import { useTranslations } from "next-intl";
-import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
-import NumberFlow from "@number-flow/react";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
+import { FlushCountdownDisplay } from "./flush-countdown";
 import { FenixLogo } from "@/components/icons";
 import { RisingAsh } from "@/components/effects/rising-ash";
-import { useCooldownUnlockTs } from "@/hooks/use-fenix-contract";
-import { useCountdown } from "@/hooks/use-countdown";
-import { mainnet } from "wagmi/chains";
 
 // Warm ambient light behind the ash. Pure CSS keyframes on transform, so the
 // drift runs on the compositor; the radial gradient is already soft, so no
@@ -46,68 +39,6 @@ function FloatingOrbs() {
   );
 }
 
-function FlushCountdownDisplay() {
-  const t = useTranslations("hero");
-  const { data: cooldownUnlockTs } = useCooldownUnlockTs(mainnet.id);
-
-  const target = useMemo(() => {
-    if (!cooldownUnlockTs) return 0;
-    return Number(cooldownUnlockTs);
-  }, [cooldownUnlockTs]);
-
-  const { days, hours, minutes, seconds, ready } = useCountdown(target);
-
-  if (!target) return null;
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: 0.5 }}
-      className="mt-8 inline-flex items-center gap-3 rounded-2xl border border-border/60 bg-card/60 px-5 py-3 backdrop-blur-md"
-    >
-      <span className="text-sm font-medium text-muted-foreground">
-        {t("next_flush")}
-      </span>
-      {ready ? (
-        <span className="text-sm font-bold text-success-foreground">
-          {t("flush_ready")}
-        </span>
-      ) : (
-        <span className="flex items-center gap-1 font-mono text-sm font-bold text-foreground">
-          {days > 0 && (
-            <>
-              <NumberFlow
-                value={days}
-                transformTiming={{ duration: 400, easing: "ease-out" }}
-              />
-              <span className="text-muted-foreground font-normal">d</span>
-            </>
-          )}
-          <NumberFlow
-            value={hours}
-            format={{ minimumIntegerDigits: days > 0 ? 2 : 1 }}
-            transformTiming={{ duration: 400, easing: "ease-out" }}
-          />
-          <span className="text-muted-foreground font-normal">h</span>
-          <NumberFlow
-            value={minutes}
-            format={{ minimumIntegerDigits: 2 }}
-            transformTiming={{ duration: 400, easing: "ease-out" }}
-          />
-          <span className="text-muted-foreground font-normal">m</span>
-          <NumberFlow
-            value={seconds}
-            format={{ minimumIntegerDigits: 2 }}
-            transformTiming={{ duration: 400, easing: "ease-out" }}
-          />
-          <span className="text-muted-foreground font-normal">s</span>
-        </span>
-      )}
-    </motion.div>
-  );
-}
-
 export function HeroSection() {
   const t = useTranslations("hero");
 
@@ -130,50 +61,34 @@ export function HeroSection() {
       {/* Content */}
       <div className="relative z-10 mx-auto max-w-4xl text-center">
         {/* Icon */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.5 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
-          className="mb-8 flex justify-center"
-        >
+        <div className="mb-8 flex justify-center">
           <div className="relative">
             <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-fenix-500 to-ember-500 shadow-lg shadow-fenix-500/30 sm:h-20 sm:w-20">
               <FenixLogo className="h-10 w-10 sm:h-12 sm:w-12 [&_path]:fill-white" />
             </div>
             {/* Glow ring */}
-            <motion.div
-              className="absolute -inset-2 rounded-2xl bg-gradient-to-br from-fenix-500/20 to-ember-500/20 blur-lg"
-              animate={{ opacity: [0.5, 1, 0.5] }}
-              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+            <div
+              className="hero-glow absolute -inset-2 rounded-2xl bg-gradient-to-br from-fenix-500/20 to-ember-500/20 blur-lg"
             />
           </div>
-        </motion.div>
+        </div>
 
         {/* Title */}
-        <motion.h1
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
+        <h1
           className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl"
         >
           <span className="gradient-text">{t("title")}</span>
-        </motion.h1>
+        </h1>
 
         {/* Subtitle */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.4, ease: "easeOut" }}
+        <p
           className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-foreground-secondary sm:text-xl"
         >
           {t("subtitle")}
-        </motion.p>
+        </p>
 
         {/* CTA Buttons */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.6, ease: "easeOut" }}
+        <div
           className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row"
         >
           <Button asChild size="lg" className="min-w-[180px]">
@@ -184,21 +99,20 @@ export function HeroSection() {
           </Button>
 
           <Button asChild variant="outline" size="lg" className="min-w-[180px]">
-            <Link href="#features">
+            <a href="#features">
               {t("cta_learn")}
               <ArrowRight className="h-4 w-4" />
-            </Link>
+            </a>
           </Button>
-        </motion.div>
+        </div>
 
         {/* Flush Countdown */}
-        <FlushCountdownDisplay />
+        <div className="mt-8 flex h-14 items-center justify-center">
+          <FlushCountdownDisplay />
+        </div>
 
         {/* Decorative bottom gradient line */}
-        <motion.div
-          initial={{ scaleX: 0 }}
-          animate={{ scaleX: 1 }}
-          transition={{ duration: 1.2, delay: 0.8, ease: "easeOut" }}
+        <div
           className="mx-auto mt-16 h-px w-full max-w-md bg-gradient-to-r from-transparent via-fenix-500/50 to-transparent"
         />
       </div>

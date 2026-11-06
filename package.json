@@ -15,6 +15,7 @@
     "bench:rpcs": "bun run scripts/benchmark-rpcs.ts",
     "bench:rpcs:summary": "bun run scripts/summarize-rpc-benchmarks.ts",
     "verify:reads": "bun run scripts/verify-reads.ts",
+    "verify:performance": "bun run scripts/check-page-weight.ts",
     "gen:llms": "bun run scripts/generate-llms-txt.ts",
     "gen:og": "bun run scripts/generate-og-image.ts"
   },

@@ -1,8 +1,5 @@
-"use client";
-
 import { useTranslations } from "next-intl";
 import { Flame, TrendingUp, Shield, Infinity } from "lucide-react";
-import { motion } from "framer-motion";
 
 const features = [
   { icon: Flame, key: "burn" as const, gradient: "from-fenix-500 to-ember-500" },
@@ -15,15 +12,11 @@ export function FeaturesSection() {
   const t = useTranslations("features");
 
   return (
-    <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <section id="features" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        {features.map((feature, i) => (
-          <motion.div
+        {features.map((feature) => (
+          <div
             key={feature.key}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.1, duration: 0.5 }}
-            viewport={{ once: true }}
             className="glow-card group p-6"
           >
             <div
@@ -37,7 +30,7 @@ export function FeaturesSection() {
             <p className="text-sm leading-relaxed text-muted-foreground">
               {t(`${feature.key}_desc`)}
             </p>
-          </motion.div>
+          </div>
         ))}
       </div>
     </section>

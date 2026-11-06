@@ -2,7 +2,7 @@ import { setRequestLocale } from "next-intl/server";
 import { HeroSection } from "@/components/dashboard/hero-section";
 import { ChainTable } from "@/components/dashboard/chain-table";
 import { LiquidityPairsSection } from "@/components/dashboard/liquidity-pairs";
-import { ChainSupplyGrid } from "@/components/charts/equity-pool-chart";
+import { LazySupplyGrid } from "@/components/charts/lazy-supply-grid";
 import { FeaturesSection } from "@/components/dashboard/features-section";
 import type { Metadata } from "next";
 import { buildPageMetadata } from "@/lib/metadata";
@@ -30,7 +30,7 @@ export default async function HomePage({
       <div className="mx-auto max-w-7xl space-y-16 px-4 sm:px-6 lg:px-8">
         <ChainTable />
         <LiquidityPairsSection />
-        <ChainSupplyGrid />
+        <LazySupplyGrid />
       </div>
       <FeaturesSection />
     </div>

@@ -258,8 +258,18 @@ body {
   }
 }
 
+@keyframes hero-glow-pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+.hero-glow {
+  animation: hero-glow-pulse 3s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .hero-orb {
+  .hero-orb,
+  .hero-glow {
     animation: none;
   }
 }

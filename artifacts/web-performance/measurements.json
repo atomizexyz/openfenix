@@ -1,0 +1,84 @@
+{
+  "date": "2026-11-05",
+  "baselineCommit": "f104987b09564c33981ced1bdfa39eabcbf7a387",
+  "integrationBase": "724eac5",
+  "method": {
+    "browser": "Chrome 156.0.8078.80",
+    "tool": "chrome-devtools-mcp performance_start_trace",
+    "viewport": "390x844, DPR 3, mobile/touch",
+    "network": "Fast 4G",
+    "cpuSlowdown": 4,
+    "cache": "bypassed for every trace",
+    "localServers": "Python http.server, no transfer compression, same machine, separate ports for before/after",
+    "route": "/en/",
+    "runCount": 3,
+    "note": "Local comparisons exclude CDN latency and use uncompressed transfer. Gzip byte totals use Bun gzipSync separately per initial script."
+  },
+  "before": {
+    "weight": {
+      "scripts": 33,
+      "rawBytes": 3147413,
+      "gzipBytes": 938344,
+      "fontPreloads": 5
+    },
+    "runs": [
+      {
+        "lcpMs": 5755,
+        "cls": 0.03
+      },
+      {
+        "lcpMs": 5749,
+        "cls": 0.03
+      },
+      {
+        "lcpMs": 5959,
+        "cls": 0.03
+      }
+    ],
+    "medianLcpMs": 5755
+  },
+  "after": {
+    "weight": {
+      "scripts": 24,
+      "rawBytes": 1221392,
+      "gzipBytes": 380815,
+      "fontPreloads": 1
+    },
+    "runs": [
+      {
+        "lcpMs": 852,
+        "cls": 0.0
+      },
+      {
+        "lcpMs": 894,
+        "cls": 0.0
+      },
+      {
+        "lcpMs": 846,
+        "cls": 0.0
+      }
+    ],
+    "medianLcpMs": 852
+  },
+  "liveBefore": {
+    "lcpMs": 3411,
+    "cls": 0.03
+  },
+  "validation": {
+    "testsPassed": 265,
+    "typecheck": "passed",
+    "lint": "passed",
+    "build": "110 static pages",
+    "noJavaScript": "hero and links visible; all heading ancestors opacity 1",
+    "initialWallet": "no modal or Reown/WalletConnect requests before wallet interaction",
+    "injectedWallet": "connect, reload restore, disconnect, and reload disconnected passed with a synthetic provider; no signing or transactions",
+    "charts": "0 before scroll, 12 after scroll",
+    "mobileArabic": "RTL, translated hero visible, zero horizontal overflow",
+    "performanceBudget": "450,000 initial JS gzip bytes, at most 1 font preload; enforced after CI build"
+  },
+  "integratedAfter": {
+    "baseCommit": "724eac5",
+    "lcpMs": 850,
+    "cls": 0.0
+  }
+}

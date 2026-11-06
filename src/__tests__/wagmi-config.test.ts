@@ -87,12 +87,24 @@ async function loadWithBlinkKey() {
   vi.stubEnv("NEXT_PUBLIC_BLINK_API_KEY", "test-key");
   vi.resetModules();
   const wagmi = await import("@/lib/wagmi");
+  const { wagmiAdapter } = await import("@/lib/wallet-adapter");
   const rpc = await import("@/config/rpc");
   const { SUPPORTED_CHAINS } = await import("@/config/chains");
-  return { ...wagmi, ...rpc, SUPPORTED_CHAINS };
+  return { ...wagmi, wagmiAdapter, ...rpc, SUPPORTED_CHAINS };
 }
 
 describe("wagmi config behind AppKit", () => {
+  it("attaches the deferred wallet to the existing read config and clients", async () => {
+    vi.resetModules();
+    const { config } = await import("@/lib/wagmi");
+    const client = config.getClient({ chainId: 1 });
+    trackClientTransport(client.transport);
+
+    const { wagmiAdapter } = await import("@/lib/wallet-adapter");
+    expect(wagmiAdapter.wagmiConfig).toBe(config);
+    expect(wagmiAdapter.wagmiConfig.getClient({ chainId: 1 })).toBe(client);
+  });
+
   it("uses our chain transports verbatim, not AppKit's wrapped ones", async () => {
     const { config, chainTransports, SUPPORTED_CHAINS } = await loadWithBlinkKey();
 

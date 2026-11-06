@@ -14,13 +14,15 @@ import { CSP_CONTENT } from "@/lib/security";
 import "@/styles/globals.css";
 
 const inter = Inter({
-  subsets: ["latin", "cyrillic", "greek", "vietnamese"],
+  // Other scripts still load through unicode-range when the locale needs them.
+  subsets: ["latin"],
   variable: "--font-sans",
 });
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
   variable: "--font-mono",
+  preload: false,
 });
 
 /**

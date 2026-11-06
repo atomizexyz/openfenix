@@ -1,0 +1,35 @@
+Fenix first-render performance — 2026-11-05
+
+Matched local production builds, cold cache, Chrome 156, 390 x 844 mobile
+viewport (DPR 3), Fast 4G network emulation, 4x CPU slowdown. Each version
+was served by Python http.server without transfer compression. Three runs
+per version. These are lab measurements, not real-user percentiles.
+
+                            Before             After
+Median hero LCP             5,755 ms           852 ms (-85%)
+LCP samples                 5755/5749/5959     852/894/846 ms
+CLS                         0.03              0.00
+Initial JavaScript          3,147,413 bytes    1,221,392 bytes (-61%)
+Initial JS gzip (Bun)       938,344 bytes      380,815 bytes (-59%)
+Initial JS files            33                24
+Font preloads               5                 1
+
+The production URL /en/ measured 3,411 ms LCP before the changes. Its trace
+attributed 3,388 ms to rendering delay. Do not compare that CDN measurement
+directly with the uncompressed local numbers above.
+
+Changes: visible static hero and route content; separate live countdown
+with reserved space; on-demand wallet SDK sharing the existing RPC config;
+charts loaded near the viewport; primary font only preloaded. A 450 KB gzip
+initial-JS budget and one-font-preload budget now run after every CI build.
+
+Validation: 265 tests, TypeScript, lint, and export of 110 pages passed.
+The hero and links render with JavaScript disabled. A synthetic injected
+wallet connected, restored on reload, and stayed disconnected after
+explicit disconnect and reload; no signing or transactions were performed.
+No wallet SDK service requests occurred before interaction for a new visitor.
+All 12 charts loaded after scrolling. Arabic RTL/mobile had no overflow.
+
+Baseline: f104987. A subsequent independent ember-rendering change (724eac5)
+was preserved. The combined final build measured 850 ms LCP and zero CLS.
+Detailed samples and settings: measurements.json.
