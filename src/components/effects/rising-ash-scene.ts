@@ -10,9 +10,9 @@
  *     unseen fire below. Rendered at quarter resolution into a render target
  *     (smoke is low-frequency, so this costs ~1/16th of a full-res pass) and
  *     upsampled as the backdrop.
- *  2. Flakes: irregular paper-ash flakes that tumble (a flip reads as a width
- *     squash plus a glint as the face turns into the firelight), some with a
- *     patchy burning rim that dies back as they climb.
+ *  2. Flakes: torn ash fragments with mipmapped mineral grain, crumpled surface
+ *     normals, and patchy glowing fissures. Sixteen procedurally baked surfaces
+ *     catch the firelight as they tumble and cool.
  *  3. Embers and sparks, drawn as *ribbons* along their actual trajectory over
  *     a shutter interval. This is what makes ember photos look the way they
  *     do: trails curve with the turbulence that carries them, and because an
@@ -50,6 +50,7 @@ import {
   WebGLRenderer,
   WebGLRenderTarget,
 } from "three";
+import { createAshMaterialAtlas } from "./ash-material-atlas";
 
 export interface AshScene {
   setLight(light: boolean): void;
@@ -135,13 +136,13 @@ float snoise(vec3 v){
 }
 `;
 
-// Tanner Helland's blackbody fit, valid ~1000K-6600K.
+// Tanner Helland's blackbody color fit, converted from sRGB to linear light.
 const BLACKBODY = /* glsl */ `
 vec3 blackbody(float kelvin){
   float t=kelvin/100.0;
   float g=clamp((99.4708025861*log(t)-161.1195681661)/255.0,0.0,1.0);
   float b=t<=19.0?0.0:clamp((138.5177312231*log(t-10.0)-305.0447927307)/255.0,0.0,1.0);
-  return vec3(1.0,g,b);
+  return pow(vec3(1.0,g,b),vec3(2.2));
 }
 `;
 
@@ -150,10 +151,36 @@ vec3 blackbody(float kelvin){
 const FILM = /* glsl */ `
 vec3 film(vec3 c,float exposure){
   float peak=max(max(c.r,c.g),c.b);
-  if(peak<=1e-5)return vec3(0.0);
+  if(peak<0.00001)return vec3(0.0);
   float mapped=1.0-exp(-peak*exposure);
-  return mix(c/peak,vec3(1.0,0.96,0.86),smoothstep(0.82,1.0,mapped)*0.6)*mapped;
+  vec3 hue=c/peak;
+  vec3 linear=mix(hue,vec3(1.0,0.87,0.64),smoothstep(2.0,16.0,peak*exposure)*0.72)*mapped;
+  return pow(max(linear,vec3(0.0)),vec3(1.0/2.2));
 }
+
+`;
+
+const SURFACE = /* glsl */ `
+vec2 rotate(vec2 p,float angle){
+  float c=cos(angle),s=sin(angle);
+  return mat2(c,-s,s,c)*p;
+}
+
+// Data atlas: mottling, hot fissures, folded surface height, signed distance.
+vec4 surface(vec2 p){
+  float tile=floor(vSeed.w*15.99);
+  vec2 cell=vec2(mod(tile,4.0),floor(tile/4.0));
+  vec2 uv=clamp(p*0.5+0.5,vec2(0.004),vec2(0.996));
+  return texture2D(uSurface,(cell+uv)*0.25);
+}
+
+float silhouette(vec2 p,vec4 tex,float softness){
+  float sd=(0.5-tex.a)*2.0;
+  float aa=max(fwidth(sd),0.012)+softness;
+  float bounds=1.0-smoothstep(0.9,1.0,max(abs(p.x),abs(p.y)));
+  return (1.0-smoothstep(-aa,aa,sd))*bounds;
+}
+
 `;
 
 // Shared particle uniforms, attributes and trajectory.
@@ -207,12 +234,10 @@ vec3 simulate(float age,float lifeT,float cycle,float type){
     float tf=age*0.5;
     float amp=mix(0.12,0.95,lifeT);
     p.x+=snoise(n0+vec3(0.0,0.0,tf))*amp;
-    p.z+=snoise(n0+vec3(19.1,7.3,tf))*amp*0.6;
     p.y+=snoise(n0+vec3(3.7,41.9,tf*1.7))*0.18;
     float w=5.0+aSeed.y*9.0;
     float r=mix(0.015,0.07,aSeed.w)*(0.4+lifeT);
     p.x+=sin(age*w+aSeed.x*6.28)*r;
-    p.z+=cos(age*w+aSeed.x*6.28)*r;
   }else if(type<1.5){
     // Spark: launched hard from low in the frame, arcing under drag.
     p.y+=h2*halfH*0.6;
@@ -229,10 +254,15 @@ vec3 simulate(float age,float lifeT,float cycle,float type){
     float tf=age*0.32;
     float amp=mix(0.35,1.5,lifeT);
     p.x+=snoise(n0+vec3(0.0,0.0,tf))*amp;
-    p.z+=snoise(n0+vec3(11.3,5.1,tf))*amp*0.5;
     p.y+=snoise(n0+vec3(2.9,23.1,tf*1.3))*0.35;
     p.x+=sin(age*(1.1+aSeed.y*1.3)+aSeed.x*6.28)*0.12;
   }
+
+  // Coherent eddies move neighboring fragments together through the plume.
+  // Keep depth fixed: flutter comes from tumble, preserving transparency order.
+  float eddy=snoise(vec3(p.x*0.28,p.y*0.22,uTime*0.16));
+  p.x+=eddy*min(age*0.12,0.7);
+  p.y+=snoise(vec3(p.x*0.22+17.0,p.y*0.24,uTime*0.12))*0.14;
 
   // Slow shared crosswind; cumulative with age so older particles lean.
   float wind=sin(uTime*0.071)*0.16+sin(uTime*0.023+1.7)*0.1;
@@ -272,6 +302,8 @@ varying float vBlur;
 varying vec3 vEmit;
 varying float vT;
 varying float vSpeck;
+varying vec4 vSeed;
+varying float vTrail;
 
 void main(){
   float type=aParams.x;
@@ -290,6 +322,7 @@ void main(){
   // Shutter interval. Sparks move fast enough to want a longer one.
   float span=type<0.5?mix(0.07,0.13,aSeed.w):mix(0.1,0.17,aSeed.w);
   float s=aStrip.x;
+  vSeed=aSeed;
   float rawAge=age-s*span;
   float ageS=max(rawAge,0.0);
   float tS=ageS/life;
@@ -309,11 +342,11 @@ void main(){
 
   // Thin-lens defocus, capped so deep embers soften rather than balloon.
   float rPx=radius*pxPerUnit;
-  float cocPx=min(uAperture*abs(dist-uFocus)*pxPerUnit,rPx*2.5+2.0*uPixelRatio);
+  float cocPx=min(uAperture*abs(dist-uFocus)*uFocus/dist*pxPerUnit,rPx*2.5+2.0*uPixelRatio);
   float corePx=sqrt(rPx*rPx+cocPx*cocPx);
   // A defocused ember spreads its light, but it is far brighter than the
   // display, so it keeps more apparent brightness than strict r^2 would give.
-  float energy=pow(rPx/corePx,1.35);
+  float energy=pow(rPx/corePx,1.7);
   float minPx=0.8*uPixelRatio;
   if(corePx<minPx){
     energy*=(corePx*corePx)/(minPx*minPx);
@@ -326,13 +359,13 @@ void main(){
   energy*=pow(corePx/(corePx+speedPx*span),0.4);
 
   // Cooling along a blackbody ramp; sparks start hotter and die faster.
-  float hot=type<0.5?mix(1300.0,1800.0,aSeed.y):mix(1900.0,2400.0,aSeed.y);
+  float hot=type<0.5?mix(1450.0,2050.0,aSeed.y):mix(2100.0,2800.0,aSeed.y);
   float kelvin=mix(hot,620.0,pow(tS,mix(0.55,1.1,aSeed.z)));
   // Oxygen flicker sampled at each point's own moment of exposure, which is
   // what beads the trail.
   float flicker=0.66+0.34*snoise(vec3(aSeed.x*53.0,aSeed.y*17.0,(uTime-s*span)*(9.0+aSeed.w*14.0)));
   kelvin*=mix(0.92,1.04,flicker);
-  float radiance=pow(kelvin/1500.0,4.0)*(type<0.5?10.0:16.0);
+  float radiance=pow(kelvin/1500.0,4.0)*(type<0.5?5.5:10.0);
   float born=smoothstep(-0.015,0.0,rawAge);
   vEmit=blackbody(kelvin)*radiance*energy*flicker*mix(1.0,0.6,s)*born;
   // The grey speck a cooled ember leaves is a point, not a streak.
@@ -340,6 +373,7 @@ void main(){
 
   // Pixel-space glow: lens bloom is a property of the optics, not of the
   // ember's size, so it is sized in px rather than in world units.
+  vTrail=s*speedPx*span/corePx;
   vCorePx=corePx;
   vHaloPx=mix(6.5,2.5,uLight)*uPixelRatio+corePx*0.6;
   float halfW=corePx*2.2+vHaloPx*3.0;
@@ -354,6 +388,7 @@ const EMBER_FRAGMENT = /* glsl */ `
 precision highp float;
 
 uniform float uLight;
+uniform sampler2D uSurface;
 
 varying vec2 vPx;
 varying float vCorePx;
@@ -362,8 +397,11 @@ varying float vBlur;
 varying vec3 vEmit;
 varying float vT;
 varying float vSpeck;
+varying vec4 vSeed;
+varying float vTrail;
 
 ${FILM}
+${SURFACE}
 
 void main(){
   float d=length(vPx);
@@ -372,8 +410,14 @@ void main(){
   // Sharp: gaussian core. Defocused: a flat disc with a faint bright rim,
   // which is what an out-of-focus point light looks like through a lens.
   float sharp=exp(-dn*dn*1.6);
-  float disc=smoothstep(1.0,0.8,dn)*(0.8+0.2*smoothstep(0.5,0.95,dn));
+  float disc=(1.0-smoothstep(0.62,1.2,dn))*(0.9+0.1*dn);
   float core=mix(sharp,disc,smoothstep(0.2,0.85,vBlur));
+  // Material grain and exposed fissures break up the hot trail as the
+  // fragment turns. Defocus averages this detail back into a soft light.
+  vec2 materialUv=vec2(fract(vTrail*0.37+vSeed.y)*1.6-0.8,clamp(vPx.y/vCorePx,-1.0,1.0));
+  vec4 tex=surface(materialUv);
+  float fuel=0.3+tex.g*0.65+pow(tex.r,3.0)*0.4;
+  core*=mix(fuel,1.0,smoothstep(0.2,0.8,vBlur));
   float halo=exp(-d/vHaloPx)*mix(0.11,0.03,uLight)*(1.0-0.7*vBlur);
 
   float fade=smoothstep(0.0,0.04,vT)*(1.0-smoothstep(0.8,1.0,vT));
@@ -384,7 +428,7 @@ void main(){
 
   // A cooled ember is a speck of grey ash. On a dark page it vanishes; on a
   // light page it is what you actually see once the glow has gone.
-  float speck=smoothstep(1.25,0.55,dn)*smoothstep(0.35,0.95,vT)*(1.0-vBlur)*fade*vSpeck;
+  float speck=(1.0-smoothstep(0.55,1.25,dn))*smoothstep(0.35,0.95,vT)*(1.0-vBlur)*fade*vSpeck;
   float speckCov=speck*0.4*uLight;
 
   float alpha=clamp(max(max(emit.r,emit.g),emit.b)+speckCov,0.0,1.0);
@@ -409,6 +453,7 @@ varying float vEnergy;
 varying vec4 vSeed;
 varying float vFlip;
 varying float vHeight;
+varying float vSpin;
 
 void main(){
   float life=aParams.y;
@@ -429,14 +474,15 @@ void main(){
   float dist=-c.z;
   vHeight=clamp(c.y/(uTanHalfFov*dist)*0.5+0.5,0.0,1.0);
 
-  float coc=min(uAperture*abs(dist-uFocus),radius*4.0);
+  float coc=min(uAperture*abs(dist-uFocus)*uFocus/dist,0.11);
   float r=sqrt(radius*radius+coc*coc);
-  vEnergy=pow(radius/r,1.35);
+  vEnergy=pow(radius/r,1.7);
   vBlur=clamp(coc/r,0.0,1.0);
 
   // Tumble: in-plane spin plus an out-of-plane flip read as a width squash.
   // Curled ash never goes knife-thin edge-on, so the squash bottoms out.
   float ang=aSeed.x*6.2831+age*(aSeed.y-0.5)*2.4;
+  vSpin=ang;
   vec2 dir=vec2(cos(ang),sin(ang));
   vec2 perp=vec2(-dir.y,dir.x);
   float flip=cos(age*(0.9+aSeed.w*1.8)+aSeed.z*6.2831);
@@ -444,16 +490,15 @@ void main(){
   float ext=1.25+vBlur*0.6;
   vUv=position.xy*ext;
 
-  vec2 offset=dir*position.x*r*ext+perp*position.y*r*ext*max(abs(flip),0.32);
+  vec2 offset=dir*position.x*r*ext+perp*position.y*r*ext*mix(0.38,1.0,aSeed.y)*max(abs(flip),0.32);
   gl_Position=projectionMatrix*vec4(c+vec3(offset,0.0),1.0);
 }
 `;
 
 const FLAKE_FRAGMENT = /* glsl */ `
 precision highp float;
-
 uniform float uLight;
-
+uniform sampler2D uSurface;
 varying vec2 vUv;
 varying float vT;
 varying float vBlur;
@@ -461,79 +506,54 @@ varying float vEnergy;
 varying vec4 vSeed;
 varying float vFlip;
 varying float vHeight;
-
+varying float vSpin;
 ${BLACKBODY}
 ${FILM}
-
-float hash12(vec2 p){
-  vec3 p3=fract(vec3(p.xyx)*0.1031);
-  p3+=dot(p3,p3.yzx+33.33);
-  return fract((p3.x+p3.y)*p3.z);
-}
-float vnoise(vec2 p){
-  vec2 i=floor(p);
-  vec2 f=fract(p);
-  vec2 u=f*f*(3.0-2.0*f);
-  return mix(mix(hash12(i),hash12(i+vec2(1.0,0.0)),u.x),
-             mix(hash12(i+vec2(0.0,1.0)),hash12(i+vec2(1.0,1.0)),u.x),u.y)*2.0-1.0;
-}
-float fbm(vec2 p){
-  float s=0.0;
-  float a=0.5;
-  for(int i=0;i<4;i++){
-    s+=a*vnoise(p);
-    p=p*2.03+vec2(17.1,9.7);
-    a*=0.5;
-  }
-  return s;
-}
+${SURFACE}
 
 void main(){
-  float fade=smoothstep(0.0,0.05,vT)*(1.0-smoothstep(0.8,1.0,vT));
+  float fade=smoothstep(0.0,0.045,vT)*(1.0-smoothstep(0.74,1.0,vT));
+  vec3 rgb;
+  float alpha;
+    vec2 p=vUv;
+    vec4 tex=surface(p);
+    float mask=silhouette(p,tex,vBlur*0.35);
+    if(mask<0.002)discard;
 
-  // Irregular silhouette from radial noise, softened by defocus.
-  vec2 p=vUv;
-  float r=length(p);
-  float ang=atan(p.y,p.x);
-  float rad=0.68+0.3*fbm(vec2(cos(ang),sin(ang))*1.6+vSeed.xy*31.0);
-  float sd=r-rad;
-  float aa=fwidth(sd)*1.2+vBlur*0.45;
-  float mask=1.0-smoothstep(-aa,aa,sd);
+    // Height-derived normals retain folds and ridges as the flake tumbles.
+    float hx=surface(p+vec2(0.022,0.0)).b;
+    float hy=surface(p+vec2(0.0,0.022)).b;
+    vec3 normal=normalize(vec3((tex.b-hx)*8.0,(tex.b-hy)*8.0,0.32));
+    vec2 lightXY=rotate(vec2(-0.2,-0.85),vSpin);
+    vec3 fireDirection=normalize(vec3(lightXY,0.35+0.35*abs(vFlip)));
+    float diffuse=max(dot(normal,fireDirection),0.0);
+    float face=0.3+0.7*abs(vFlip);
+    float fireFall=pow(1.0-vHeight,1.5);
 
-  // Mottled, occasionally holed paper ash.
-  float tex=fbm(p*2.6+vSeed.zw*23.0);
-  mask*=smoothstep(-0.62,-0.42,tex+vBlur*0.4);
-  if(mask<0.002)discard;
+    float mineral=smoothstep(0.2,0.8,tex.r);
+    float whiteness=mix(0.15,0.9,pow(vSeed.x,0.65));
+    vec3 carbon=vec3(0.028,0.023,0.02);
+    vec3 ash=vec3(0.52,0.50,0.46);
+    vec3 albedo=mix(carbon,ash,whiteness*mineral);
+    albedo*=1.0-tex.g*0.55;
+    vec3 ambient=mix(vec3(0.27,0.31,0.37),vec3(0.8,0.84,0.9),uLight);
+    vec3 fire=vec3(1.0,0.29,0.065)*(0.15+fireFall*1.6)*diffuse*face;
+    vec3 lit=pow(albedo*(ambient+fire),vec3(1.0/2.2));
 
-  vec3 charcoal=vec3(0.07,0.065,0.06);
-  vec3 paleAsh=vec3(0.62,0.6,0.57);
-  vec3 albedo=mix(charcoal,paleAsh,vSeed.x*vSeed.x)*(0.82+0.36*tex);
-  // Daylight reads ash as soft grey paper, not charcoal.
-  albedo=mix(albedo,vec3(0.42,0.39,0.37)*(0.85+0.3*tex),0.45*uLight);
+    // A few flakes still smolder along broken edges and within cracks. There
+    // is no continuous neon outline around the entire silhouette.
+    float sd=(0.5-tex.a)*2.0;
+    float edgeBand=exp(-abs(sd+0.035)*26.0);
+    float hotPatch=smoothstep(0.42,0.75,tex.r)*tex.g;
+    float heat=(1.0-smoothstep(0.12,0.65,vT))*step(0.62,vSeed.z);
+    vec3 rim=blackbody(1250.0+hotPatch*400.0)*heat*(hotPatch*0.8+edgeBand*hotPatch*2.4)*vEnergy;
+    vec3 emit=film(rim,1.2)*mask;
 
-  // Lit from the fire below: warm and strong near the bottom of the frame,
-  // cooler higher up. The flip turns the face into and out of the light, so
-  // a tumbling flake glints rather than sitting at one brightness.
-  float face=abs(vFlip);
-  float fireFall=pow(1.0-vHeight,1.6);
-  vec3 fire=vec3(1.0,0.48,0.16)*(0.25+1.6*fireFall);
-  vec3 ambient=mix(vec3(0.42,0.4,0.39),vec3(0.9,0.86,0.82),uLight);
-  float glint=pow(face,6.0)*0.6*fireFall;
-  vec3 lit=albedo*(ambient+fire*(0.35+0.65*face))+vec3(1.0,0.62,0.3)*glint*albedo;
-
-  // A burning rim on some flakes, patchy along its length, dying back as
-  // the flake climbs away from the heat.
-  float burns=step(0.5,vSeed.w);
-  float band=smoothstep(-0.2,-0.02,sd)*mask;
-  float patchy=smoothstep(-0.1,0.35,fbm(vec2(ang*2.2,vSeed.z*9.0)));
-  float alive=1.0-smoothstep(0.08,0.55,vT);
-  float kelvin=mix(950.0,1350.0,patchy);
-  vec3 rim=blackbody(kelvin)*pow(kelvin/1500.0,4.0)*band*patchy*alive*burns*vEnergy*3.0;
-  vec3 emit=film(rim,1.6)*fade;
-
-  float cov=mask*fade*mix(0.85,0.6,uLight)*mix(1.0,0.55,vBlur);
-  float alpha=clamp(cov+max(max(emit.r,emit.g),emit.b),0.0,1.0);
-  gl_FragColor=vec4(lit*cov+emit,alpha);
+    float cov=mask*fade*mix(0.82,0.55,uLight)*mix(1.0,0.35,vBlur);
+    rgb=(lit+emit)*cov;
+    alpha=cov;
+  if(alpha<0.003)discard;
+  gl_FragColor=vec4(min(rgb,vec3(alpha)),alpha);
 }
 `;
 
@@ -643,16 +663,16 @@ function buildInstances(
     if (type === TYPE_EMBER) {
       life = 4.5 + rand() * 4.5;
       // Mostly fine fragments with a long tail of larger ones.
-      radius = 0.009 + Math.pow(rand(), 2.2) * 0.03;
-      depth = -7 + rand() * 10.5;
+      radius = 0.005 + Math.pow(rand(), 3.0) * 0.055;
+      depth = rand() < 0.09 ? 4.5 + rand() * 2 : -7 + rand() * 9;
     } else if (type === TYPE_SPARK) {
       life = 0.9 + rand() * 1.1;
-      radius = 0.006 + rand() * 0.008;
+      radius = 0.003 + rand() * 0.005;
       depth = -3 + rand() * 5;
     } else {
       life = 11 + rand() * 9;
-      radius = 0.035 + Math.pow(rand(), 1.6) * 0.09;
-      depth = -6 + rand() * 9;
+      radius = 0.018 + Math.pow(rand(), 2.5) * 0.115;
+      depth = rand() < 0.08 ? 4 + rand() * 2 : -6 + rand() * 8;
     }
 
     out.push({ seed, params: [type, life, rand() * life, radius], depth });
@@ -800,22 +820,24 @@ export function createAshScene(
   composite.renderOrder = 0;
   scene.add(composite);
 
+  const surfaceAtlas = createAshMaterialAtlas();
   const uniforms = {
+    uSurface: { value: surfaceAtlas },
     uTime: { value: 0 },
     uTanHalfFov: { value: Math.tan(((FOV / 2) * Math.PI) / 180) },
     uAspect: { value: 1 },
     uCameraZ: { value: CAMERA_Z },
     uViewportH: { value: 1 },
     uPixelRatio: { value: 1 },
-    uFocus: { value: CAMERA_Z + 2 },
-    uAperture: { value: 0.0045 },
+    uFocus: { value: CAMERA_Z + 1 },
+    uAperture: { value: 0.0022 },
     uDensity: { value: 1 },
     uLight: { value: light ? 1 : 0 },
   };
 
   const rand = mulberry32(0xf3e1);
   const flakeGeometry = createQuadGeometry(
-    buildInstances(rand, TYPE_FLAKE, 150)
+    buildInstances(rand, TYPE_FLAKE, 180)
   );
   const flakeMaterial = new ShaderMaterial({
     vertexShader: FLAKE_VERTEX,
@@ -830,7 +852,7 @@ export function createAshScene(
 
   const emberGeometry = createTrailGeometry([
     ...buildInstances(rand, TYPE_EMBER, 340),
-    ...buildInstances(rand, TYPE_SPARK, 44),
+    ...buildInstances(rand, TYPE_SPARK, 60),
   ]);
   const emberMaterial = new ShaderMaterial({
     vertexShader: EMBER_VERTEX,
@@ -852,7 +874,7 @@ export function createAshScene(
       0.05 * Math.sin(time * 13.1 + 1.3) +
       0.04 * Math.sin(time * 2.1);
   };
-  setTime(still ? 24 : 0);
+  setTime(24);
 
   const resize = () => {
     const width = canvas.clientWidth;
@@ -945,6 +967,7 @@ export function createAshScene(
       resizeObserver.disconnect();
       canvas.removeEventListener("webglcontextlost", onContextLost);
       for (const disposable of [
+        surfaceAtlas,
         quad,
         flakeGeometry,
         emberGeometry,

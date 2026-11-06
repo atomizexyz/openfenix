@@ -178,7 +178,7 @@ export function HeroSection() {
         >
           <Button asChild size="lg" className="min-w-[180px]">
             <Link href="/burn">
-              <FenixLogo className="h-4 w-4" />
+              <FenixLogo className="h-4 w-4 [&_path]:fill-current" />
               {t("cta_burn")}
             </Link>
           </Button>
