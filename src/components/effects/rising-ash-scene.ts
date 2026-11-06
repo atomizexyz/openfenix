@@ -418,7 +418,9 @@ void main(){
   vec4 tex=surface(materialUv);
   float fuel=0.3+tex.g*0.65+pow(tex.r,3.0)*0.4;
   core*=mix(fuel,1.0,smoothstep(0.2,0.8,vBlur));
-  float halo=exp(-d/vHaloPx)*mix(0.11,0.03,uLight)*(1.0-0.7*vBlur);
+  // Decay to black before the ribbon boundary, including after the display
+  // transfer lifts low intensities. An exponential tail exposes the quad.
+  float halo=exp(-1.5*d*d/(vHaloPx*vHaloPx))*mix(0.045,0.012,uLight)*(1.0-0.7*vBlur);
 
   float fade=smoothstep(0.0,0.04,vT)*(1.0-smoothstep(0.8,1.0,vT));
   vec3 emit=film(vEmit*(core+halo),mix(1.8,1.05,uLight))*fade;
@@ -515,43 +517,43 @@ void main(){
   float fade=smoothstep(0.0,0.045,vT)*(1.0-smoothstep(0.74,1.0,vT));
   vec3 rgb;
   float alpha;
-    vec2 p=vUv;
-    vec4 tex=surface(p);
-    float mask=silhouette(p,tex,vBlur*0.35);
-    if(mask<0.002)discard;
+  vec2 p=vUv;
+  vec4 tex=surface(p);
+  float mask=silhouette(p,tex,vBlur*0.35);
+  if(mask<0.002)discard;
 
-    // Height-derived normals retain folds and ridges as the flake tumbles.
-    float hx=surface(p+vec2(0.022,0.0)).b;
-    float hy=surface(p+vec2(0.0,0.022)).b;
-    vec3 normal=normalize(vec3((tex.b-hx)*8.0,(tex.b-hy)*8.0,0.32));
-    vec2 lightXY=rotate(vec2(-0.2,-0.85),vSpin);
-    vec3 fireDirection=normalize(vec3(lightXY,0.35+0.35*abs(vFlip)));
-    float diffuse=max(dot(normal,fireDirection),0.0);
-    float face=0.3+0.7*abs(vFlip);
-    float fireFall=pow(1.0-vHeight,1.5);
+  // Height-derived normals retain folds and ridges as the flake tumbles.
+  float hx=surface(p+vec2(0.022,0.0)).b;
+  float hy=surface(p+vec2(0.0,0.022)).b;
+  vec3 normal=normalize(vec3((tex.b-hx)*8.0,(tex.b-hy)*8.0,0.32));
+  vec2 lightXY=rotate(vec2(-0.2,-0.85),vSpin);
+  vec3 fireDirection=normalize(vec3(lightXY,0.35+0.35*abs(vFlip)));
+  float diffuse=max(dot(normal,fireDirection),0.0);
+  float face=0.3+0.7*abs(vFlip);
+  float fireFall=pow(1.0-vHeight,1.5);
 
-    float mineral=smoothstep(0.2,0.8,tex.r);
-    float whiteness=mix(0.15,0.9,pow(vSeed.x,0.65));
-    vec3 carbon=vec3(0.028,0.023,0.02);
-    vec3 ash=vec3(0.52,0.50,0.46);
-    vec3 albedo=mix(carbon,ash,whiteness*mineral);
-    albedo*=1.0-tex.g*0.55;
-    vec3 ambient=mix(vec3(0.27,0.31,0.37),vec3(0.8,0.84,0.9),uLight);
-    vec3 fire=vec3(1.0,0.29,0.065)*(0.15+fireFall*1.6)*diffuse*face;
-    vec3 lit=pow(albedo*(ambient+fire),vec3(1.0/2.2));
+  float mineral=smoothstep(0.2,0.8,tex.r);
+  float whiteness=mix(0.15,0.9,pow(vSeed.x,0.65));
+  vec3 carbon=vec3(0.028,0.023,0.02);
+  vec3 ash=vec3(0.52,0.50,0.46);
+  vec3 albedo=mix(carbon,ash,whiteness*mineral);
+  albedo*=1.0-tex.g*0.55;
+  vec3 ambient=mix(vec3(0.27,0.31,0.37),vec3(0.8,0.84,0.9),uLight);
+  vec3 fire=vec3(1.0,0.29,0.065)*(0.15+fireFall*1.6)*diffuse*face;
+  vec3 lit=pow(albedo*(ambient+fire),vec3(1.0/2.2));
 
-    // A few flakes still smolder along broken edges and within cracks. There
-    // is no continuous neon outline around the entire silhouette.
-    float sd=(0.5-tex.a)*2.0;
-    float edgeBand=exp(-abs(sd+0.035)*26.0);
-    float hotPatch=smoothstep(0.42,0.75,tex.r)*tex.g;
-    float heat=(1.0-smoothstep(0.12,0.65,vT))*step(0.62,vSeed.z);
-    vec3 rim=blackbody(1250.0+hotPatch*400.0)*heat*(hotPatch*0.8+edgeBand*hotPatch*2.4)*vEnergy;
-    vec3 emit=film(rim,1.2)*mask;
+  // A few flakes still smolder along broken edges and within cracks. There
+  // is no continuous neon outline around the entire silhouette.
+  float sd=(0.5-tex.a)*2.0;
+  float edgeBand=exp(-abs(sd+0.035)*26.0);
+  float hotPatch=smoothstep(0.42,0.75,tex.r)*tex.g;
+  float heat=(1.0-smoothstep(0.12,0.65,vT))*step(0.62,vSeed.z);
+  vec3 rim=blackbody(1250.0+hotPatch*400.0)*heat*(hotPatch*0.8+edgeBand*hotPatch*2.4)*vEnergy;
+  vec3 emit=film(rim,1.2)*mask;
 
-    float cov=mask*fade*mix(0.82,0.55,uLight)*mix(1.0,0.35,vBlur);
-    rgb=(lit+emit)*cov;
-    alpha=cov;
+  float cov=mask*fade*mix(0.82,0.55,uLight)*mix(1.0,0.35,vBlur);
+  rgb=(lit+emit)*cov;
+  alpha=cov;
   if(alpha<0.003)discard;
   gl_FragColor=vec4(min(rgb,vec3(alpha)),alpha);
 }
